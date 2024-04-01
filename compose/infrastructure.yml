@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    shm_size: '4gb'
+    container_name: postgres
+    restart: unless-stopped
+    networks:
+      - rapido
+    environment:
+      POSTGRES_PASSWORD: Admin12!
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: "rabbitmq:3.11.7-management"
+    container_name: rabbitmq
+    restart: unless-stopped
+    
+    networks:
+      - rapido
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+networks:
+  rapido:
+    name: rapido-network
+
+volumes:
+  postgres:
+    driver: local
+
+  rabbitmq:
+    driver: local
