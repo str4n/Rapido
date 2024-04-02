@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Rapido.Framework;
 using Rapido.Framework.Contexts;
 using Rapido.Framework.CQRS.Dispatchers;
 using Rapido.Services.Users.Core.Commands;
@@ -13,11 +13,21 @@ internal static class UserEndpoints
     
     public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost($"/{Version}/sign-up", SignUp);
+        app
+            .MapPost($"/{Version}/sign-up", SignUp)
+            .WithTags("Account")
+            .WithName("Sign up");
 
-        app.MapPost($"/{Version}/sign-in", SignIn);
+        app
+            .MapPost($"/{Version}/sign-in", SignIn)
+            .WithTags("Account")
+            .WithName("Sign in");;
 
-        app.MapGet($"/{Version}/me", GetMe);
+        app
+            .MapGet($"/{Version}/me", GetMe)
+            .RequireAuthorization()
+            .WithTags("Account")
+            .WithName("Get account");
 
         return app;
     }

@@ -11,8 +11,14 @@ namespace Rapido.Framework;
 
 public static class Extensions
 {
+    private const string SectionName = "app";
+    
     public static WebApplicationBuilder AddFramework(this WebApplicationBuilder builder)
     {
+        var appOptions = builder.Configuration.GetSection(SectionName).BindOptions<AppOptions>();
+        var appInfo = new AppInfo(appOptions.Name, appOptions.Version);
+        builder.Services.AddSingleton(appInfo);
+        
         builder.Services
             .AddExceptionHandling()
             .AddBaseFeatures(builder.Configuration)
