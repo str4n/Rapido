@@ -1,4 +1,5 @@
 using Rapido.Framework;
+using Rapido.Services.Users.Api.Endpoints.v1;
 using Rapido.Services.Users.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,5 +10,9 @@ builder.Services
     .AddCore(builder.Configuration);
 
 var app = builder.Build();
+
+app.MapUserEndpoints();
+
+app.UseFramework();
 
 app.Run();

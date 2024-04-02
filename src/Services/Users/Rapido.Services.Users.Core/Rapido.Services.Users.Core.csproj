@@ -6,10 +6,6 @@
     </PropertyGroup>
     
     <ItemGroup>
-      <Folder Include="EF\Repositories\" />
-    </ItemGroup>
-    
-    <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />

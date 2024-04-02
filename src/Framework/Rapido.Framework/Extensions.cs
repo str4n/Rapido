@@ -23,4 +23,14 @@ public static class Extensions
 
         return builder;
     }
+
+    public static WebApplication UseFramework(this WebApplication app)
+    {
+        app
+            .UseAuthentication()
+            .UseRouting()
+            .UseAuthorization();
+
+        return app;
+    }
 }

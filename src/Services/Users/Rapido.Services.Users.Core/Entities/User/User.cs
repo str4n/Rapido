@@ -2,7 +2,7 @@
 
 internal sealed class User
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     public Email Email { get; set; }
     public string Password { get; set; }
     public Role.Role Role { get; set; }
