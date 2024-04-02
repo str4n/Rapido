@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Rapido.Framework.Auth.Authenticator;
-using Rapido.Framework.Base;
+using Rapido.Framework.Common;
 
 namespace Rapido.Framework.Auth;
 

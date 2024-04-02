@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Base.Exceptions;
+﻿namespace Rapido.Framework.Common.Exceptions;
 
 public enum ExceptionCategory
 {

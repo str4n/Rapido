@@ -8,7 +8,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Rapido.Framework.Api\Rapido.Framework.Api\Rapido.Framework.Api.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Auth\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
-      <ProjectReference Include="..\Rapido.Framework.Base\Rapido.Framework.Base.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Contexts\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj" />
       <ProjectReference Include="..\Rapido.Framework.CQRS\Rapido.Framework.CQRS.csproj" />
     </ItemGroup>

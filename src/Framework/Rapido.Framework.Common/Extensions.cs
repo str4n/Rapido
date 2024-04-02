@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rapido.Framework.Base.Serialization;
-using Rapido.Framework.Base.Time;
+using Rapido.Framework.Common.Serialization;
+using Rapido.Framework.Common.Time;
 
-namespace Rapido.Framework.Base;
+namespace Rapido.Framework.Common;
 
 public static class Extensions
 {

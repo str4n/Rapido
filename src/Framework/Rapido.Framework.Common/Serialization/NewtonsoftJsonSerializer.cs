@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Rapido.Framework.Base.Serialization;
+namespace Rapido.Framework.Common.Serialization;
 
 internal sealed class NewtonsoftJsonSerializer : IJsonSerializer
 {

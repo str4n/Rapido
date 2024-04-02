@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Base.Serialization;
+﻿namespace Rapido.Framework.Common.Serialization;
 
 public interface IJsonSerializer
 {

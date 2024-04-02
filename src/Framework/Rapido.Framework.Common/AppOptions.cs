@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Base;
+﻿namespace Rapido.Framework.Common;
 
 public sealed class AppOptions
 {

@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Base.Time;
+﻿namespace Rapido.Framework.Common.Time;
 
 internal sealed class UtcClock : IClock
 {

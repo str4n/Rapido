@@ -1,5 +1,5 @@
 ﻿using Rapido.Framework.Auth.Authenticator;
-using Rapido.Framework.Base.Time;
+using Rapido.Framework.Common.Time;
 using Rapido.Framework.CQRS.Commands;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;

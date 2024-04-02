@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Rapido.Framework.Base;
+using Rapido.Framework.Common;
 
 namespace Rapido.Framework.Api.Swagger;
 

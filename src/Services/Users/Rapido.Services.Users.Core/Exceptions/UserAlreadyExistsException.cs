@@ -1,4 +1,4 @@
-﻿using Rapido.Framework.Base.Exceptions;
+﻿using Rapido.Framework.Common.Exceptions;
 
 namespace Rapido.Services.Users.Core.Exceptions;
 

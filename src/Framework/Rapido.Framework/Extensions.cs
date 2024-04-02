@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Api.Exceptions;
 using Rapido.Framework.Api.Swagger;
 using Rapido.Framework.Auth;
-using Rapido.Framework.Base;
+using Rapido.Framework.Common;
 using Rapido.Framework.Contexts;
 using Rapido.Framework.CQRS;
 

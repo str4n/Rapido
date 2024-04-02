@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Humanizer;
-using Rapido.Framework.Base.Exceptions;
+using Rapido.Framework.Common.Exceptions;
 
 namespace Rapido.Framework.Api.Exceptions.Mappers;
 

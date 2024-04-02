@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Rapido.Framework.Base.Time;
+using Rapido.Framework.Common.Time;
 
 namespace Rapido.Framework.Auth.Authenticator;
 

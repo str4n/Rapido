@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Postgres",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.CQRS", "src\Framework\Rapido.Framework.CQRS\Rapido.Framework.CQRS.csproj", "{B8DD4BB8-C5CA-4AF3-8DBE-1DB869E15996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Base", "src\Framework\Rapido.Framework.Base\Rapido.Framework.Base.csproj", "{B840866D-7423-417B-93D3-205995715608}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Common", "src\Framework\Rapido.Framework.Common\Rapido.Framework.Common.csproj", "{B840866D-7423-417B-93D3-205995715608}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Auth", "src\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj", "{EEC04B54-E5ED-4FE4-B736-6A497847012B}"
 EndProject
