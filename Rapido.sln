@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Api", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Contexts", "src\Framework\Rapido.Framework.Contexts\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj", "{4305651C-73FA-4F3C-BEB1-D6E137110545}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Customers.Api", "src\Services\Customers\Rapido.Services.Customers.Api\Rapido.Services.Customers.Api.csproj", "{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Customers.Core", "src\Services\Customers\Rapido.Services.Customers.Core\Rapido.Services.Customers.Core.csproj", "{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,8 @@ Global
 		{EEC04B54-E5ED-4FE4-B736-6A497847012B} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{9ABE0651-0B27-4F84-A671-F900C84B9F8D} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{4305651C-73FA-4F3C-BEB1-D6E137110545} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
+		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D} = {0CD210CC-9174-4159-B584-1C046B6FE790}
+		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5} = {0CD210CC-9174-4159-B584-1C046B6FE790}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -105,5 +111,13 @@ Global
 		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
