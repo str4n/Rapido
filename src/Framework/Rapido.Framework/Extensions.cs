@@ -4,6 +4,7 @@ using Rapido.Framework.Api.Exceptions;
 using Rapido.Framework.Api.Swagger;
 using Rapido.Framework.Auth;
 using Rapido.Framework.Base;
+using Rapido.Framework.Contexts;
 using Rapido.Framework.CQRS;
 
 namespace Rapido.Framework;
@@ -16,6 +17,7 @@ public static class Extensions
             .AddExceptionHandling()
             .AddBaseFeatures(builder.Configuration)
             .AddHttpContextAccessor()
+            .AddContexts()
             .AddMemoryCache()
             .AddEndpointsApiExplorer()
             .AddSwaggerDocs(builder.Configuration)
