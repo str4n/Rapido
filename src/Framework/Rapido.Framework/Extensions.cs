@@ -1,17 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Rapido.Framework.Base;
+using Rapido.Framework.CQRS;
 
 namespace Rapido.Framework;
 
 public static class Extensions
 {
-    public static TOptions BindOptions<TOptions>(this IConfiguration configuration, string sectionName) where TOptions : class, new()
-        => BindOptions<TOptions>(configuration.GetSection(sectionName));
-    
-    public static TOptions BindOptions<TOptions>(this IConfigurationSection section) where TOptions : class, new()
+    public static WebApplicationBuilder AddFramework(this WebApplicationBuilder builder)
     {
-        var options = new TOptions();
-        section.Bind(options);
+        builder.Services.AddBaseFeatures(builder.Configuration);
 
-        return options;
+        builder.Services
+            .AddCommands()
+            .AddQueries()
+            .AddDispatcher();
+
+        return builder;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Rapido.Framework.Postgres;
 
-public class PostgresOptions
+public sealed class PostgresOptions
 {
     public string ConnectionString { get; init; }
 }

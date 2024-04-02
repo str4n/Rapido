@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Base;
 using Rapido.Framework.Postgres.Initializers;
 
 namespace Rapido.Framework.Postgres;

@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Exceptions;
+﻿namespace Rapido.Framework.Base.Exceptions;
 
 public abstract class CustomException : Exception
 {

@@ -6,12 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Humanizer" Version="2.14.1" />
-      <PackageReference Include="Scrutor" Version="4.2.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <ProjectReference Include="..\Rapido.Framework.Base\Rapido.Framework.Base.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.CQRS\Rapido.Framework.CQRS.csproj" />
     </ItemGroup>
     
 </Project>
