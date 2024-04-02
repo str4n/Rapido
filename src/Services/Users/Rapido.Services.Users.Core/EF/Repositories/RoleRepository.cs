@@ -13,9 +13,13 @@ internal sealed class RoleRepository : IRoleRepository
         _dbContext = dbContext;
     }
 
-    public Task<Role> GetAsync(string name)
-        => _dbContext.Roles.SingleOrDefaultAsync(x => x.Name == name);
+    public Task<Role> GetAsync(string name, bool tracking = true)
+        => tracking
+            ? _dbContext.Roles.SingleOrDefaultAsync(x => x.Name == name)
+            : _dbContext.Roles.AsNoTracking().SingleOrDefaultAsync(x => x.Name == name);
 
     public async Task<IReadOnlyCollection<Role>> GetAllAsync()
-        => await _dbContext.Roles.ToListAsync();
+        => await _dbContext.Roles
+            .AsNoTracking()
+            .ToListAsync();
 }

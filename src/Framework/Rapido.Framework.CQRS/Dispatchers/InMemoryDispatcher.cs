@@ -18,6 +18,6 @@ internal sealed class InMemoryDispatcher : IDispatcher
     public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : class, ICommand
         => await _commandDispatcher.DispatchAsync(command);
 
-    public async Task DispatchAsync<TResult>(IQuery<TResult> query)
+    public async Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query)
         => await _queryDispatcher.DispatchAsync(query);
 }

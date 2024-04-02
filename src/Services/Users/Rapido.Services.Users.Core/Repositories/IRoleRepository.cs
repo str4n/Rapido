@@ -4,6 +4,6 @@ namespace Rapido.Services.Users.Core.Repositories;
 
 internal interface IRoleRepository
 {
-    Task<Role> GetAsync(string name);
+    Task<Role> GetAsync(string name, bool tracking = true);
     Task<IReadOnlyCollection<Role>> GetAllAsync();
 }
