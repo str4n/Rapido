@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Auth;
 using Rapido.Framework.Base;
 using Rapido.Framework.CQRS;
 
@@ -9,6 +11,10 @@ public static class Extensions
     public static WebApplicationBuilder AddFramework(this WebApplicationBuilder builder)
     {
         builder.Services.AddBaseFeatures(builder.Configuration);
+
+        builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddAuth(builder.Configuration);
 
         builder.Services
             .AddCommands()

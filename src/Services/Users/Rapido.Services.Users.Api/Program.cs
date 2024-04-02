@@ -7,7 +7,6 @@ builder.AddFramework();
 
 builder.Services
     .AddCore(builder.Configuration);
-    
 
 var app = builder.Build();
 
