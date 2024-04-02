@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Rapido.Framework.Api\Rapido.Framework.Api\Rapido.Framework.Api.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Auth\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Base\Rapido.Framework.Base.csproj" />
       <ProjectReference Include="..\Rapido.Framework.CQRS\Rapido.Framework.CQRS.csproj" />
