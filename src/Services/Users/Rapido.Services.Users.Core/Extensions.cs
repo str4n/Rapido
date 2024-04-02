@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Postgres;
 using Rapido.Services.Users.Core.EF;
 using Rapido.Services.Users.Core.EF.Repositories;
+using Rapido.Services.Users.Core.Entities.User;
 using Rapido.Services.Users.Core.Repositories;
 using Rapido.Services.Users.Core.Services;
 using Rapido.Services.Users.Core.Storage;
@@ -20,5 +22,6 @@ public static class Extensions
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IRoleRepository, RoleRepository>()
             .AddScoped<ISignUpValidator, SignUpValidator>()
-            .AddScoped<IPasswordManager, PasswordManager>();
+            .AddScoped<IPasswordManager, PasswordManager>()
+            .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 }

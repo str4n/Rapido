@@ -52,6 +52,8 @@ public static class Extensions
             };
          });
 
+      services.AddAuthorization();
+
       return services;
    }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Api.Exceptions;
+using Rapido.Framework.Api.Swagger;
 using Rapido.Framework.Auth;
 using Rapido.Framework.Base;
 using Rapido.Framework.CQRS;
@@ -15,6 +16,9 @@ public static class Extensions
             .AddExceptionHandling()
             .AddBaseFeatures(builder.Configuration)
             .AddHttpContextAccessor()
+            .AddMemoryCache()
+            .AddEndpointsApiExplorer()
+            .AddSwaggerDocs(builder.Configuration)
             .AddAuth(builder.Configuration);
 
         builder.Services
@@ -29,6 +33,7 @@ public static class Extensions
     {
         app
             .UseExceptionHandling()
+            .UseSwaggerDocs()
             .UseAuthentication()
             .UseRouting()
             .UseAuthorization();
