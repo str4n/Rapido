@@ -14,10 +14,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{327B702F-BF36-4FC6-BE6F-77A294FBE3E5}"
-	ProjectSection(SolutionItems) = preProject
-		src\Services\Users\Dockerfile = src\Services\Users\Dockerfile
-		src\Services\Users\.dockerignore = src\Services\Users\.dockerignore
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{0CD210CC-9174-4159-B584-1C046B6FE790}"
 EndProject
