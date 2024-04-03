@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rapidoservicesusers-deployment  
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: rapidoservicesusers 
+  template:
+    metadata:
+      labels:
+        app: rapidoservicesusers
+    spec:
+      containers:
+      - name: rapidoservicesusers
+        image: rapido/services-users:latest
+        ports:
+        - containerPort: 8080

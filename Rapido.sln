@@ -14,6 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{327B702F-BF36-4FC6-BE6F-77A294FBE3E5}"
+	ProjectSection(SolutionItems) = preProject
+		src\Services\Users\Dockerfile = src\Services\Users\Dockerfile
+		src\Services\Users\.dockerignore = src\Services\Users\.dockerignore
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{0CD210CC-9174-4159-B584-1C046B6FE790}"
 EndProject
@@ -35,15 +39,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.CQRS", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Common", "src\Framework\Rapido.Framework.Common\Rapido.Framework.Common.csproj", "{B840866D-7423-417B-93D3-205995715608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Auth", "src\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj", "{EEC04B54-E5ED-4FE4-B736-6A497847012B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Api", "src\Framework\Rapido.Framework.Api\Rapido.Framework.Api\Rapido.Framework.Api.csproj", "{9ABE0651-0B27-4F84-A671-F900C84B9F8D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Contexts", "src\Framework\Rapido.Framework.Contexts\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj", "{4305651C-73FA-4F3C-BEB1-D6E137110545}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Customers.Api", "src\Services\Customers\Rapido.Services.Customers.Api\Rapido.Services.Customers.Api.csproj", "{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Customers.Core", "src\Services\Customers\Rapido.Services.Customers.Core\Rapido.Services.Customers.Core.csproj", "{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Api", "src\Framework\Rapido.Framework.Api\Rapido.Framework.Api.csproj", "{F08BA58E-BE19-40E0-B209-E44E899E5598}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Auth", "src\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj", "{3A1B06A8-7C40-48E6-8F5D-48341D18C469}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Contexts", "src\Framework\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj", "{D0D3196E-DB14-4F67-BA40-CD2064ED68F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,11 +72,11 @@ Global
 		{FAB4F17A-E6E4-4401-97EC-96BDEC339A67} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{B8DD4BB8-C5CA-4AF3-8DBE-1DB869E15996} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{B840866D-7423-417B-93D3-205995715608} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
-		{EEC04B54-E5ED-4FE4-B736-6A497847012B} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
-		{9ABE0651-0B27-4F84-A671-F900C84B9F8D} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
-		{4305651C-73FA-4F3C-BEB1-D6E137110545} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D} = {0CD210CC-9174-4159-B584-1C046B6FE790}
 		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5} = {0CD210CC-9174-4159-B584-1C046B6FE790}
+		{F08BA58E-BE19-40E0-B209-E44E899E5598} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
+		{3A1B06A8-7C40-48E6-8F5D-48341D18C469} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
+		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -99,18 +103,6 @@ Global
 		{B840866D-7423-417B-93D3-205995715608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B840866D-7423-417B-93D3-205995715608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B840866D-7423-417B-93D3-205995715608}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EEC04B54-E5ED-4FE4-B736-6A497847012B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEC04B54-E5ED-4FE4-B736-6A497847012B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEC04B54-E5ED-4FE4-B736-6A497847012B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEC04B54-E5ED-4FE4-B736-6A497847012B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9ABE0651-0B27-4F84-A671-F900C84B9F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9ABE0651-0B27-4F84-A671-F900C84B9F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9ABE0651-0B27-4F84-A671-F900C84B9F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9ABE0651-0B27-4F84-A671-F900C84B9F8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4305651C-73FA-4F3C-BEB1-D6E137110545}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BD776E2-8051-4F4E-A27A-7E1CDEC5144D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -119,5 +111,17 @@ Global
 		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E7A6869-DB71-4F00-A30B-D086CA46F1A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F08BA58E-BE19-40E0-B209-E44E899E5598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F08BA58E-BE19-40E0-B209-E44E899E5598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F08BA58E-BE19-40E0-B209-E44E899E5598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F08BA58E-BE19-40E0-B209-E44E899E5598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A1B06A8-7C40-48E6-8F5D-48341D18C469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A1B06A8-7C40-48E6-8F5D-48341D18C469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A1B06A8-7C40-48E6-8F5D-48341D18C469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A1B06A8-7C40-48E6-8F5D-48341D18C469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
