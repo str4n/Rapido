@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit" Version="8.2.0" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Rapido.Framework.Messaging\Rapido.Framework.Messaging.csproj" />
+    </ItemGroup>
+
+</Project>
