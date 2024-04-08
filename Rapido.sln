@@ -47,6 +47,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Messaging"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Messaging.RabbitMQ", "src\Framework\Rapido.Framework.Messaging.RabbitMQ\Rapido.Framework.Messaging.RabbitMQ.csproj", "{39675207-45CD-4905-9D84-57585B86A12E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{6D0AF0C8-1EAB-497F-9A39-30CC7ABED8D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{27CB429A-3D4E-45DE-990F-D8CF617996A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Tests.Services.Users.Integration", "tests\Services\Users\Rapido.Tests.Services.Users.Integration\Rapido.Tests.Services.Users.Integration.csproj", "{AEB189D7-57EC-4926-A5C8-5A833350A551}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Testing", "src\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj", "{3ED11293-CD88-471D-B013-2A5C9B801567}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +84,10 @@ Global
 		{D0D3196E-DB14-4F67-BA40-CD2064ED68F6} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{235DE0BB-6AAA-48A9-B3D0-C9843851BCAC} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{39675207-45CD-4905-9D84-57585B86A12E} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
+		{6D0AF0C8-1EAB-497F-9A39-30CC7ABED8D6} = {FACF4E4A-217A-491A-9CBE-FCA03007AB5A}
+		{27CB429A-3D4E-45DE-990F-D8CF617996A5} = {6D0AF0C8-1EAB-497F-9A39-30CC7ABED8D6}
+		{AEB189D7-57EC-4926-A5C8-5A833350A551} = {27CB429A-3D4E-45DE-990F-D8CF617996A5}
+		{3ED11293-CD88-471D-B013-2A5C9B801567} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -126,5 +138,13 @@ Global
 		{39675207-45CD-4905-9D84-57585B86A12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39675207-45CD-4905-9D84-57585B86A12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39675207-45CD-4905-9D84-57585B86A12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB189D7-57EC-4926-A5C8-5A833350A551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB189D7-57EC-4926-A5C8-5A833350A551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB189D7-57EC-4926-A5C8-5A833350A551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB189D7-57EC-4926-A5C8-5A833350A551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ED11293-CD88-471D-B013-2A5C9B801567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED11293-CD88-471D-B013-2A5C9B801567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED11293-CD88-471D-B013-2A5C9B801567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED11293-CD88-471D-B013-2A5C9B801567}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -7,7 +7,7 @@ using Rapido.Framework.Common.Time;
 
 namespace Rapido.Framework.Auth.Authenticator;
 
-internal sealed class Authenticator : IAuthenticator
+public sealed class Authenticator : IAuthenticator
 {
     private readonly IClock _clock;
     private readonly AuthOptions _options;
