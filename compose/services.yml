@@ -1,0 +1,31 @@
+version: "3.9"
+name: rapido
+
+services:
+  users-service:
+    build:
+      context: ../
+      dockerfile: src/Services/Users/Dockerfile
+    container_name: users-service
+    restart: unless-stopped
+    ports:
+      - 5020:80
+    networks:
+      - rapido
+
+  customers-service:
+    build:
+      context: ../
+      dockerfile: src/Services/Customers/Dockerfile
+    container_name: customers-service
+    restart: unless-stopped
+    ports:
+      - 5030:80
+    networks:
+      - rapido
+
+
+networks:
+  rapido:
+    name: rapido
+    external: true

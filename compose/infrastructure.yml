@@ -1,4 +1,5 @@
-version: "3"
+version: "3.9"
+name: rapido
 
 services:
   postgres:
@@ -31,7 +32,7 @@ services:
 
 networks:
   rapido:
-    name: rapido-network
+    name: rapido
 
 volumes:
   postgres:
