@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.CQRS.Commands;
+﻿using Rapido.Framework.Common.Abstractions;
+using Rapido.Framework.Common.Abstractions.Commands;
 
 namespace Rapido.Services.Users.Core.Commands;
 

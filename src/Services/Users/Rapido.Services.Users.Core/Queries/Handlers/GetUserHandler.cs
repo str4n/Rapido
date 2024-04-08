@@ -1,4 +1,4 @@
-﻿using Rapido.Framework.CQRS.Queries;
+﻿using Rapido.Framework.Common.Abstractions.Queries;
 using Rapido.Services.Users.Core.DTO;
 using Rapido.Services.Users.Core.Exceptions;
 using Rapido.Services.Users.Core.Repositories;

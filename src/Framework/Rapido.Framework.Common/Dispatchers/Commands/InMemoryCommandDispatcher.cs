@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Common.Abstractions.Commands;
 
-namespace Rapido.Framework.CQRS.Commands.Dispatchers;
+namespace Rapido.Framework.Common.Dispatchers.Commands;
 
 internal sealed class InMemoryCommandDispatcher : ICommandDispatcher
 {

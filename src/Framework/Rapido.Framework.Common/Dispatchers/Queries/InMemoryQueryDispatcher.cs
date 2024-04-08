@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Common.Abstractions.Queries;
 
-namespace Rapido.Framework.CQRS.Queries.Dispatchers;
+namespace Rapido.Framework.Common.Dispatchers.Queries;
 
 internal sealed class InMemoryQueryDispatcher : IQueryDispatcher
 {

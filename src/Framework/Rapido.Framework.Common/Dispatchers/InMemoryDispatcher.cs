@@ -1,7 +1,9 @@
-﻿using Rapido.Framework.CQRS.Commands;
-using Rapido.Framework.CQRS.Queries;
+﻿using Rapido.Framework.Common.Abstractions;
+using Rapido.Framework.Common.Abstractions.Commands;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
+using Rapido.Framework.Common.Abstractions.Queries;
 
-namespace Rapido.Framework.CQRS.Dispatchers;
+namespace Rapido.Framework.Common.Dispatchers;
 
 internal sealed class InMemoryDispatcher : IDispatcher
 {

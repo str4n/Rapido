@@ -1,7 +1,7 @@
-﻿using Rapido.Framework.CQRS.Commands;
-using Rapido.Framework.CQRS.Queries;
+﻿using Rapido.Framework.Common.Abstractions.Commands;
+using Rapido.Framework.Common.Abstractions.Queries;
 
-namespace Rapido.Framework.CQRS.Dispatchers;
+namespace Rapido.Framework.Common.Abstractions.Dispatchers;
 
 public interface IDispatcher
 {

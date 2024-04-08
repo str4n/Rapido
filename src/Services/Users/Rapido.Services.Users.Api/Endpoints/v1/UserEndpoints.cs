@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
-using Rapido.Framework.CQRS.Dispatchers;
 using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.Queries;
 using Rapido.Services.Users.Core.Storage;

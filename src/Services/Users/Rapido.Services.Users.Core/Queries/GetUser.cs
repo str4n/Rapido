@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.CQRS.Queries;
+﻿using Rapido.Framework.Common.Abstractions;
+using Rapido.Framework.Common.Abstractions.Queries;
 using Rapido.Services.Users.Core.DTO;
 
 namespace Rapido.Services.Users.Core.Queries;

@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.CQRS.Queries;
+﻿namespace Rapido.Framework.Common.Abstractions.Queries;
 
 public interface IQueryDispatcher
 {

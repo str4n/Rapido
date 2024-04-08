@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Auth.Authenticator;
+using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.CQRS.Commands;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
 using Rapido.Services.Users.Core.Exceptions;

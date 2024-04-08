@@ -10,7 +10,6 @@
       <ProjectReference Include="..\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj" />
-      <ProjectReference Include="..\Rapido.Framework.CQRS\Rapido.Framework.CQRS.csproj" />
     </ItemGroup>
     
 </Project>

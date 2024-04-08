@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Rapido.Framework.CQRS.Commands;
-using Rapido.Framework.CQRS.Commands.Dispatchers;
-using Rapido.Framework.CQRS.Dispatchers;
-using Rapido.Framework.CQRS.Queries;
-using Rapido.Framework.CQRS.Queries.Dispatchers;
+using Rapido.Framework.Common.Abstractions.Commands;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
+using Rapido.Framework.Common.Abstractions.Queries;
+using Rapido.Framework.Common.Dispatchers.Commands;
+using Rapido.Framework.Common.Dispatchers.Queries;
 
-namespace Rapido.Framework.CQRS;
+namespace Rapido.Framework.Common.Dispatchers;
 
 public static class Extensions
 {
