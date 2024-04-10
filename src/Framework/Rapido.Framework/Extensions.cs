@@ -6,6 +6,7 @@ using Rapido.Framework.Auth;
 using Rapido.Framework.Common;
 using Rapido.Framework.Common.Dispatchers;
 using Rapido.Framework.Contexts;
+using Rapido.Framework.Messaging.RabbitMQ;
 
 namespace Rapido.Framework;
 
@@ -33,6 +34,9 @@ public static class Extensions
             .AddCommands()
             .AddQueries()
             .AddDispatcher();
+
+        builder.Services
+            .AddRabbitMq(builder.Configuration);
 
         return builder;
     }

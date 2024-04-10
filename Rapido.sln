@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Testing", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Tests.Services.Users.Integration", "tests\Services\Users\Rapido.Tests.Services.Users.Integration\Rapido.Tests.Services.Users.Integration.csproj", "{8C4589E3-18D0-4D9B-985C-D0C8C46B32D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Contracts", "src\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj", "{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,7 @@ Global
 		{27CB429A-3D4E-45DE-990F-D8CF617996A5} = {6D0AF0C8-1EAB-497F-9A39-30CC7ABED8D6}
 		{3ED11293-CD88-471D-B013-2A5C9B801567} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{8C4589E3-18D0-4D9B-985C-D0C8C46B32D2} = {27CB429A-3D4E-45DE-990F-D8CF617996A5}
+		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -146,5 +149,9 @@ Global
 		{8C4589E3-18D0-4D9B-985C-D0C8C46B32D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C4589E3-18D0-4D9B-985C-D0C8C46B32D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C4589E3-18D0-4D9B-985C-D0C8C46B32D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

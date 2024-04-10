@@ -4,5 +4,5 @@ namespace Rapido.Framework.Messaging.Brokers;
 
 public interface IMessageBroker
 {
-    Task PublishAsync<T>(T message) where T : class, IMessage;
+    Task PublishAsync<T>(params T[] messages) where T : class, IMessage;
 }
