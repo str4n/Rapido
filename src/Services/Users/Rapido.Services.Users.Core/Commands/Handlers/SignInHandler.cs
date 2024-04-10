@@ -34,12 +34,12 @@ internal sealed class SignInHandler : ICommandHandler<SignIn>
 
         if (user is null)
         {
-            throw new InvalidCredentialException();
+            throw new InvalidCredentialsException();
         }
 
         if (!_passwordManager.Validate(password, user.Password))
         {
-            throw new InvalidCredentialException();
+            throw new InvalidCredentialsException();
         }
 
         if (user.State is not UserState.Active)

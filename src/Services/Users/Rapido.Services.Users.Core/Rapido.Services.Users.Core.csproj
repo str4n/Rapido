@@ -11,5 +11,9 @@
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="Rapido.Tests.Services.Users.Integration"/>
+    </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ public sealed class TestAuthenticator
     
     public TestAuthenticator()
     {
-        var options = new OptionsProvider().GetOptions<AuthOptions>("Auth");
+        var options = new OptionsProvider().GetOptions<AuthOptions>("auth");
         _authenticator = new Authenticator(new UtcClock(), Options.Create(options));
     }
     
