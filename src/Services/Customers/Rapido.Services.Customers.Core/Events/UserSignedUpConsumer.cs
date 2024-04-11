@@ -21,7 +21,7 @@ internal sealed class UserSignedUpConsumer : IConsumer<UserSignedUp>
     {
         var message = context.Message;
 
-        var customer = new Customer(Guid.NewGuid(), message.Email, _clock.Now());
+        var customer = new Customer(message.UserId, message.Email, _clock.Now());
 
         await _customerRepository.AddAsync(customer);
     }

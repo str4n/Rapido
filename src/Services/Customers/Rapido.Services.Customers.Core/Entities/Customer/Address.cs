@@ -44,5 +44,9 @@ internal sealed record Address
         PostalCode = postalCode;
     }
 
+    private Address()
+    {
+    }
+
     public override string ToString() => $"{Street}, {PostalCode} {City}, {Country}";
 }

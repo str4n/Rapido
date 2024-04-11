@@ -6,5 +6,7 @@ internal interface ICustomerRepository
 {
     Task<Customer> GetAsync(Guid id, bool tracking = true);
     Task<Customer> GetAsync(string email, bool tracking = true);
+    Task<bool> AnyAsync(string name);
     Task AddAsync(Customer customer);
+    Task UpdateAsync(Customer customer);
 }

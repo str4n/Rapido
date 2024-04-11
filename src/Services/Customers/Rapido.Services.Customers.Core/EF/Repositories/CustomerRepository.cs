@@ -23,9 +23,18 @@ internal sealed class CustomerRepository : ICustomerRepository
             ? _dbContext.Customers.SingleOrDefaultAsync(x => x.Email == email)
             : _dbContext.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
 
+    public Task<bool> AnyAsync(string name)
+        => _dbContext.Customers.AnyAsync(x => x.Name == name);
+
     public async Task AddAsync(Customer customer)
     {
         await _dbContext.Customers.AddAsync(customer);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(Customer customer)
+    {
+        _dbContext.Update(customer);
         await _dbContext.SaveChangesAsync();
     }
 }

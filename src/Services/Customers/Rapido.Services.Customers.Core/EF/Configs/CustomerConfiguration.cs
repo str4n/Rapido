@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Newtonsoft.Json;
 using Rapido.Services.Customers.Core.Entities.Customer;
 
 namespace Rapido.Services.Customers.Core.EF.Configs;
@@ -30,9 +31,23 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .IsRequired();
 
         builder.Property(x => x.Address)
-            .HasColumnType("jsonb");
-        
+            .HasColumnType("text")
+            .HasConversion(
+                x => JsonConvert.SerializeObject(x), 
+                x => JsonConvert.DeserializeObject<Address>(x));
+
         builder.Property(x => x.Identity)
-            .HasColumnType("jsonb");
+            .HasColumnType("text")
+            .HasConversion(
+                x => ConvertIdentity(x), 
+                x => JsonConvert.DeserializeObject<Identity>(x));
+    }
+
+    private string ConvertIdentity(Identity identity)
+    {
+        var type = identity.Type.ToString();
+        var series = identity.Series;
+        
+        return JsonConvert.SerializeObject(new {type, series});
     }
 }
