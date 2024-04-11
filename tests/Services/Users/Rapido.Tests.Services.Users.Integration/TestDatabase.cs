@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Rapido.Framework.Common.Time;
+using Rapido.Framework.Testing;
 using Rapido.Services.Users.Core.EF;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;

@@ -8,6 +8,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>

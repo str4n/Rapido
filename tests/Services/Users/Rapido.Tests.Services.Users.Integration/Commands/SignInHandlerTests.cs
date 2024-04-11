@@ -65,27 +65,23 @@ public class SignInHandlerTests : IDisposable
     #region Arrange
 
     private readonly TestDatabase _testDatabase;
-    private readonly IUserRepository _userRepository;
-    private readonly IPasswordManager _passwordManager;
-    private readonly IAuthenticator _authenticator;
-    private readonly IClock _clock;
     private readonly ITokenStorage _tokenStorage;
 
     private readonly SignInHandler _handler;
 
     public SignInHandlerTests()
     {
-        _clock = new TestClock();
+        var clock = new TestClock();
         _testDatabase = new TestDatabase();
-        _userRepository = new UserRepository(_testDatabase.DbContext);
-        _passwordManager = new PasswordManager(new PasswordHasher<User>());
+        var userRepository = new UserRepository(_testDatabase.DbContext);
+        var passwordManager = new PasswordManager(new PasswordHasher<User>());
 
         var options = new OptionsProvider().GetOptions<AuthOptions>("auth");
-        _authenticator = new Authenticator(_clock, Options.Create(options));
+        var authenticator = new Authenticator(clock, Options.Create(options));
 
         _tokenStorage = new TestTokenStorage();
         
-        _handler = new SignInHandler(_userRepository, _passwordManager, _authenticator, _tokenStorage);
+        _handler = new SignInHandler(userRepository, passwordManager, authenticator, _tokenStorage);
     }
     
     #endregion Arrange

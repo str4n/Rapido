@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Rapido.Framework.Common.Time;
+using Rapido.Framework.Testing;
 using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.Commands.Handlers;
 using Rapido.Services.Users.Core.EF.Repositories;
@@ -75,22 +76,20 @@ public class SignUpHandlerTests : IDisposable
 
     private readonly TestDatabase _testDatabase;
     private readonly IUserRepository _userRepository;
-    private readonly IRoleRepository _roleRepository;
-    private readonly SignUpValidator _validator;
     private readonly IPasswordManager _passwordManager;
-    private readonly IClock _clock;
 
     private readonly SignUpHandler _handler;
 
     public SignUpHandlerTests()
     {
         _testDatabase = new TestDatabase();
-        _clock = new TestClock();
+        var clock = new TestClock();
         _userRepository = new UserRepository(_testDatabase.DbContext);
-        _roleRepository = new RoleRepository(_testDatabase.DbContext);
-        _validator = new SignUpValidator(_userRepository);
+        var roleRepository = new RoleRepository(_testDatabase.DbContext);
+        var validator = new SignUpValidator(_userRepository);
         _passwordManager = new PasswordManager(new PasswordHasher<User>());
-        _handler = new SignUpHandler(_userRepository, _roleRepository, _clock, _validator, _passwordManager);
+        var messageBroker = new TestMessageBroker();
+        _handler = new SignUpHandler(_userRepository, roleRepository, clock, validator, _passwordManager, messageBroker);
     }
     
     #endregion Arrange
