@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Events;
+using Rapido.Framework.Contracts.Customers.Events;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.Entities.Customer;
 using Rapido.Services.Customers.Core.Exceptions;

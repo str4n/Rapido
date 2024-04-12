@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Events;
+using Rapido.Framework.Contracts.Users.Events;
 using Rapido.Services.Customers.Core.Entities.Customer;
 using Rapido.Services.Customers.Core.Repositories;
 

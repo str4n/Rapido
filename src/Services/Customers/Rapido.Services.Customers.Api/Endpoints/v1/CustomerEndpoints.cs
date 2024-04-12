@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
+﻿using Rapido.Framework.Auth.Policies;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Services.Customers.Core.Commands;
 using Rapido.Services.Customers.Core.Queries;
@@ -10,7 +11,7 @@ internal static class CustomerEndpoints
     private const string Version = "v1";
     public static IEndpointRouteBuilder MapCustomerEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost($"{Version}/complete", Complete)
+        app.MapPost($"/{Version}/complete", Complete)
             .RequireAuthorization()
             .WithTags("Customer")
             .WithName("Complete customer");
@@ -20,6 +21,12 @@ internal static class CustomerEndpoints
             .RequireAuthorization()
             .WithTags("Customer")
             .WithName("Get customer");
+
+        app
+            .MapPost(Version + "/verify/{customerId:guid}", Verify)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Verify customer");
 
         return app;
     }
@@ -40,5 +47,12 @@ internal static class CustomerEndpoints
         var result = await dispatcher.DispatchAsync(new GetCustomer(id));
         
         return Results.Ok(result);
+    }
+
+    private static async Task<IResult> Verify(Guid customerId, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(new VerifyCustomer(customerId));
+
+        return Results.Ok();
     }
 }
