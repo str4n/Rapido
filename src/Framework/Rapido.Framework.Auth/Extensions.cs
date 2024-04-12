@@ -1,9 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Rapido.Framework.Auth.Authenticator;
+using Rapido.Framework.Auth.Policies;
+using Rapido.Framework.Auth.Policies.Handlers;
 using Rapido.Framework.Common;
 
 namespace Rapido.Framework.Auth;
@@ -51,8 +54,17 @@ public static class Extensions
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.SigningKey))
             };
          });
+      
+      services.AddScoped<IAuthorizationHandler, RoleRequirementHandler>();
 
-      services.AddAuthorization();
+      services.AddAuthorization(authOptions =>
+      {
+         authOptions.AddPolicy(Policies.Policies.Admin, 
+            builder => builder.AddRequirements(new RoleRequirement("admin")));
+         
+         authOptions.AddPolicy(Policies.Policies.User, 
+            builder => builder.AddRequirements(new RoleRequirement("user")));
+      });
 
       return services;
    }
