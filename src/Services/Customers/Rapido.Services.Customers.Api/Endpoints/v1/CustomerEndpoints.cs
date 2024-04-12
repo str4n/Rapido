@@ -11,6 +11,11 @@ internal static class CustomerEndpoints
     private const string Version = "v1";
     public static IEndpointRouteBuilder MapCustomerEndpoints(this IEndpointRouteBuilder app)
     {
+        app.MapGet($"{Version}/customers", GetAll)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Get all customers");
+        
         app.MapPost($"/{Version}/complete", Complete)
             .RequireAuthorization()
             .WithTags("Customer")
@@ -28,7 +33,6 @@ internal static class CustomerEndpoints
             .WithTags("Customer")
             .WithName("Verify customer");
         
-        
         //A backup method if for some reason the event consumer wouldn't work.
         app
             .MapPost($"{Version}/customers/create", Create)
@@ -38,6 +42,13 @@ internal static class CustomerEndpoints
             .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
 
         return app;
+    }
+
+    private static async Task<IResult> GetAll(IDispatcher dispatcher)
+    {
+        var result = await dispatcher.DispatchAsync(new GetCustomers());
+
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Complete(CompleteCustomer command, IDispatcher dispatcher, IContext context)

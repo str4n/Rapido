@@ -13,6 +13,9 @@ internal sealed class CustomerRepository : ICustomerRepository
         _dbContext = dbContext;
     }
 
+    public async Task<IEnumerable<Customer>> GetAllAsync()
+        => await _dbContext.Customers.ToListAsync();
+
     public Task<Customer> GetAsync(Guid id, bool tracking = true)
         => tracking
             ? _dbContext.Customers.SingleOrDefaultAsync(x => x.Id == id)
