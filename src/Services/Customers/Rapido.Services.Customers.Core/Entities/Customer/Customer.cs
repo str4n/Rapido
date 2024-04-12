@@ -24,6 +24,10 @@ internal sealed class Customer
         CreatedAt = createdAt;
     }
 
+    private Customer()
+    {
+    }
+
     public void Complete(Name name, FullName fullName, Address address, Nationality nationality, Identity identity,
         DateTime completedAt)
     {
@@ -38,13 +42,14 @@ internal sealed class Customer
         Nationality = nationality;
         Identity = identity;
         CompletedAt = completedAt;
+        State = CustomerState.Completed;
     }
 
     public void Verify(DateTime verifiedAt)
     {
         if (State is CustomerState.Deleted or CustomerState.Locked or CustomerState.NotCompleted)
         {
-            
+            throw new CannotVerifyAccountException();
         }
 
         State = CustomerState.Verified;

@@ -5,5 +5,6 @@ internal enum CustomerState
     NotCompleted,
     Locked,
     Deleted,
+    Completed,
     Verified
 }

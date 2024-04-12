@@ -38,7 +38,7 @@ internal sealed class CompleteCustomerHandler : ICommandHandler<CompleteCustomer
 
         if (await _customerRepository.AnyAsync(name))
         {
-            throw new CustomerAlreadyExistsException(name);
+            throw new CustomerAlreadyExistsException($"Customer with name: {name} already exists.");
         }
         
         customer.Complete(name, fullName, address, nationality, identity, _clock.Now());

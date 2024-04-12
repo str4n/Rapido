@@ -1,5 +1,6 @@
 ﻿using Rapido.Framework.Common.Abstractions.Queries;
 using Rapido.Services.Customers.Core.DTO;
+using Rapido.Services.Customers.Core.Entities.Customer;
 using Rapido.Services.Customers.Core.Exceptions;
 using Rapido.Services.Customers.Core.Mappings;
 using Rapido.Services.Customers.Core.Repositories;

@@ -27,6 +27,15 @@ internal static class CustomerEndpoints
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Verify customer");
+        
+        
+        //A backup method if for some reason the event consumer wouldn't work.
+        app
+            .MapPost($"{Version}/customers/create", Create)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Create customer")
+            .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
 
         return app;
     }
@@ -52,6 +61,13 @@ internal static class CustomerEndpoints
     private static async Task<IResult> Verify(Guid customerId, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(new VerifyCustomer(customerId));
+
+        return Results.Ok();
+    }
+
+    private static async Task<IResult> Create(CreateCustomer command, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(command);
 
         return Results.Ok();
     }

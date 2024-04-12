@@ -21,9 +21,9 @@ internal sealed class GetUserHandler : IQueryHandler<GetUser, UserDto>
 
         if (user is null)
         {
-            throw new UserNotFoundException(userId);
+            throw new UserNotFoundException($"User with id: {userId} was not found.");
         }
 
-        return new UserDto(user.Id, user.Email, user.Role.Name, user.CreatedAt);
+        return new UserDto(user.Id, user.Email, user.Role.Name);
     }
 }

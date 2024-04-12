@@ -27,6 +27,7 @@ public static class Extensions
             .AddContexts()
             .AddMemoryCache()
             .AddEndpointsApiExplorer()
+            .AddHttpClient()
             .AddSwaggerDocs(builder.Configuration)
             .AddAuth(builder.Configuration);
 
