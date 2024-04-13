@@ -12,6 +12,9 @@ internal sealed class Customer
     public Nationality Nationality { get; private set; }
     public Identity Identity { get; private set; }
     public CustomerState State { get; private set; }
+    public CustomerState StateBeforeLockout { get; private set; }
+    private readonly List<Lockout.Lockout> _lockouts = new();
+    public IEnumerable<Lockout.Lockout> Lockouts => _lockouts;
     public DateTime CreatedAt { get; private set; }
     public DateTime CompletedAt { get; private set; }
     public DateTime VerifiedAt { get; private set; }
@@ -43,6 +46,7 @@ internal sealed class Customer
         Identity = identity;
         CompletedAt = completedAt;
         State = CustomerState.Completed;
+        StateBeforeLockout = CustomerState.None;
     }
 
     public void Verify(DateTime verifiedAt)
@@ -54,5 +58,29 @@ internal sealed class Customer
 
         State = CustomerState.Verified;
         VerifiedAt = verifiedAt;
+    }
+
+    public void Lock(Lockout.Lockout lockout)
+    {
+        if (State is CustomerState.Locked)
+        {
+            throw new CannotLockCustomerException();
+        }
+        
+        StateBeforeLockout = State;
+        
+        _lockouts.Add(lockout);
+
+        State = CustomerState.Locked;
+    }
+
+    public void Unlock()
+    {
+        if (State is not CustomerState.Locked)
+        {
+            throw new CannotUnlockCustomerException();
+        }
+        
+        State = StateBeforeLockout;
     }
 }

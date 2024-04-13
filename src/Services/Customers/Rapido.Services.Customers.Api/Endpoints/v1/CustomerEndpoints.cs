@@ -28,7 +28,7 @@ internal static class CustomerEndpoints
             .WithName("Get customer");
 
         app
-            .MapPost(Version + "/verify/{customerId:guid}", Verify)
+            .MapPut(Version + "/verify/{customerId:guid}", Verify)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Verify customer");
@@ -40,6 +40,12 @@ internal static class CustomerEndpoints
             .WithTags("Customer")
             .WithName("Create customer")
             .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
+
+        app
+            .MapPost(Version + "/customers/lock/{customerId:guid}", Lock)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Lock customer");
 
         return app;
     }
@@ -79,6 +85,13 @@ internal static class CustomerEndpoints
     private static async Task<IResult> Create(CreateCustomer command, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(command);
+
+        return Results.Ok();
+    }
+
+    private static async Task<IResult> Lock(Guid customerId, LockCustomer command, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(command with { CustomerId = customerId });
 
         return Results.Ok();
     }

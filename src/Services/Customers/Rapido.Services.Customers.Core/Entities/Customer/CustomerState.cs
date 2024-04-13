@@ -2,6 +2,7 @@
 
 internal enum CustomerState
 {
+    None,
     NotCompleted,
     Locked,
     Deleted,

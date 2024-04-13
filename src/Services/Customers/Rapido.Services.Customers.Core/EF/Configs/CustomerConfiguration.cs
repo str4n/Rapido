@@ -30,6 +30,9 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasConversion<string>()
             .IsRequired();
 
+        builder.Property(x => x.StateBeforeLockout)
+            .HasConversion<string>();
+
         builder.Property(x => x.Address)
             .HasColumnType("text")
             .HasConversion(

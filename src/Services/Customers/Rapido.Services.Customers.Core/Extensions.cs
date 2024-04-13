@@ -7,6 +7,7 @@ using Rapido.Services.Customers.Core.EF;
 using Rapido.Services.Customers.Core.EF.Repositories;
 using Rapido.Services.Customers.Core.Events;
 using Rapido.Services.Customers.Core.Repositories;
+using Rapido.Services.Customers.Core.Services;
 
 namespace Rapido.Services.Customers.Core;
 
@@ -16,5 +17,6 @@ public static class Extensions
         => services
             .AddPostgres<CustomersDbContext>(configuration)
             .AddScoped<ICustomerRepository, CustomerRepository>()
-            .AddSingleton<IUserApiClient, UserApiClient>();
+            .AddSingleton<IUserApiClient, UserApiClient>()
+            .AddHostedService<CustomerLockoutService>();
 }

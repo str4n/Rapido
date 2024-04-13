@@ -18,13 +18,23 @@ internal sealed class CustomerRepository : ICustomerRepository
 
     public Task<Customer> GetAsync(Guid id, bool tracking = true)
         => tracking
-            ? _dbContext.Customers.SingleOrDefaultAsync(x => x.Id == id)
-            : _dbContext.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            ? _dbContext.Customers
+                .Include(x => x.Lockouts)
+                .SingleOrDefaultAsync(x => x.Id == id)
+            : _dbContext.Customers
+                .AsNoTracking()
+                .Include(x => x.Lockouts)
+                .SingleOrDefaultAsync(x => x.Id == id);
 
     public Task<Customer> GetAsync(string email, bool tracking = true)
         => tracking
-            ? _dbContext.Customers.SingleOrDefaultAsync(x => x.Email == email)
-            : _dbContext.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
+            ? _dbContext.Customers
+                .Include(x => x.Lockouts)
+                .SingleOrDefaultAsync(x => x.Email == email)
+            : _dbContext.Customers
+                .AsNoTracking()
+                .Include(x => x.Lockouts)
+                .SingleOrDefaultAsync(x => x.Email == email);
 
     public Task<bool> AnyAsync(string name)
         => _dbContext.Customers.AnyAsync(x => x.Name == name);
