@@ -74,12 +74,15 @@ internal sealed class Customer
         State = CustomerState.Locked;
     }
 
-    public void Unlock()
+    public void Unlock(DateTime now)
     {
-        if (State is not CustomerState.Locked)
+        if (State is not CustomerState.Locked && !Lockouts.Any())
         {
             throw new CannotUnlockCustomerException();
         }
+
+        var activeLockout = _lockouts.Last();
+        activeLockout.EndDate = now;
         
         State = StateBeforeLockout;
     }

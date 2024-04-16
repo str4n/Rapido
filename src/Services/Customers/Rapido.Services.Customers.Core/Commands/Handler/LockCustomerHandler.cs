@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
+using Rapido.Framework.Contracts.Customers.Events;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.EF;
 using Rapido.Services.Customers.Core.Entities.Lockout;
 using Rapido.Services.Customers.Core.Exceptions;
@@ -12,11 +14,13 @@ internal sealed class LockCustomerHandler : ICommandHandler<LockCustomer>
 {
     private readonly CustomersDbContext _dbContext;
     private readonly IClock _clock;
+    private readonly IMessageBroker _messageBroker;
 
-    public LockCustomerHandler(CustomersDbContext dbContext, IClock clock)
+    public LockCustomerHandler(CustomersDbContext dbContext, IClock clock, IMessageBroker messageBroker)
     {
         _dbContext = dbContext;
         _clock = clock;
+        _messageBroker = messageBroker;
     }
     
     public async Task HandleAsync(LockCustomer command)
@@ -43,5 +47,6 @@ internal sealed class LockCustomerHandler : ICommandHandler<LockCustomer>
         _dbContext.Entry(lockout).State = EntityState.Added;
         _dbContext.Customers.Update(customer);
         await _dbContext.SaveChangesAsync();
+        await _messageBroker.PublishAsync(new CustomerLocked(customer.Id, customer.Email, lockout.EndDate));
     }
 }

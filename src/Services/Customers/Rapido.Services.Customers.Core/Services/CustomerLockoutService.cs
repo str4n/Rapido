@@ -54,7 +54,7 @@ internal sealed class CustomerLockoutService : IHostedService
 
             foreach (var customer in customersWithEndedLockouts)
             {
-                customer.Unlock();
+                customer.Unlock(now);
             }
             
             dbContext.UpdateRange(customersWithEndedLockouts);

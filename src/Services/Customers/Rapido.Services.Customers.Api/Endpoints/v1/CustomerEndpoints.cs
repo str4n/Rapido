@@ -46,6 +46,12 @@ internal static class CustomerEndpoints
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Lock customer");
+        
+        app
+            .MapPost(Version + "/customers/unlock/{customerId:guid}", Unlock)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Unlock customer");
 
         return app;
     }
@@ -92,6 +98,13 @@ internal static class CustomerEndpoints
     private static async Task<IResult> Lock(Guid customerId, LockCustomer command, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(command with { CustomerId = customerId });
+
+        return Results.Ok();
+    }
+
+    private static async Task<IResult> Unlock(Guid customerId, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(new UnlockCustomer(customerId));
 
         return Results.Ok();
     }
