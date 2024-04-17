@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Time;
 using Rapido.Services.Customers.Core.EF;
 using Rapido.Services.Customers.Core.Entities.Customer;
+using Rapido.Services.Customers.Core.Entities.Lockout;
 
 namespace Rapido.Services.Customers.Core.Services;
 
@@ -26,7 +27,7 @@ internal sealed class CustomerLockoutService : IHostedService
     
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(10));
         
         return Task.CompletedTask;
     }
@@ -42,22 +43,22 @@ internal sealed class CustomerLockoutService : IHostedService
             var dbContext = scope.ServiceProvider.GetRequiredService<CustomersDbContext>();
 
             var now = _clock.Now();
-
+            
             var lockedCustomers = await dbContext.Customers
                 .Include(x => x.Lockouts)
                 .Where(c => c.State == CustomerState.Locked && c.Lockouts.Any())
                 .ToListAsync();
-
-            var customersWithEndedLockouts = lockedCustomers
-                    .Where(x => x.Lockouts.Last().EndDate < now)
-                    .ToList();
-
-            foreach (var customer in customersWithEndedLockouts)
+            
+            var customersWithEndedLockout = lockedCustomers
+                .Where(x => x.Lockouts.Last() is TemporaryLockout lockout && lockout.IsActive(now))
+                .ToList();
+            
+            foreach (var customer in customersWithEndedLockout)
             {
                 customer.Unlock(now);
             }
             
-            dbContext.UpdateRange(customersWithEndedLockouts);
+            dbContext.UpdateRange(customersWithEndedLockout);
             await dbContext.SaveChangesAsync();
         }
         catch (Exception exception)

@@ -15,5 +15,9 @@ internal sealed class LockoutConfiguration : IEntityTypeConfiguration<Lockout>
         
         builder.Property(x => x.Description)
             .IsRequired();
+        
+        builder.HasDiscriminator<string>("Type")
+            .HasValue<TemporaryLockout>(nameof(TemporaryLockout))
+            .HasValue<PermanentLockout>(nameof(PermanentLockout));
     }
 }

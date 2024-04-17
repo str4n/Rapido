@@ -1,4 +1,5 @@
-﻿using Rapido.Services.Customers.Core.Exceptions;
+﻿using Rapido.Services.Customers.Core.Entities.Lockout;
+using Rapido.Services.Customers.Core.Exceptions;
 
 namespace Rapido.Services.Customers.Core.Entities.Customer;
 
@@ -82,7 +83,16 @@ internal sealed class Customer
         }
 
         var activeLockout = _lockouts.Last();
-        activeLockout.EndDate = now;
+
+        if (activeLockout is TemporaryLockout tempLockout)
+        {
+            tempLockout.EndDate = now;
+        }
+
+        if (activeLockout is PermanentLockout permLockout)
+        {
+            permLockout.Active = false;
+        }
         
         State = StateBeforeLockout;
     }

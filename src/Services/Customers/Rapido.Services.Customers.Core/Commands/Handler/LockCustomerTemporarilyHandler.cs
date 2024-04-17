@@ -6,24 +6,23 @@ using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.EF;
 using Rapido.Services.Customers.Core.Entities.Lockout;
 using Rapido.Services.Customers.Core.Exceptions;
-using Rapido.Services.Customers.Core.Repositories;
 
 namespace Rapido.Services.Customers.Core.Commands.Handler;
 
-internal sealed class LockCustomerHandler : ICommandHandler<LockCustomer>
+internal sealed class LockCustomerTemporarilyHandler : ICommandHandler<LockCustomerTemporarily>
 {
     private readonly CustomersDbContext _dbContext;
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
 
-    public LockCustomerHandler(CustomersDbContext dbContext, IClock clock, IMessageBroker messageBroker)
+    public LockCustomerTemporarilyHandler(CustomersDbContext dbContext, IClock clock, IMessageBroker messageBroker)
     {
         _dbContext = dbContext;
         _clock = clock;
         _messageBroker = messageBroker;
     }
     
-    public async Task HandleAsync(LockCustomer command)
+    public async Task HandleAsync(LockCustomerTemporarily command)
     {
         var customer = await _dbContext.Customers
             .Include(x => x.Lockouts)
@@ -34,12 +33,9 @@ internal sealed class LockCustomerHandler : ICommandHandler<LockCustomer>
             throw new CustomerNotFoundException(command.CustomerId);
         }
 
-        var lockout = new Lockout(customer.Id, command.Reason, command.Description, _clock.Now());
+        var now = _clock.Now();
 
-        if (command.EndDate != default)
-        {
-            lockout.EndDate = command.EndDate;
-        }
+        var lockout = new TemporaryLockout(customer.Id, command.Reason, command.Description, now, command.EndDate);
         
         customer.Lock(lockout);
         
@@ -47,6 +43,6 @@ internal sealed class LockCustomerHandler : ICommandHandler<LockCustomer>
         _dbContext.Entry(lockout).State = EntityState.Added;
         _dbContext.Customers.Update(customer);
         await _dbContext.SaveChangesAsync();
-        await _messageBroker.PublishAsync(new CustomerLocked(customer.Id, customer.Email, lockout.EndDate));
+        await _messageBroker.PublishAsync(new CustomerLocked(customer.Id));
     }
 }

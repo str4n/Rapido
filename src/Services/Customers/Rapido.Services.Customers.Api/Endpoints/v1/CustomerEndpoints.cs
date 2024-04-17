@@ -42,10 +42,16 @@ internal static class CustomerEndpoints
             .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
 
         app
-            .MapPost(Version + "/customers/lock/{customerId:guid}", Lock)
+            .MapPost(Version + "/customers/lock/temp/{customerId:guid}", LockTemporarily)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
-            .WithName("Lock customer");
+            .WithName("Lock customer temporarily");
+        
+        app
+            .MapPost(Version + "/customers/lock/perm/{customerId:guid}", LockPermanently)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Customer")
+            .WithName("Lock customer permanently");
         
         app
             .MapPost(Version + "/customers/unlock/{customerId:guid}", Unlock)
@@ -95,7 +101,14 @@ internal static class CustomerEndpoints
         return Results.Ok();
     }
 
-    private static async Task<IResult> Lock(Guid customerId, LockCustomer command, IDispatcher dispatcher)
+    private static async Task<IResult> LockTemporarily(Guid customerId, LockCustomerTemporarily command, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(command with { CustomerId = customerId });
+
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> LockPermanently(Guid customerId, LockCustomerPermanently command, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(command with { CustomerId = customerId });
 
