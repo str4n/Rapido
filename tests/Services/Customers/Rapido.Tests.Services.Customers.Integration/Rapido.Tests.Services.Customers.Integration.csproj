@@ -3,10 +3,10 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Rapido.Tests.Services.Users.Integration</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,14 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\src\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
-      <ProjectReference Include="..\..\..\..\src\Services\Users\Rapido.Services.Users.Core\Rapido.Services.Users.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="appsettings.test.json" />
-      <Content Include="appsettings.test.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+      <ProjectReference Include="..\..\..\..\src\Services\Customers\Rapido.Services.Customers.Core\Rapido.Services.Customers.Core.csproj" />
     </ItemGroup>
 
 </Project>
