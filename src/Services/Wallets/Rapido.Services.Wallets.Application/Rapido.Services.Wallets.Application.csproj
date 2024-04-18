@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj" />
+      <ProjectReference Include="..\Rapido.Services.Wallets.Infrastructure\Rapido.Services.Wallets.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

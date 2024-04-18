@@ -61,6 +61,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Tests.Services.Customers.Integration", "tests\Services\Customers\Rapido.Tests.Services.Customers.Integration\Rapido.Tests.Services.Customers.Integration.csproj", "{C30F1A04-5679-4F64-87B6-EF64EC69F4B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Api", "src\Services\Wallets\Rapido.Services.Wallets.Api\Rapido.Services.Wallets.Api.csproj", "{9DAD0813-9C2D-451D-BD2D-C1428D144AC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Application", "src\Services\Wallets\Rapido.Services.Wallets.Application\Rapido.Services.Wallets.Application.csproj", "{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Domain", "src\Services\Wallets\Rapido.Services.Wallets.Domain\Rapido.Services.Wallets.Domain.csproj", "{95C1FF6C-6E9D-440D-8C02-947FB3916E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Infrastructure", "src\Services\Wallets\Rapido.Services.Wallets.Infrastructure\Rapido.Services.Wallets.Infrastructure.csproj", "{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +105,10 @@ Global
 		{8F2A70C4-AFCF-408E-AEAA-74CB45D543B9} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{6BB4CE54-7526-411F-A45A-C331810611F9} = {6D0AF0C8-1EAB-497F-9A39-30CC7ABED8D6}
 		{C30F1A04-5679-4F64-87B6-EF64EC69F4B9} = {6BB4CE54-7526-411F-A45A-C331810611F9}
+		{9DAD0813-9C2D-451D-BD2D-C1428D144AC6} = {B3F45679-98D7-4001-B423-250AA9C044B1}
+		{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E} = {B3F45679-98D7-4001-B423-250AA9C044B1}
+		{95C1FF6C-6E9D-440D-8C02-947FB3916E11} = {B3F45679-98D7-4001-B423-250AA9C044B1}
+		{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0} = {B3F45679-98D7-4001-B423-250AA9C044B1}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -163,5 +175,21 @@ Global
 		{C30F1A04-5679-4F64-87B6-EF64EC69F4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C30F1A04-5679-4F64-87B6-EF64EC69F4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C30F1A04-5679-4F64-87B6-EF64EC69F4B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DAD0813-9C2D-451D-BD2D-C1428D144AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DAD0813-9C2D-451D-BD2D-C1428D144AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DAD0813-9C2D-451D-BD2D-C1428D144AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DAD0813-9C2D-451D-BD2D-C1428D144AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0515BEF9-94B9-4BD0-AD1B-57F16BE35A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C1FF6C-6E9D-440D-8C02-947FB3916E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C1FF6C-6E9D-440D-8C02-947FB3916E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C1FF6C-6E9D-440D-8C02-947FB3916E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C1FF6C-6E9D-440D-8C02-947FB3916E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5F3B89-66D2-4D12-AE5C-5F37A94D90A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
