@@ -34,6 +34,7 @@ public static class Extensions
         builder.Services
             .AddCommands()
             .AddQueries()
+            .AddDomainEvents()
             .AddDispatcher();
 
         builder.Services
