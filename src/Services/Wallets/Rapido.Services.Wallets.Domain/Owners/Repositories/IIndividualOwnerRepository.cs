@@ -7,4 +7,5 @@ public interface IIndividualOwnerRepository
     public Task<IndividualOwner> GetAsync(OwnerId id);
     public Task AddAsync(IndividualOwner owner);
     public Task UpdateAsync(IndividualOwner owner);
+    public Task DeleteAsync(IndividualOwner owner);
 }

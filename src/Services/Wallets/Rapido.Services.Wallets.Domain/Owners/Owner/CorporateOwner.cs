@@ -9,8 +9,9 @@ public sealed class CorporateOwner : Owner
         TaxId = taxId;
     }
 
-    public CorporateOwner(OwnerId id, OwnerName name, TaxId taxId, DateTime createdAt) : base(id, name, createdAt)
+    public CorporateOwner(OwnerId id, OwnerName name, TaxId taxId, OwnerState state, DateTime createdAt) : base(id, name, createdAt)
     {
         TaxId = taxId;
+        State = state;
     }
 }

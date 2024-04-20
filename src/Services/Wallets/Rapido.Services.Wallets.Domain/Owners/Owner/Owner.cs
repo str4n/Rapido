@@ -4,7 +4,7 @@ public abstract class Owner
 {
     public OwnerId Id { get; }
     public OwnerName Name { get; private set; }
-    public OwnerState State { get; private set; }
+    public OwnerState State { get; protected set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? VerifiedAt { get; private set; }
 
