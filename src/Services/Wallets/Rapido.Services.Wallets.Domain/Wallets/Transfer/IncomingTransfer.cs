@@ -10,4 +10,8 @@ public sealed class IncomingTransfer : Transfer
         : base(id, walletId, name, description, currency, amount, createdAt, metadata)
     {
     }
+
+    private IncomingTransfer()
+    {
+    }
 }

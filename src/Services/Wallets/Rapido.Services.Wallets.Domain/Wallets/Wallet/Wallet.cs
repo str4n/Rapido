@@ -6,7 +6,7 @@ using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 
 namespace Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
-public sealed class Wallet : AggregateRoot
+public sealed class Wallet : AggregateRoot<WalletId>
 {
     public OwnerId OwnerId { get; }
     public Amount Amount => CurrentAmount();
@@ -24,6 +24,10 @@ public sealed class Wallet : AggregateRoot
         CreatedAt = createdAt;
     }
 
+    private Wallet()
+    {
+    }
+
     public void TransferFunds(Wallet receiverWallet, TransferName name, TransferDescription description,
         Amount amount, DateTime now)
     {
@@ -31,12 +35,12 @@ public sealed class Wallet : AggregateRoot
         var incomingTransferId = new TransferId();
         
         var outgoingTransfer =
-            new OutgoingTransfer(outgoingTransferId, new WalletId(Id), name, description, Currency, 
-                amount, now, GetMetadata(outgoingTransferId, new WalletId(receiverWallet.Id)));
+            new OutgoingTransfer(outgoingTransferId, Id, name, description, Currency, 
+                amount, now, GetMetadata(outgoingTransferId, receiverWallet.Id));
         
         var incomingTransfer =
-            new IncomingTransfer(incomingTransferId, new WalletId(receiverWallet.Id), name, description, Currency, 
-                amount, now, GetMetadata(incomingTransferId, new WalletId(Id)));
+            new IncomingTransfer(incomingTransferId, receiverWallet.Id, name, description, Currency, 
+                amount, now, GetMetadata(incomingTransferId, Id));
         
         TransferFunds(outgoingTransfer);
         receiverWallet.ReceiveFunds(incomingTransfer);

@@ -23,7 +23,6 @@ public sealed record AggregateId
     public static AggregateId Create() => new(Guid.NewGuid());
     
     public static implicit operator Guid(AggregateId id) => id.Value;
-    
     public static implicit operator AggregateId(Guid id) => new(id);
     
     public override string ToString() => Value.ToString();

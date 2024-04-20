@@ -2,9 +2,9 @@
 
 namespace Rapido.Services.Wallets.Domain.Wallets.Aggregate;
 
-public abstract class AggregateRoot
+public abstract class AggregateRoot<T>
 {
-    public AggregateId Id { get; protected set; }
+    public T Id { get; protected set; }
     
     private readonly List<IDomainEvent> _events = new();
     public IEnumerable<IDomainEvent> Events => _events;
@@ -35,4 +35,8 @@ public abstract class AggregateRoot
         Version++;
         _versionIncremented = true;
     }
+}
+
+public abstract class AggregateRoot : AggregateRoot<AggregateId>
+{
 }

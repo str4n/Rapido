@@ -26,4 +26,8 @@ public abstract class Transfer
         Amount = amount;
         CreatedAt = createdAt;
     }
+
+    protected Transfer()
+    {
+    }
 }
