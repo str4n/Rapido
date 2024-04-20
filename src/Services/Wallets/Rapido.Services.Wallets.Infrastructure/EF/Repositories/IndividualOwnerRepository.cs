@@ -16,6 +16,9 @@ internal sealed class IndividualOwnerRepository : IIndividualOwnerRepository
     public Task<IndividualOwner> GetAsync(OwnerId id)
         => _dbContext.IndividualOwners.SingleOrDefaultAsync(x => x.Id == id);
 
+    public async Task<IEnumerable<IndividualOwner>> GetAllAsync()
+        => await _dbContext.IndividualOwners.ToListAsync();
+
     public async Task AddAsync(IndividualOwner owner)
     {
         await _dbContext.IndividualOwners.AddAsync(owner);

@@ -16,6 +16,9 @@ internal sealed class CorporateOwnerRepository : ICorporateOwnerRepository
     public Task<CorporateOwner> GetAsync(OwnerId id)
         => _dbContext.CorporateOwners.SingleOrDefaultAsync(x => x.Id == id);
 
+    public async Task<IEnumerable<CorporateOwner>> GetAllAsync()
+        => await _dbContext.CorporateOwners.ToListAsync();
+
     public async Task AddAsync(CorporateOwner owner)
     {
         await _dbContext.CorporateOwners.AddAsync(owner);
