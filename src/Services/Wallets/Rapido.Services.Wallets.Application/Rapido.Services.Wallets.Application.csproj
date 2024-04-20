@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Rapido.Services.Wallets.Infrastructure\Rapido.Services.Wallets.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Wallets\" />
+    </ItemGroup>
+
 </Project>

@@ -20,7 +20,11 @@ public abstract class Owner
         State = OwnerState.Active;
     }
 
-    public void Verify(DateTime verifiedAt) => VerifiedAt = verifiedAt;
+    public void Verify(DateTime verifiedAt)
+    {
+        VerifiedAt = verifiedAt;
+        State = OwnerState.Verified;
+    }
     public void Lock() => State = OwnerState.Locked;
 
     public void Unlock()
