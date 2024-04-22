@@ -12,10 +12,9 @@ public sealed class Wallet : AggregateRoot<WalletId>
     public Amount Amount => CurrentAmount();
     public Currency Currency { get; }
 
-    private HashSet<Transfer.Transfer> _transfers = new();
+    private readonly HashSet<Transfer.Transfer> _transfers = new();
     public IEnumerable<Transfer.Transfer> Transfers => _transfers;
     public DateTime CreatedAt { get; }
-
     public Wallet(WalletId id, OwnerId ownerId, Currency currency, DateTime createdAt)
     {
         Id = new(id);
@@ -28,29 +27,27 @@ public sealed class Wallet : AggregateRoot<WalletId>
     {
     }
 
-    public void TransferFunds(Wallet receiverWallet, TransferName name, TransferDescription description,
+    public static Wallet Create(OwnerId ownerId, Currency currency, DateTime createdAt)
+        => new Wallet(Guid.NewGuid(), ownerId, currency, createdAt);
+
+    public Transaction TransferFunds(Wallet receiverWallet, TransferName name, TransferDescription description,
         Amount amount, DateTime now)
     {
-        var outgoingTransferId = new TransferId();
-        var incomingTransferId = new TransferId();
-        
-        var outgoingTransfer =
-            new OutgoingTransfer(outgoingTransferId, Id, name, description, Currency, 
-                amount, now, GetMetadata(outgoingTransferId, receiverWallet.Id));
-        
-        var incomingTransfer =
-            new IncomingTransfer(incomingTransferId, receiverWallet.Id, name, description, Currency, 
-                amount, now, GetMetadata(incomingTransferId, Id));
-        
-        TransferFunds(outgoingTransfer);
-        receiverWallet.ReceiveFunds(incomingTransfer);
-        
-        static TransferMetadata GetMetadata(TransferId transferId, WalletId walletId)
-            => new($"{{\"transferId\": \"{transferId}\", \"walletId\": \"{walletId}\"}}");
+        var incomingTransfer = receiverWallet.AddFunds(receiverWallet, name, description, amount, now);
+        var outgoingTransfer = DeductFunds(receiverWallet, name, description, amount, now);
+
+        return new Transaction(outgoingTransfer, incomingTransfer);
     }
 
-    private void ReceiveFunds(IncomingTransfer transfer)
+    public IncomingTransfer AddFunds(Wallet receiverWallet, TransferName name, TransferDescription description, 
+        Amount amount, DateTime now)
     {
+        var transferId = new TransferId();
+        
+        var transfer =
+            new IncomingTransfer(transferId, receiverWallet.Id, name, description, Currency, 
+                amount, now, GetMetadata(transferId, Id));
+        
         if (transfer.Amount <= 0)
         {
             throw new InvalidTransferAmountException(transfer.Amount);
@@ -58,10 +55,19 @@ public sealed class Wallet : AggregateRoot<WalletId>
         
         _transfers.Add(transfer);
         IncrementVersion();
+        
+        return transfer;
     }
     
-    private void TransferFunds(OutgoingTransfer transfer)
+    public OutgoingTransfer DeductFunds(Wallet receiverWallet, TransferName name, TransferDescription description, 
+        Amount amount, DateTime now)
     {
+        var transferId = new TransferId();
+        
+        var transfer =
+            new OutgoingTransfer(transferId, Id, name, description, Currency, 
+                amount, now, GetMetadata(transferId, receiverWallet.Id));
+        
         if (transfer.Amount <= 0)
         {
             throw new InvalidTransferAmountException(transfer.Amount);
@@ -74,7 +80,12 @@ public sealed class Wallet : AggregateRoot<WalletId>
         
         _transfers.Add(transfer);
         IncrementVersion();
+
+        return transfer;
     }
+    
+    private static TransferMetadata GetMetadata(TransferId transferId, WalletId walletId)
+        => new($"{{\"transferId\": \"{transferId}\", \"walletId\": \"{walletId}\"}}");
     
 
     private Amount CurrentAmount() => _transfers.OfType<IncomingTransfer>().Sum(x => x.Amount) -

@@ -15,7 +15,9 @@ builder.Services
 
 var app = builder.Build();
 
-app.MapOwnerEndpoints();
+app
+    .MapWalletEndpoints()
+    .MapOwnerEndpoints();
 
 app
     .MapGet("/", (AppInfo appInfo) => appInfo)

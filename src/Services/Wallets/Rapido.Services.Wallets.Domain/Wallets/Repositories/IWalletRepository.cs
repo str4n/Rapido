@@ -8,6 +8,7 @@ public interface IWalletRepository
 {
     Task<Wallet.Wallet> GetAsync(WalletId id);
     Task<Wallet.Wallet> GetAsync(OwnerId ownerId, Currency currency);
+    Task<IEnumerable<Wallet.Wallet>> GetAllAsync(OwnerId ownerId, bool tracking = true);
     Task AddAsync(Wallet.Wallet wallet);
     Task UpdateAsync(Wallet.Wallet wallet);
 }
