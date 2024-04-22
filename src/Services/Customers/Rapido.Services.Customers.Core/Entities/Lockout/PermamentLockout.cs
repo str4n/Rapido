@@ -2,7 +2,7 @@
 
 internal sealed class PermanentLockout : Lockout
 {
-    public bool Active { get; set; }
+    public bool Active { get; set; } = true;
     
     public PermanentLockout(Guid customerId, string reason, string description, DateTime startDate) : base(customerId, reason, description, startDate)
     {
