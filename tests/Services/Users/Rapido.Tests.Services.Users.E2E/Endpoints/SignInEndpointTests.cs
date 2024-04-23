@@ -1,0 +1,56 @@
+﻿using System.Net;
+using System.Net.Http.Json;
+using FluentAssertions;
+using Rapido.Framework.Auth;
+using Rapido.Framework.Testing;
+using Rapido.Services.Users.Core.Commands;
+using Xunit;
+
+namespace Rapido.Tests.Services.Users.E2E.Endpoints;
+
+public class SignInEndpointTests : IDisposable
+{
+    [Fact]
+    public async Task post_sign_up_should_create_account_and_sign_in_should_return_proper_jwt()
+    {
+        var email = "test@gmail.com";
+        var password = "TestPassword12!";
+
+        var signUpCommand = new SignUp(Guid.Empty, email, password);
+        
+        var signUpResponse = await _app.Client.PostAsJsonAsync("v1/sign-up", signUpCommand);
+        
+        signUpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var signInCommand = new SignIn(email, password);
+
+        var signInResponse = await _app.Client.PostAsJsonAsync("v1/sign-in", signInCommand);
+
+        signInResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var content = await signInResponse.Content.ReadFromJsonAsync<JsonWebToken>();
+
+        content.Should().NotBeNull();
+        content?.Email.Should().Be(email);
+        content?.Role.Should().Be("user");
+        content?.Token.Should().NotBeNullOrEmpty();
+    }
+    
+    public void Dispose()
+    {
+        _testDatabase.Dispose();
+    }
+
+    #region Arrange
+
+    private readonly TestDatabase _testDatabase;
+    private readonly TestApp<Program> _app;
+
+    public SignInEndpointTests()
+    {
+        _testDatabase = new TestDatabase();
+        _app = new TestApp<Program>();
+    }
+
+    #endregion Arrange
+}

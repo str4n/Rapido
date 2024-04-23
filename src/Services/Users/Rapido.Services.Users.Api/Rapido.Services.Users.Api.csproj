@@ -17,5 +17,9 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="Rapido.Tests.Services.Users.E2E"/>
+    </ItemGroup>
 
 </Project>
