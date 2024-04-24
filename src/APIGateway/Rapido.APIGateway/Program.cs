@@ -1,17 +1,14 @@
 using Rapido.Framework;
-using Rapido.Services.Customers.Api.Endpoints;
-using Rapido.Services.Customers.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddFramework();
 
 builder.Services
-    .AddCore(builder.Configuration);
+    .AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("reverseProxy"));
 
 var app = builder.Build();
-
-app.MapCustomerEndpoints();
 
 app
     .MapGet("/", (AppInfo appInfo) => appInfo)
@@ -19,5 +16,7 @@ app
     .WithName("Info");
 
 app.UseFramework();
+
+app.MapReverseProxy();
 
 app.Run();

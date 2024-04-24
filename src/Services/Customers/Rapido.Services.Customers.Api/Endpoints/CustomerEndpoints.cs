@@ -4,57 +4,56 @@ using Rapido.Framework.Contexts;
 using Rapido.Services.Customers.Core.Commands;
 using Rapido.Services.Customers.Core.Queries;
 
-namespace Rapido.Services.Customers.Api.Endpoints.v1;
+namespace Rapido.Services.Customers.Api.Endpoints;
 
 internal static class CustomerEndpoints
 {
-    private const string Version = "v1";
     public static IEndpointRouteBuilder MapCustomerEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet($"{Version}/customers", GetAll)
+        app.MapGet("/customers", GetAll)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Get all customers");
         
-        app.MapPost($"/{Version}/complete", Complete)
+        app.MapPost("/complete", Complete)
             .RequireAuthorization()
             .WithTags("Customer")
             .WithName("Complete customer");
         
         app
-            .MapGet($"/{Version}/me", GetMe)
+            .MapGet("/me", GetMe)
             .RequireAuthorization()
             .WithTags("Customer")
             .WithName("Get customer");
 
         app
-            .MapPut(Version + "/verify/{customerId:guid}", Verify)
+            .MapPut("/verify/{customerId:guid}", Verify)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Verify customer");
         
         //A backup method if for some reason the event consumer wouldn't work.
         app
-            .MapPost($"{Version}/customers/create", Create)
+            .MapPost("/customers/create", Create)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Create customer")
             .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
 
         app
-            .MapPost(Version + "/customers/lock/temp/{customerId:guid}", LockTemporarily)
+            .MapPost("/customers/lock/temp/{customerId:guid}", LockTemporarily)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Lock customer temporarily");
         
         app
-            .MapPost(Version + "/customers/lock/perm/{customerId:guid}", LockPermanently)
+            .MapPost("/customers/lock/perm/{customerId:guid}", LockPermanently)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Lock customer permanently");
         
         app
-            .MapPost(Version + "/customers/unlock/{customerId:guid}", Unlock)
+            .MapPost("/customers/unlock/{customerId:guid}", Unlock)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Customer")
             .WithName("Unlock customer");

@@ -1,30 +1,27 @@
-﻿using Rapido.Framework;
-using Rapido.Framework.Common.Abstractions.Dispatchers;
+﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.Queries;
 using Rapido.Services.Users.Core.Storage;
 
-namespace Rapido.Services.Users.Api.Endpoints.v1;
+namespace Rapido.Services.Users.Api.Endpoints;
 
 internal static class AccountEndpoints
 {
-    private const string Version = "v1";
-    
     public static IEndpointRouteBuilder MapAccountEndpoints(this IEndpointRouteBuilder app)
     {
         app
-            .MapPost($"/{Version}/sign-up", SignUp)
+            .MapPost("/sign-up", SignUp)
             .WithTags("Account")
             .WithName("Sign up");
 
         app
-            .MapPost($"/{Version}/sign-in", SignIn)
+            .MapPost("/sign-in", SignIn)
             .WithTags("Account")
             .WithName("Sign in");;
 
         app
-            .MapGet($"/{Version}/me", GetMe)
+            .MapGet("/me", GetMe)
             .RequireAuthorization()
             .WithTags("Account")
             .WithName("Get account");

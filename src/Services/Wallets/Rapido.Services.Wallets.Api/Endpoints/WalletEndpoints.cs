@@ -4,35 +4,33 @@ using Rapido.Framework.Contexts;
 using Rapido.Services.Wallets.Application.Wallets.Commands;
 using Rapido.Services.Wallets.Application.Wallets.Queries;
 
-namespace Rapido.Services.Wallets.Api.Endpoints.v1;
+namespace Rapido.Services.Wallets.Api.Endpoints;
 
 internal static class WalletEndpoints
 {
-    private const string Version = "v1";
-
     public static IEndpointRouteBuilder MapWalletEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost($"{Version}/transfer", TransferFunds)
+        app.MapPost("/transfer", TransferFunds)
             .RequireAuthorization()
             .WithTags("Wallets")
             .WithName("Transfer funds");
 
-        app.MapPut($"{Version}/add-funds", AddFunds)
+        app.MapPut("/add-funds", AddFunds)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Wallets")
             .WithName("Add funds");
 
-        app.MapPut($"{Version}/deduct-funds", DeductFunds)
+        app.MapPut("/deduct-funds", DeductFunds)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Wallets")
             .WithName("Deduct funds");
 
-        app.MapGet($"{Version}/wallets", GetWallets)
+        app.MapGet("/wallets", GetWallets)
             .RequireAuthorization()
             .WithTags("Wallets")
             .WithName("Get owner wallets");
 
-        app.MapPost($"{Version}/create", CreateWallet)
+        app.MapPost("/create", CreateWallet)
             .RequireAuthorization()
             .WithTags("Wallets")
             .WithName("Create wallet");

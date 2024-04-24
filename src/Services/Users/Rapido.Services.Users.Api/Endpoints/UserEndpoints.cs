@@ -1,14 +1,13 @@
 ﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Services.Users.Core.Queries;
 
-namespace Rapido.Services.Users.Api.Endpoints.v1;
+namespace Rapido.Services.Users.Api.Endpoints;
 
 internal static class UserEndpoints
 {
-    private const string Version = "v1";
     public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet(Version + "/users/{email}", GetUser);
+        app.MapGet("/users/{email}", GetUser);
         
         return app;
     }

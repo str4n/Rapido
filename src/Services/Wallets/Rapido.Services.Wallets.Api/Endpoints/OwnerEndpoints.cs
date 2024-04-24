@@ -4,25 +4,23 @@ using Rapido.Framework.Contexts;
 using Rapido.Services.Wallets.Application.Owners.Commands;
 using Rapido.Services.Wallets.Application.Owners.Queries;
 
-namespace Rapido.Services.Wallets.Api.Endpoints.v1;
+namespace Rapido.Services.Wallets.Api.Endpoints;
 
 internal static class OwnerEndpoints
 {
-    private const string Version = "v1";
-
     public static IEndpointRouteBuilder MapOwnerEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost($"{Version}/transform", TransformOwner)
+        app.MapPost("/transform", TransformOwner)
             .RequireAuthorization()
             .WithTags("Owners")
             .WithName("Transform individual owner to corporate owner");
 
-        app.MapGet($"{Version}/owners/individual", GetAllIndividualOwners)
+        app.MapGet("/owners/individual", GetAllIndividualOwners)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Owners")
             .WithName("Get all individual owners");
         
-        app.MapGet($"{Version}/owners/corporate", GetAllCorporateOwners)
+        app.MapGet("/owners/corporate", GetAllCorporateOwners)
             .RequireAuthorization(Policies.Admin)
             .WithTags("Owners")
             .WithName("Get all corporate owners");

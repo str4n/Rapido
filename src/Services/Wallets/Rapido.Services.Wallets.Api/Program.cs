@@ -1,5 +1,5 @@
 using Rapido.Framework;
-using Rapido.Services.Wallets.Api.Endpoints.v1;
+using Rapido.Services.Wallets.Api.Endpoints;
 using Rapido.Services.Wallets.Application;
 using Rapido.Services.Wallets.Domain;
 using Rapido.Services.Wallets.Infrastructure;
