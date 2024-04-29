@@ -15,7 +15,7 @@ public class SignUpEndpointTests : IDisposable
     {
         var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!");
 
-        var response = await _app.Client.PostAsJsonAsync("v1/sign-up", command);
+        var response = await _app.Client.PostAsJsonAsync("/sign-up", command);
         
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -25,11 +25,11 @@ public class SignUpEndpointTests : IDisposable
     {
         var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!");
 
-        var firstResponse = await _app.Client.PostAsJsonAsync("v1/sign-up", command);
+        var firstResponse = await _app.Client.PostAsJsonAsync("/sign-up", command);
         
         firstResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var secondResponse = await _app.Client.PostAsJsonAsync("v1/sign-up", command);
+        var secondResponse = await _app.Client.PostAsJsonAsync("/sign-up", command);
 
         secondResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }

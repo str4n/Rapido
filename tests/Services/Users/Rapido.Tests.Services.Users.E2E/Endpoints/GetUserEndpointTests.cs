@@ -16,18 +16,18 @@ public class GetUserEndpointTests : IDisposable
     public async Task
         post_sign_up_should_create_account_and_sign_in_should_return_proper_jwt_get_should_return_account_info()
     {
-        var email = "test@gmail.com";
+        var email = "test312@gmail.com";
         var password = "TestPassword12!";
 
         var signUpCommand = new SignUp(Guid.Empty, email, password);
         
-        var signUpResponse = await _app.Client.PostAsJsonAsync("v1/sign-up", signUpCommand);
+        var signUpResponse = await _app.Client.PostAsJsonAsync("/sign-up", signUpCommand);
         
         signUpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var signInCommand = new SignIn(email, password);
 
-        var signInResponse = await _app.Client.PostAsJsonAsync("v1/sign-in", signInCommand);
+        var signInResponse = await _app.Client.PostAsJsonAsync("/sign-in", signInCommand);
 
         signInResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -35,7 +35,7 @@ public class GetUserEndpointTests : IDisposable
 
         _app.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var getResponse = await _app.Client.GetAsync("v1/me");
+        var getResponse = await _app.Client.GetAsync("/me");
 
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
