@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Messaging.RabbitMQ\Rapido.Framework.Messaging.RabbitMQ.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.Observability\Rapido.Framework.Observability.csproj" />
     </ItemGroup>
     
 </Project>

@@ -3,6 +3,7 @@ using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Common.Abstractions.DomainEvents;
 using Rapido.Framework.Common.Abstractions.Queries;
+using Rapido.Framework.Common.Attributes;
 using Rapido.Framework.Common.Dispatchers.Commands;
 using Rapido.Framework.Common.Dispatchers.DomainEvents;
 using Rapido.Framework.Common.Dispatchers.Queries;
@@ -17,7 +18,8 @@ public static class Extensions
 
         services.Scan(s =>
             s.FromAssemblies(assemblies)
-                .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
+                .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>))
+                    .WithoutAttribute<DecoratorAttribute>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
 
@@ -32,7 +34,8 @@ public static class Extensions
 
         services.Scan(s =>
             s.FromAssemblies(assemblies)
-                .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
+                .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>))
+                    .WithoutAttribute<DecoratorAttribute>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
 
@@ -47,7 +50,8 @@ public static class Extensions
         
         services.Scan(s =>
             s.FromAssemblies(assemblies)
-                .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
+                .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>))
+                    .WithoutAttribute<DecoratorAttribute>())
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
 

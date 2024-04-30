@@ -24,4 +24,23 @@ public static class Extensions
 
         return options;
     }
+    
+    public static string GetServiceName(this object value)
+    {
+        const string namespacePart = "Services";
+        
+        if (value?.GetType() is null)
+        {
+            return string.Empty;
+        }
+
+        var type = value.GetType();
+        
+        if (type.Namespace is null)
+        {
+            return string.Empty;
+        }
+
+        return type.Namespace.Contains(namespacePart) ? type.Namespace.Split(".")[2] : string.Empty;
+    }
 }
