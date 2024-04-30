@@ -2,4 +2,4 @@
 
 namespace Rapido.Services.Wallets.Application.Owners.Commands;
 
-public sealed record TransformOwnerToCorporate(Guid OwnerId, string TaxId) : ICommand;
+public sealed record TransformOwnerIntoCorporate(Guid OwnerId, string TaxId) : ICommand;

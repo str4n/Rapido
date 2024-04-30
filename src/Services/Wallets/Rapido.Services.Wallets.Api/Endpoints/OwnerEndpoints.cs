@@ -13,7 +13,7 @@ internal static class OwnerEndpoints
         app.MapPost("/transform", TransformOwner)
             .RequireAuthorization()
             .WithTags("Owners")
-            .WithName("Transform individual owner to corporate owner");
+            .WithName("Transform individual owner into corporate owner");
 
         app.MapGet("/owners/individual", GetAllIndividualOwners)
             .RequireAuthorization(Policies.Admin)
@@ -28,7 +28,7 @@ internal static class OwnerEndpoints
         return app;
     }
 
-    private static async Task<IResult> TransformOwner(TransformOwnerToCorporate command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> TransformOwner(TransformOwnerIntoCorporate command, IDispatcher dispatcher, IContext context)
     {
         var id = context.Identity.UserId;
         await dispatcher.DispatchAsync(command with { OwnerId = id });
