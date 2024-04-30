@@ -26,7 +26,6 @@ public static class Extensions
         builder.Services.AddSingleton(appInfo);
         
         builder.Services
-            .AddLogging(builder.Configuration)
             .AddExceptionHandling()
             .AddBaseFeatures(builder.Configuration)
             .AddHttpContextAccessor()
@@ -42,6 +41,9 @@ public static class Extensions
             .AddQueries()
             .AddDomainEvents()
             .AddDispatcher();
+
+        builder.Services
+            .AddLogging(builder.Configuration);
 
         builder.Services
             .AddRabbitMq(builder.Configuration);
