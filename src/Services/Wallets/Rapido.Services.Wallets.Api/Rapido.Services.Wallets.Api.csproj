@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Health\Rapido.Framework.Health.csproj" />
       <ProjectReference Include="..\Rapido.Services.Wallets.Application\Rapido.Services.Wallets.Application.csproj" />
     </ItemGroup>
 

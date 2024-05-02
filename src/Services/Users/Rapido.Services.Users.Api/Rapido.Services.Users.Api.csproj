@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Health\Rapido.Framework.Health.csproj" />
       <ProjectReference Include="..\Rapido.Services.Users.Core\Rapido.Services.Users.Core.csproj" />
     </ItemGroup>
 
