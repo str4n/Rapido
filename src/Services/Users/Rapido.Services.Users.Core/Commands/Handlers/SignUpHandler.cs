@@ -35,7 +35,7 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
     public async Task HandleAsync(SignUp command)
     {
         var id = command.UserId;
-        var email = (Email)command.Email.ToLowerInvariant();
+        var email = (Email)command.Email?.ToLowerInvariant();
         var password = command.Password;
         
         await _validator.Validate(email, password);

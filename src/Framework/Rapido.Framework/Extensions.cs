@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Api.CORS;
 using Rapido.Framework.Api.Exceptions;
 using Rapido.Framework.Api.Swagger;
 using Rapido.Framework.Auth;
@@ -28,6 +29,7 @@ public static class Extensions
         builder.Services
             .AddExceptionHandling()
             .AddBaseFeatures(builder.Configuration)
+            .AddCorsPolicy(builder.Configuration)
             .AddHttpContextAccessor()
             .AddContexts()
             .AddMemoryCache()
@@ -54,6 +56,8 @@ public static class Extensions
     public static WebApplication UseFramework(this WebApplication app)
     {
         app
+            .UseForwardedHeaders()
+            .UseCorsPolicy()
             .UseExceptionHandling()
             .UseSwaggerDocs()
             .UseAuthentication()
