@@ -30,6 +30,17 @@ services:
         - 5672:5672
         - 15672:15672
 
+  redis:
+    image: redis:7.2
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - rapido
+    ports:
+      - 6379:6379
+    volumes: 
+      - redis:/data
+
 networks:
   rapido:
     name: rapido
@@ -39,4 +50,7 @@ volumes:
     driver: local
 
   rabbitmq:
+    driver: local
+
+  redis:
     driver: local
