@@ -15,8 +15,9 @@ public class SignInEndpointTests : IDisposable
     {
         var email = "test756@gmail.com";
         var password = "TestPassword12!";
+        var accountType = "Individual";
 
-        var signUpCommand = new SignUp(Guid.Empty, email, password);
+        var signUpCommand = new SignUp(Guid.Empty, email, password, accountType);
         
         var signUpResponse = await _app.Client.PostAsJsonAsync("/sign-up", signUpCommand);
         

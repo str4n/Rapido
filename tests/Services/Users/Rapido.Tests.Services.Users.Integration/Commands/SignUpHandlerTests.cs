@@ -24,7 +24,8 @@ public class SignUpHandlerTests : IDisposable
         await _testDatabase.InitAsync();
         var email = Const.ValidEmail;
         var password = Const.ValidPassword;
-        var command = new SignUp(Guid.NewGuid(), email, password);
+        var accountType = AccountType.Individual;
+        var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
 
         await Act(command);
 
@@ -41,7 +42,8 @@ public class SignUpHandlerTests : IDisposable
         await _testDatabase.InitAsync();
         var email = Const.EmailInUse;
         var password = Const.ValidPassword;
-        var command = new SignUp(Guid.NewGuid(), email, password);
+        var accountType = AccountType.Individual;
+        var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
 
         var act = async () => await Act(command);
 
@@ -60,7 +62,8 @@ public class SignUpHandlerTests : IDisposable
         await _testDatabase.InitAsync();
 
         var email = Const.ValidEmail;
-        var command = new SignUp(Guid.NewGuid(), email, password);
+        var accountType = AccountType.Individual;
+        var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
 
         var act = async () => await Act(command);
 

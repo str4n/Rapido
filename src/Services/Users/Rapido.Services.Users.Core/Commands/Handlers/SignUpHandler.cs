@@ -41,6 +41,11 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
         await _validator.Validate(email, password);
         
         var securedPassword = _passwordManager.Secure(password);
+        
+        if (!Enum.TryParse(command.AccountType, out AccountType accountType))
+        {
+            throw new InvalidAccountTypeException();
+        }
 
         var roleName = Role.Default;
 
@@ -58,6 +63,7 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
             Password = securedPassword,
             Role = role,
             State = UserState.Active,
+            Type = accountType,
             CreatedAt = _clock.Now()
         };
 

@@ -7,5 +7,6 @@ internal sealed class User
     public string Password { get; set; }
     public Role.Role Role { get; set; }
     public UserState State { get; set; }
+    public AccountType Type { get; set; }
     public DateTime CreatedAt { get; set; }
 }

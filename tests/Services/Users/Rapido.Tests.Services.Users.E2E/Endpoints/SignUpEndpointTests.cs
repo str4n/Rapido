@@ -13,7 +13,7 @@ public class SignUpEndpointTests : IDisposable
     [Fact]
     public async Task post_sign_up_should_create_account_and_return_ok_status_code()
     {
-        var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!");
+        var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!", "Individual");
 
         var response = await _app.Client.PostAsJsonAsync("/sign-up", command);
         
@@ -23,7 +23,7 @@ public class SignUpEndpointTests : IDisposable
     [Fact]
     public async Task post_sign_up_with_existing_email_should_return_bad_request_status_code()
     {
-        var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!");
+        var command = new SignUp(Guid.NewGuid(), "test@gmail.com", "Testpasswd12!", "Individual");
 
         var firstResponse = await _app.Client.PostAsJsonAsync("/sign-up", command);
         

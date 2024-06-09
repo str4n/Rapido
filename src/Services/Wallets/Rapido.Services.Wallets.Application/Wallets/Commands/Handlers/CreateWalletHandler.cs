@@ -5,6 +5,7 @@ using Rapido.Framework.Contracts.Wallets.Events;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
+using Rapido.Services.Wallets.Domain.Owners.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;

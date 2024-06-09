@@ -7,7 +7,6 @@ namespace Rapido.Services.Customers.Core.Clients;
 internal sealed class UserApiClient : IUserApiClient
 {
     private const string ApiUrl = "http://localhost:5020";
-    private const string ApiVersion = "v1";
     private readonly IHttpClientFactory _clientFactory;
     
     public UserApiClient(IHttpClientFactory clientFactory)
@@ -18,6 +17,6 @@ internal sealed class UserApiClient : IUserApiClient
     public Task<UserDto> GetAsync(string email)
     {
         var client = _clientFactory.CreateClient();
-        return client.GetFromJsonAsync<UserDto>($"{ApiUrl}/{ApiVersion}/users/{email}");
+        return client.GetFromJsonAsync<UserDto>($"{ApiUrl}/users/{email}");
     }
 }
