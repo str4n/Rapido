@@ -28,8 +28,8 @@ internal sealed class TestDatabase : IDisposable
     {
         await DbContext.Database.MigrateAsync();
         
-        var customer = new Customer(Guid.Parse(Const.Id), Const.EmailInUse, _clock.Now());
-        var completedCustomer = new Customer(Guid.Parse(Const.CompletedCustomerId), Const.CompletedCustomerEmail, _clock.Now());
+        var customer = new Customer(Guid.Parse(Const.Id), Const.EmailInUse, CustomerType.Individual ,_clock.Now());
+        var completedCustomer = new Customer(Guid.Parse(Const.CompletedCustomerId), Const.CompletedCustomerEmail, CustomerType.Individual ,_clock.Now());
         
         completedCustomer.Complete("namex", "full-namex", 
             new Address("country", "province", "city", "street", "postalCode"), "PL", 

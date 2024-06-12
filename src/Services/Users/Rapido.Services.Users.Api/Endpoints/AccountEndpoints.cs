@@ -32,6 +32,12 @@ internal static class AccountEndpoints
     private static async Task<IResult> SignUp(SignUp command, IDispatcher dispatcher)
     {
         var userId = Guid.NewGuid();
+
+        if (command is null)
+        {
+            return Results.BadRequest();
+        }
+        
         await dispatcher.DispatchAsync(command with { UserId = userId });
 
         return Results.Ok();

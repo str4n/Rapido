@@ -27,6 +27,11 @@ internal sealed class CreateCustomerHandler : ICommandHandler<CreateCustomer>
     public async Task HandleAsync(CreateCustomer command)
     {
         var email = command.Email;
+        
+        if (Enum.TryParse(command.CustomerType, out CustomerType type))
+        {
+            throw new InvalidCustomerTypeException();
+        }
 
         if (await _customerRepository.GetAsync(email) is not null)
         {
@@ -42,7 +47,7 @@ internal sealed class CreateCustomerHandler : ICommandHandler<CreateCustomer>
 
         var customerId = user.UserId;
 
-        var customer = new Customer(customerId, user.Email, _clock.Now());
+        var customer = new Customer(customerId, user.Email, type,_clock.Now());
 
         await _customerRepository.AddAsync(customer);
     }

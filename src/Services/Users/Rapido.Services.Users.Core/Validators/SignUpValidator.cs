@@ -27,7 +27,7 @@ internal sealed class SignUpValidator : ISignUpValidator
         
         if (await _repository.GetAsync(email) is not null)
         {
-            throw new UserAlreadyExistsException($"User with email: {email.Value} already exists");
+            throw new UserAlreadyExistsException("Email is already taken.");
         }
     }
 }

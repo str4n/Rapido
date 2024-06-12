@@ -4,7 +4,7 @@ namespace Rapido.Services.Users.Core.Exceptions;
 
 internal sealed class InvalidCredentialsException : CustomException
 {
-    public InvalidCredentialsException() : base("Invalid credentials", ExceptionCategory.ValidationError)
+    public InvalidCredentialsException() : base("Invalid email or password.", ExceptionCategory.ValidationError)
     {
     }
 }

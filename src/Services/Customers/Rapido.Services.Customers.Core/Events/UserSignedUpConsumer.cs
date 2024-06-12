@@ -2,6 +2,7 @@
 using Rapido.Framework.Common.Time;
 using Rapido.Framework.Contracts.Users.Events;
 using Rapido.Services.Customers.Core.Entities.Customer;
+using Rapido.Services.Customers.Core.Exceptions;
 using Rapido.Services.Customers.Core.Repositories;
 
 namespace Rapido.Services.Customers.Core.Events;
@@ -21,7 +22,12 @@ internal sealed class UserSignedUpConsumer : IConsumer<UserSignedUp>
     {
         var message = context.Message;
 
-        var customer = new Customer(message.UserId, message.Email, _clock.Now());
+        if (Enum.TryParse(message.AccountType, out CustomerType type))
+        {
+            throw new InvalidCustomerTypeException();
+        }
+
+        var customer = new Customer(message.UserId, message.Email, type, _clock.Now());
 
         await _customerRepository.AddAsync(customer);
     }

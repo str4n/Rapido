@@ -3,6 +3,7 @@ using Rapido.Framework.Testing;
 using Rapido.Services.Customers.Core.Commands;
 using Rapido.Services.Customers.Core.Commands.Handler;
 using Rapido.Services.Customers.Core.EF.Repositories;
+using Rapido.Services.Customers.Core.Entities.Customer;
 using Rapido.Services.Customers.Core.Repositories;
 using Xunit;
 
@@ -18,8 +19,9 @@ public class CreateCustomerHandlerTests : IDisposable
         await _testDatabase.InitAsync();
 
         var email = Const.EmailNotInUse;
+        var customerType = CustomerType.Individual;
 
-        await Act(new CreateCustomer(email));
+        await Act(new CreateCustomer(email, customerType.ToString()));
 
         var customer = await _customerRepository.GetAsync(email);
         customer.Should().NotBeNull();

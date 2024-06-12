@@ -13,6 +13,7 @@ internal sealed class Customer
     public Nationality Nationality { get; private set; }
     public Identity Identity { get; private set; }
     public CustomerState State { get; private set; }
+    public CustomerType Type { get; private set; }
     public CustomerState StateBeforeLockout { get; private set; }
     private readonly List<Lockout.Lockout> _lockouts = new();
     public IEnumerable<Lockout.Lockout> Lockouts => _lockouts;
@@ -20,11 +21,12 @@ internal sealed class Customer
     public DateTime CompletedAt { get; private set; }
     public DateTime VerifiedAt { get; private set; }
     
-    public Customer(Guid id, Email email, DateTime createdAt)
+    public Customer(Guid id, Email email, CustomerType type, DateTime createdAt)
     {
         Id = id;
         Email = email;
         State = CustomerState.NotCompleted;
+        Type = type;
         CreatedAt = createdAt;
     }
 
