@@ -9,6 +9,7 @@ namespace Rapido.Framework.HTTP.ServiceDiscovery;
 public class ConsulRegisterService : IHostedService
 {
     private readonly IConsulClient _consulClient;
+    private readonly ConsulOptions _options;
     private readonly ILogger<ConsulRegisterService> _logger;
     private readonly Uri _consulUrl;
     private readonly Uri _serviceUrl;
@@ -19,6 +20,7 @@ public class ConsulRegisterService : IHostedService
         ILogger<ConsulRegisterService> logger)
     {
         _consulClient = consulClient;
+        _options = options.Value;
         _logger = logger;
         _consulUrl = new Uri(options.Value.Url);
         _serviceUrl = new Uri(options.Value.Service.Url);
@@ -34,7 +36,13 @@ public class ConsulRegisterService : IHostedService
             Name = _serviceId,
             Address = _serviceUrl.Host,
             Port = _serviceUrl.Port,
-            Tags = [_serviceName]
+            Tags = [_serviceName],
+            // Check = new AgentServiceCheck
+            // {
+            //     HTTP = $"{_serviceUrl}{_options.HealthCheck.Endpoint}",
+            //     Interval = _options.HealthCheck.Interval,
+            //     DeregisterCriticalServiceAfter = _options.HealthCheck.DeregisterInterval
+            // }
         };
 
         var result = await _consulClient.Agent.ServiceRegister(serviceRegistration, cancellationToken);

@@ -28,6 +28,11 @@ app
     .WithTags("API")
     .WithName("Info");
 
+app
+    .MapGet("/ping", () => "pong")
+    .WithTags("API")
+    .WithName("Pong");
+
 app.UseFramework();
 
 app.Run();
