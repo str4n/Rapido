@@ -41,6 +41,18 @@ services:
     volumes: 
       - redis:/data
 
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul
+    hostname: consul
+    networks:
+      - rapido
+    ports:
+      - "8500:8500"
+    volumes:
+      - consul:/var/lib/consul/data
+      - consul:/var/lib/consul/config
+
 networks:
   rapido:
     name: rapido
@@ -53,4 +65,7 @@ volumes:
     driver: local
 
   redis:
+    driver: local
+
+  consul:
     driver: local
