@@ -6,7 +6,8 @@ namespace Rapido.Services.Customers.Core.Clients;
 //TODO: Extract URL to the service registry
 internal sealed class UserApiClient : IUserApiClient
 {
-    private const string ApiUrl = "http://localhost:5020";
+    private const string ClientName = "consul";
+    private const string ApiUrl = "http://users/users";
     private readonly IHttpClientFactory _clientFactory;
     
     public UserApiClient(IHttpClientFactory clientFactory)
@@ -14,9 +15,9 @@ internal sealed class UserApiClient : IUserApiClient
         _clientFactory = clientFactory;
     }
 
-    public Task<UserDto> GetAsync(string email)
+    public async Task<UserDto> GetAsync(string email)
     {
-        var client = _clientFactory.CreateClient();
-        return client.GetFromJsonAsync<UserDto>($"{ApiUrl}/users/{email}");
+        var client = _clientFactory.CreateClient(ClientName);
+        return await client.GetFromJsonAsync<UserDto>($"{ApiUrl}/{email}");
     }
 }

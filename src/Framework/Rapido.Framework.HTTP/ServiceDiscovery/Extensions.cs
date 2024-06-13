@@ -7,9 +7,12 @@ namespace Rapido.Framework.HTTP.ServiceDiscovery;
 
 public static class Extensions
 {
+    private const string SectionName = "consul";
+    private const string HttpClientName = "consul";
+    
     public static IServiceCollection AddConsul(this IServiceCollection services, IConfiguration configuration)
     {
-        var section = configuration.GetSection("consul");
+        var section = configuration.GetSection(SectionName);
         var options = section.BindOptions<ConsulOptions>();
         services.Configure<ConsulOptions>(section);
 
@@ -19,9 +22,27 @@ public static class Extensions
             { 
                 config.Address = new Uri(options.Url);
             }));
-
+            
+            services.AddTransient<ConsulHttpHandler>();
             services.AddHostedService<ConsulRegisterService>();
         }
+
+        return services;
+    }
+
+    public static IServiceCollection AddConsulHandler(this IServiceCollection services, IConfiguration configuration)
+    {
+        var section = configuration.GetSection(SectionName);
+        var options = section.BindOptions<ConsulOptions>();
+
+        if (!options.Enabled)
+        {
+            return services;
+        }
+        
+        services
+            .AddHttpClient(HttpClientName)
+            .AddHttpMessageHandler<ConsulHttpHandler>();
 
         return services;
     }
