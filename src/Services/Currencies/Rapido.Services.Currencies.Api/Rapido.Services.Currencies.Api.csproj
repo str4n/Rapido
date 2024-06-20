@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Health\Rapido.Framework.Health.csproj" />
+      <ProjectReference Include="..\Rapido.Services.Currencies.Core\Rapido.Services.Currencies.Core.csproj" />
+    </ItemGroup>
+
+</Project>

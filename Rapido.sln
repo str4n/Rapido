@@ -85,6 +85,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Saga", "Saga", "{1126FF81-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.HTTP", "src\Framework\Rapido.Framework.HTTP\Rapido.Framework.HTTP.csproj", "{830A3CF9-BE68-43D5-B5CF-47DD8B9E802D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Currencies", "Currencies", "{93EF42EB-3A9F-4FE9-8E69-76139958595A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Currencies.Api", "src\Services\Currencies\Rapido.Services.Currencies.Api\Rapido.Services.Currencies.Api.csproj", "{0AA0A338-C930-4212-B39B-4CB6DD8687DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Currencies.Core", "src\Services\Currencies\Rapido.Services.Currencies.Core\Rapido.Services.Currencies.Core.csproj", "{30AD1695-53F4-487F-93EA-9CCD729AD42A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +139,9 @@ Global
 		{09553E08-2DB0-45F1-8FB8-92A94071BB2D} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 		{1126FF81-672D-474C-80AD-16986E741F33} = {78F98107-EAB0-4F6C-B795-ACB7073CAE6E}
 		{830A3CF9-BE68-43D5-B5CF-47DD8B9E802D} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
+		{93EF42EB-3A9F-4FE9-8E69-76139958595A} = {9183DDCA-8D96-4EF7-86C0-83B5863EAC56}
+		{0AA0A338-C930-4212-B39B-4CB6DD8687DC} = {93EF42EB-3A9F-4FE9-8E69-76139958595A}
+		{30AD1695-53F4-487F-93EA-9CCD729AD42A} = {93EF42EB-3A9F-4FE9-8E69-76139958595A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -247,5 +256,13 @@ Global
 		{830A3CF9-BE68-43D5-B5CF-47DD8B9E802D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830A3CF9-BE68-43D5-B5CF-47DD8B9E802D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830A3CF9-BE68-43D5-B5CF-47DD8B9E802D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AA0A338-C930-4212-B39B-4CB6DD8687DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AA0A338-C930-4212-B39B-4CB6DD8687DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AA0A338-C930-4212-B39B-4CB6DD8687DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AA0A338-C930-4212-B39B-4CB6DD8687DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
