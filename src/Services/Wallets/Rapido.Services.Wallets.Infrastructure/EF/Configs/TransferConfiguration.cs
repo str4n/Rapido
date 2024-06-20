@@ -21,10 +21,6 @@ internal sealed class TransferConfiguration : IEntityTypeConfiguration<Transfer>
         builder.Property(x => x.Name)
             .HasConversion(x => x.Value, x => new(x))
             .IsRequired();
-        
-        builder.Property(x => x.Description)
-            .HasConversion(x => x.Value, x => new(x))
-            .IsRequired();
 
         builder.Property(x => x.Currency)
             .HasConversion(x => x.Value, x => new(x))

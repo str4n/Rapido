@@ -14,21 +14,15 @@ internal sealed class WalletConfiguration : IEntityTypeConfiguration<Wallet>
 
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, x => new(x));
-
-        builder.Property(x => x.Currency)
-            .HasConversion(x => x.Value, x => new(x))
-            .IsRequired();
-
-        builder.Property(x => x.CreatedAt).IsRequired();
         
-        builder.HasIndex(x => new { x.OwnerId, x.Currency }).IsUnique();
+        builder.Property(x => x.CreatedAt).IsRequired();
         
         builder.Property(x => x.Version).IsConcurrencyToken();
         
         builder.Ignore(x => x.Events);
-        builder.Ignore(x => x.Amount);
         
         builder.HasOne<Owner>().WithMany().HasForeignKey(x => x.OwnerId);
         builder.HasMany(x => x.Transfers).WithOne().HasForeignKey(x => x.WalletId);
+        builder.HasMany(x => x.Balances).WithOne().HasForeignKey(x => x.WalletId);
     }
 }

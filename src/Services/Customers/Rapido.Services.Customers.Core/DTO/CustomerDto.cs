@@ -2,4 +2,4 @@
 
 public record CustomerDto(Guid Id, string Email, string Name, string FullName, 
     AddressDto Address, IdentityDto Identity, string State, DateTime CreatedAt, 
-    DateTime CompletedAt, DateTime VerifiedAt);
+    DateTime CompletedAt);

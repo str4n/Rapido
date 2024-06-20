@@ -25,15 +25,15 @@ internal static class WalletEndpoints
             .WithTags("Wallets")
             .WithName("Deduct funds");
 
-        app.MapGet("/wallets", GetWallets)
+        app.MapGet("/wallet", GetWallet)
             .RequireAuthorization()
             .WithTags("Wallets")
-            .WithName("Get owner wallets");
+            .WithName("Get owner wallet");
 
-        app.MapPost("/create", CreateWallet)
+        app.MapPost("/add-balance", AddBalance)
             .RequireAuthorization()
             .WithTags("Wallets")
-            .WithName("Create wallet");
+            .WithName("Add balance to wallet");
 
         return app;
     }
@@ -61,19 +61,19 @@ internal static class WalletEndpoints
         return Results.Ok();
     }
 
-    private static async Task<IResult> GetWallets(IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> GetWallet(IDispatcher dispatcher, IContext context)
     {
         var id = context.Identity.UserId;
 
-        var result = await dispatcher.DispatchAsync(new GetOwnerWallets(id));
+        var result = await dispatcher.DispatchAsync(new GetWallet(id));
 
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> CreateWallet(CreateWallet command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> AddBalance(AddBalance command, IDispatcher dispatcher, IContext context)
     {
         var id = context.Identity.UserId;
-        
+
         await dispatcher.DispatchAsync(command with { OwnerId = id });
 
         return Results.Created();

@@ -7,6 +7,5 @@ public sealed record TransferFunds(
     Guid WalletId, 
     Guid ReceiverWalletId, 
     string TransferName,
-    string TransferDescription,
     string Currency, 
     double Amount) : ICommand;

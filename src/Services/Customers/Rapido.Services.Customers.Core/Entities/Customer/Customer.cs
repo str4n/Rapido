@@ -19,7 +19,7 @@ internal sealed class Customer
     public IEnumerable<Lockout.Lockout> Lockouts => _lockouts;
     public DateTime CreatedAt { get; private set; }
     public DateTime CompletedAt { get; private set; }
-    public DateTime VerifiedAt { get; private set; }
+
     
     public Customer(Guid id, Email email, CustomerType type, DateTime createdAt)
     {
@@ -51,17 +51,7 @@ internal sealed class Customer
         State = CustomerState.Completed;
         StateBeforeLockout = CustomerState.None;
     }
-
-    public void Verify(DateTime verifiedAt)
-    {
-        if (State is CustomerState.Deleted or CustomerState.Locked or CustomerState.NotCompleted)
-        {
-            throw new CannotVerifyAccountException();
-        }
-
-        State = CustomerState.Verified;
-        VerifiedAt = verifiedAt;
-    }
+    
 
     public void Lock(Lockout.Lockout lockout)
     {

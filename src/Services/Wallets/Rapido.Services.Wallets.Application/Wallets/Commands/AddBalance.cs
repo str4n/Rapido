@@ -2,4 +2,4 @@
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands;
 
-public sealed record CreateWallet(Guid OwnerId, string Currency) : ICommand;
+public sealed record AddBalance(Guid OwnerId, string Currency) : ICommand;

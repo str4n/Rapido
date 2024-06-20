@@ -10,13 +10,13 @@ internal static class CustomerMappings
         if (customer.State is CustomerState.NotCompleted)
         {
             return new CustomerDto(customer.Id, customer.Email, default, default, default, default,
-                customer.State.ToString(), customer.CreatedAt, customer.CompletedAt, customer.VerifiedAt);
+                customer.State.ToString(), customer.CreatedAt, customer.CompletedAt);
         }
         
         return new CustomerDto(customer.Id, customer.Email, customer.Name, customer.FullName,
             new AddressDto(customer.Address.Country, customer.Address.Province, customer.Address.City,
                 customer.Address.Street, customer.Address.PostalCode), 
             new IdentityDto(customer.Identity.Type.ToString(), customer.Identity.Series), 
-            customer.State.ToString(), customer.CompletedAt, customer.CompletedAt, customer.VerifiedAt);
+            customer.State.ToString(), customer.CompletedAt, customer.CompletedAt);
     }
 }

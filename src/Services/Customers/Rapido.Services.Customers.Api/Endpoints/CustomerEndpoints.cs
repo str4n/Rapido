@@ -25,12 +25,6 @@ internal static class CustomerEndpoints
             .RequireAuthorization()
             .WithTags("Customer")
             .WithName("Get customer");
-
-        app
-            .MapPut("/verify/{customerId:guid}", Verify)
-            .RequireAuthorization(Policies.Admin)
-            .WithTags("Customer")
-            .WithName("Verify customer");
         
         //A backup method if for some reason the event consumer wouldn't work.
         app
@@ -85,14 +79,7 @@ internal static class CustomerEndpoints
         
         return Results.Ok(result);
     }
-
-    private static async Task<IResult> Verify(Guid customerId, IDispatcher dispatcher)
-    {
-        await dispatcher.DispatchAsync(new VerifyCustomer(customerId));
-
-        return Results.Ok();
-    }
-
+    
     private static async Task<IResult> Create(CreateCustomer command, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(command);

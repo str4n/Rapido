@@ -63,11 +63,10 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
             Password = securedPassword,
             Role = role,
             State = UserState.Active,
-            Type = accountType,
             CreatedAt = _clock.Now()
         };
 
         await _userRepository.AddAsync(user);
-        await _messageBroker.PublishAsync(new UserSignedUp(user.Id, user.Email, user.Type.ToString(), user.CreatedAt));
+        await _messageBroker.PublishAsync(new UserSignedUp(user.Id, user.Email, accountType.ToString(), user.CreatedAt));
     }
 }

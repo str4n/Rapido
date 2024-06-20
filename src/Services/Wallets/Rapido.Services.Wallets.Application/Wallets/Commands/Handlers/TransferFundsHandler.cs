@@ -3,6 +3,7 @@ using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
 using Rapido.Framework.Contracts.Wallets.Events;
 using Rapido.Framework.Messaging.Brokers;
+using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
@@ -18,14 +19,16 @@ internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<TransferFundsHandler> _logger;
+    private readonly IExchangeRateApiClient _client;
 
     public TransferFundsHandler(IWalletRepository walletRepository, IClock clock, IMessageBroker messageBroker, 
-        ILogger<TransferFundsHandler> logger)
+        ILogger<TransferFundsHandler> logger, IExchangeRateApiClient client)
     {
         _walletRepository = walletRepository;
         _clock = clock;
         _messageBroker = messageBroker;
         _logger = logger;
+        _client = client;
     }
     
     public async Task HandleAsync(TransferFunds command)
@@ -33,43 +36,39 @@ internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
         var walletId = new WalletId(command.WalletId);
         var receiverWalletId = new WalletId(command.ReceiverWalletId);
         var transferName = new TransferName(command.TransferName);
-        var transferDescription = new TransferDescription(command.TransferDescription);
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         
         var wallet = await _walletRepository.GetAsync(walletId);
-
+        
         if (wallet is null)
         {
-            throw new WalletNotFoundException(walletId);
+            throw new WalletNotFoundException();
         }
-
+        
         if (wallet.OwnerId != (OwnerId)command.OwnerId)
         {
-            throw new WalletNotFoundException(walletId);
+            throw new WalletNotFoundException();
         }
-
-        if (wallet.Currency != currency)
-        {
-            throw new TransferCurrencyMismatchException($"Your wallet supports only: {wallet.Currency} currency.");
-        }
-
+        
         var receiverWallet = await _walletRepository.GetAsync(receiverWalletId);
         
         if (receiverWallet is null)
         {
-            throw new WalletNotFoundException(receiverWalletId);
+            throw new WalletNotFoundException();
         }
 
-        if (receiverWallet.Currency != currency)
+        var exchangeRates = (await _client.GetExchangeRates()).ToList();
+        
+        if (exchangeRates is null || !exchangeRates.Any())
         {
-            throw new TransferCurrencyMismatchException($"Receiver wallet supports only: {receiverWallet.Currency} currency.");
+            throw new ExchangeRateNotFoundException();
         }
-
+        
         var now = _clock.Now();
         
-        wallet.TransferFunds(receiverWallet, transferName, transferDescription, amount, now);
-
+        wallet.TransferFunds(receiverWallet, transferName, amount, currency, exchangeRates, now);
+        
         await _walletRepository.UpdateAsync(wallet);
         await _walletRepository.UpdateAsync(receiverWallet);
         

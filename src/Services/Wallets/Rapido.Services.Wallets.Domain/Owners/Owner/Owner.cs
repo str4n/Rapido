@@ -6,7 +6,6 @@ public abstract class Owner
     public OwnerName Name { get; private set; }
     public OwnerState State { get; protected set; }
     public DateTime CreatedAt { get; private set; }
-    public DateTime VerifiedAt { get; private set; }
 
     public Owner(OwnerName name, DateTime createdAt) : this(new OwnerId(), name, createdAt)
     {
@@ -19,22 +18,11 @@ public abstract class Owner
         CreatedAt = createdAt;
         State = OwnerState.Active;
     }
-
-    public void Verify(DateTime verifiedAt)
-    {
-        VerifiedAt = verifiedAt;
-        State = OwnerState.Verified;
-    }
+    
     public void Lock() => State = OwnerState.Locked;
 
     public void Unlock()
     {
-        if (VerifiedAt != default)
-        {
-            State = OwnerState.Verified;
-            return;
-        }
-
         State = OwnerState.Active;
     }
 }

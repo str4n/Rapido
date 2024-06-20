@@ -7,5 +7,4 @@ internal enum CustomerState
     Locked,
     Deleted,
     Completed,
-    Verified
 }

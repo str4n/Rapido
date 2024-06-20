@@ -4,5 +4,4 @@ public enum OwnerState
 {
     Active,
     Locked,
-    Verified,
 }

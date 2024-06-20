@@ -3,6 +3,7 @@ using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
 using Rapido.Framework.Contracts.Wallets.Events;
 using Rapido.Framework.Messaging.Brokers;
+using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
@@ -15,14 +16,16 @@ internal sealed class AddFundsHandler : ICommandHandler<AddFunds>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IClock _clock;
+    private readonly IExchangeRateApiClient _client;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<AddFundsHandler> _logger;
 
-    public AddFundsHandler(IWalletRepository walletRepository, IClock clock, 
+    public AddFundsHandler(IWalletRepository walletRepository, IClock clock, IExchangeRateApiClient client,
         IMessageBroker messageBroker, ILogger<AddFundsHandler> logger)
     {
         _walletRepository = walletRepository;
         _clock = clock;
+        _client = client;
         _messageBroker = messageBroker;
         _logger = logger;
     }
@@ -33,23 +36,27 @@ internal sealed class AddFundsHandler : ICommandHandler<AddFunds>
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         var transferName = new TransferName(command.TransferName);
-        var transferDescription = new TransferDescription(command.TransferDescription);
 
         var wallet = await _walletRepository.GetAsync(walletId);
         
         if (wallet is null)
         {
-            throw new WalletNotFoundException(walletId);
+            throw new WalletNotFoundException();
         }
-
-        if (wallet.Currency != currency)
-        {
-            throw new TransferCurrencyMismatchException($"Receiver wallet supports only: {wallet.Currency} currency.");
-        }
+        
         
         var now = _clock.Now();
 
-        var transfer = wallet.AddFunds(wallet, transferName, transferDescription, amount, now);
+
+        var exchangeRate = (await _client.GetExchangeRates())
+            .SingleOrDefault(x => x.From == currency && x.To == wallet.GetPrimaryCurrency());
+
+        if (exchangeRate is null)
+        {
+            throw new ExchangeRateNotFoundException();
+        }
+        
+        var transfer = wallet.AddFunds(transferName, amount, currency, exchangeRate, now);
 
         await _walletRepository.UpdateAsync(wallet);
 

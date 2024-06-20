@@ -22,7 +22,7 @@ internal sealed class UserSignedUpConsumer : IConsumer<UserSignedUp>
     {
         var message = context.Message;
 
-        if (Enum.TryParse(message.AccountType, out CustomerType type))
+        if (!Enum.TryParse(message.AccountType, out CustomerType type))
         {
             throw new InvalidCustomerTypeException();
         }

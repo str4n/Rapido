@@ -31,5 +31,11 @@ public sealed record Currency
     public static implicit operator string(Currency currency) => currency.Value;
     public static implicit operator Currency(string currency) => new(currency);
 
+    public static Currency PLN() => new("PLN");
+    public static Currency USD() => new("USD");
+    public static Currency EUR() => new("EUR");
+    public static Currency GBP() => new("GBP");
+    
+
     public override string ToString() => Value;
 }

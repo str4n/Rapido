@@ -1,4 +1,5 @@
 ﻿using Rapido.Services.Wallets.Application.Wallets.DTO;
+using Rapido.Services.Wallets.Domain.Wallets.Balance;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
@@ -10,16 +11,23 @@ internal static class WalletMappings
         => new(
             wallet.Id,
             wallet.OwnerId, 
-            wallet.Amount, 
-            wallet.Currency, 
-            wallet.Transfers.Select(x => x.AsDto()), 
+            wallet.Balances.OrderByDescending(x => x.IsPrimary).Select(x => x.AsDto()),
+            wallet.Transfers.OrderByDescending(x => x.CreatedAt).Select(x => x.AsDto()), 
             wallet.CreatedAt);
+
+    private static BalanceDto AsDto(this Balance balance)
+        => new(
+            balance.Id, 
+            balance.WalletId, 
+            Math.Round(balance.Amount.Value), 
+            balance.Currency, 
+            balance.IsPrimary, 
+            balance.CreatedAt);
 
     private static TransferDto AsDto(this Transfer transfer)
         => new(
             transfer.Id, 
             transfer.Name, 
-            transfer.Description, 
             transfer.Amount, 
             transfer.Currency,
             transfer.GetTransferType(),

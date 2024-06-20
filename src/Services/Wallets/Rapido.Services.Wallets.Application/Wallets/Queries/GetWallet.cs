@@ -3,4 +3,4 @@ using Rapido.Services.Wallets.Application.Wallets.DTO;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Queries;
 
-public sealed record GetOwnerWallets(Guid OwnerId) : IQuery<IEnumerable<WalletDto>>;
+public sealed record GetWallet(Guid OwnerId) : IQuery<WalletDto>;

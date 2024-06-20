@@ -18,24 +18,14 @@ internal sealed class WalletRepository : IWalletRepository
     public Task<Wallet> GetAsync(WalletId id)
         => _dbContext.Wallets
             .Include(x => x.Transfers)
+            .Include(x => x.Balances)
             .SingleOrDefaultAsync(x => x.Id == id);
 
-    public Task<Wallet> GetAsync(OwnerId ownerId, Currency currency)
+    public Task<Wallet> GetAsync(OwnerId ownerId)
         => _dbContext.Wallets
             .Include(x => x.Transfers)
-            .SingleOrDefaultAsync(x => x.OwnerId == ownerId && x.Currency == currency);
-
-    public async Task<IEnumerable<Wallet>> GetAllAsync(OwnerId ownerId, bool tracking = true)
-        => tracking 
-            ? await _dbContext.Wallets
-                .Include(x => x.Transfers)
-                .Where(x => x.OwnerId == ownerId)
-                .ToListAsync() 
-            : await _dbContext.Wallets
-                .Include(x => x.Transfers)
-                .AsNoTracking()
-                .Where(x => x.OwnerId == ownerId)
-                .ToListAsync();
+            .Include(x => x.Balances)
+            .SingleOrDefaultAsync(x => x.OwnerId == ownerId);
 
     public async Task AddAsync(Wallet wallet)
     {

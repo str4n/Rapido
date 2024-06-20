@@ -3,7 +3,6 @@
 public sealed record WalletDto(
     Guid Id,
     Guid OwnerId, 
-    double Amount, 
-    string Currency, 
+    IEnumerable<BalanceDto> Balances,
     IEnumerable<TransferDto> Transfers, 
     DateTime CreatedAt);

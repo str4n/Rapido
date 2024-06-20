@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Rapido.Services.Customers.Core.EF;
@@ -11,9 +12,11 @@ using Rapido.Services.Customers.Core.EF;
 namespace Rapido.Services.Customers.Core.EF.Migrations
 {
     [DbContext(typeof(CustomersDbContext))]
-    partial class CustomersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616210839_RapidoCustomersCustomerVerificationRemoved")]
+    partial class RapidoCustomersCustomerVerificationRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace Rapido.Services.Customers.Core.EF.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Rapido.Services.Customers.Core.Entities.Lockout.Lockout", b =>
@@ -102,7 +105,7 @@ namespace Rapido.Services.Customers.Core.EF.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Lockouts", (string)null);
+                    b.ToTable("Lockouts");
 
                     b.HasDiscriminator<string>("Type").HasValue("Lockout");
 
