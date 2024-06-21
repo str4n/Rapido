@@ -19,10 +19,10 @@ internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<TransferFundsHandler> _logger;
-    private readonly IExchangeRateApiClient _client;
+    private readonly ICurrencyApiClient _client;
 
     public TransferFundsHandler(IWalletRepository walletRepository, IClock clock, IMessageBroker messageBroker, 
-        ILogger<TransferFundsHandler> logger, IExchangeRateApiClient client)
+        ILogger<TransferFundsHandler> logger, ICurrencyApiClient client)
     {
         _walletRepository = walletRepository;
         _clock = clock;

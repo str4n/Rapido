@@ -1,5 +1,6 @@
 using Rapido.Framework;
 using Rapido.Framework.Health.HealthChecks;
+using Rapido.Services.Currencies.Api.Endpoints;
 using Rapido.Services.Currencies.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services
     .AddHealth(builder.Configuration);
 
 var app = builder.Build();
+
+app.MapCurrencyEndpoints();
 
 app.UseHealth();
 

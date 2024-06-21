@@ -16,11 +16,11 @@ internal sealed class DeductFundsHandler : ICommandHandler<DeductFunds>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IClock _clock;
-    private readonly IExchangeRateApiClient _client;
+    private readonly ICurrencyApiClient _client;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<DeductFundsHandler> _logger;
 
-    public DeductFundsHandler(IWalletRepository walletRepository, IClock clock, IExchangeRateApiClient client,
+    public DeductFundsHandler(IWalletRepository walletRepository, IClock clock, ICurrencyApiClient client,
         IMessageBroker messageBroker, ILogger<DeductFundsHandler> logger)
     {
         _walletRepository = walletRepository;

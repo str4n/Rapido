@@ -2,7 +2,7 @@
 
 namespace Rapido.Services.Wallets.Application.Wallets.Clients;
 
-public interface IExchangeRateApiClient
+public interface ICurrencyApiClient
 {
     Task<IEnumerable<ExchangeRate>> GetExchangeRates();
 }

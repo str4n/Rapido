@@ -3,10 +3,10 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Redis\Rapido.Framework.Redis.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
 

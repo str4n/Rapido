@@ -16,11 +16,11 @@ internal sealed class AddFundsHandler : ICommandHandler<AddFunds>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IClock _clock;
-    private readonly IExchangeRateApiClient _client;
+    private readonly ICurrencyApiClient _client;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<AddFundsHandler> _logger;
 
-    public AddFundsHandler(IWalletRepository walletRepository, IClock clock, IExchangeRateApiClient client,
+    public AddFundsHandler(IWalletRepository walletRepository, IClock clock, ICurrencyApiClient client,
         IMessageBroker messageBroker, ILogger<AddFundsHandler> logger)
     {
         _walletRepository = walletRepository;

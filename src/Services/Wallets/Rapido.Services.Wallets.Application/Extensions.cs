@@ -7,7 +7,7 @@ public static class Extensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IExchangeRateApiClient, InMemoryExchangeRateClient>();
+        services.AddScoped<ICurrencyApiClient, CurrencyApiClient>();
         
         return services;
     }

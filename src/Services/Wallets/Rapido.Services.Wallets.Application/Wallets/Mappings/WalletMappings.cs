@@ -19,7 +19,7 @@ internal static class WalletMappings
         => new(
             balance.Id, 
             balance.WalletId, 
-            Math.Round(balance.Amount.Value), 
+            Math.Round(balance.Amount.Value, 2), 
             balance.Currency, 
             balance.IsPrimary, 
             balance.CreatedAt);
