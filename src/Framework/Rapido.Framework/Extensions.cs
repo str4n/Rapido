@@ -10,6 +10,7 @@ using Rapido.Framework.Contexts;
 using Rapido.Framework.HTTP.ServiceDiscovery;
 using Rapido.Framework.Messaging.RabbitMQ;
 using Rapido.Framework.Observability.Logging;
+using Rapido.Framework.Observability.Tracing;
 
 namespace Rapido.Framework;
 
@@ -39,7 +40,8 @@ public static class Extensions
             .AddConsulHandler(builder.Configuration)
             .AddSwaggerDocs(builder.Configuration)
             .AddAuth(builder.Configuration)
-            .AddConsul(builder.Configuration);
+            .AddConsul(builder.Configuration)
+            .AddTracing(builder.Configuration);
 
         builder.Services
             .AddCommands()

@@ -7,6 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0" />
+      <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+      <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+      <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
+      <PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.9.0-beta.1" />
+      <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.15" />
       <PackageReference Include="Serilog" Version="3.1.1" />
       <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
       <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
@@ -16,6 +22,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Contexts\Rapido.Framework.Contexts.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.Messaging.RabbitMQ\Rapido.Framework.Messaging.RabbitMQ.csproj" />
     </ItemGroup>
 
 </Project>
