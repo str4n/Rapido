@@ -91,6 +91,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Currencies.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Currencies.Core", "src\Services\Currencies\Rapido.Services.Currencies.Core\Rapido.Services.Currencies.Core.csproj", "{30AD1695-53F4-487F-93EA-9CCD729AD42A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{2AF69753-2271-4302-96AF-9101E99D14F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Notifications.Api", "src\Services\Rapido.Services.Notifications.Api\Rapido.Services.Notifications.Api.csproj", "{D4E22F0E-49A4-49CA-A73E-6704A44EE747}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +146,8 @@ Global
 		{93EF42EB-3A9F-4FE9-8E69-76139958595A} = {9183DDCA-8D96-4EF7-86C0-83B5863EAC56}
 		{0AA0A338-C930-4212-B39B-4CB6DD8687DC} = {93EF42EB-3A9F-4FE9-8E69-76139958595A}
 		{30AD1695-53F4-487F-93EA-9CCD729AD42A} = {93EF42EB-3A9F-4FE9-8E69-76139958595A}
+		{2AF69753-2271-4302-96AF-9101E99D14F8} = {9183DDCA-8D96-4EF7-86C0-83B5863EAC56}
+		{D4E22F0E-49A4-49CA-A73E-6704A44EE747} = {2AF69753-2271-4302-96AF-9101E99D14F8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -264,5 +270,9 @@ Global
 		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30AD1695-53F4-487F-93EA-9CCD729AD42A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4E22F0E-49A4-49CA-A73E-6704A44EE747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E22F0E-49A4-49CA-A73E-6704A44EE747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E22F0E-49A4-49CA-A73E-6704A44EE747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E22F0E-49A4-49CA-A73E-6704A44EE747}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
