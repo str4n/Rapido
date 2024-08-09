@@ -101,6 +101,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Notificatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Urls.Api", "src\Services\Urls\Rapido.Services.Urls.Api\Rapido.Services.Urls.Api.csproj", "{C0D99245-FACA-4897-8659-08227DE992FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Urls.Core", "src\Services\Urls\Rapido.Services.Urls.Core\Rapido.Services.Urls.Core.csproj", "{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,7 @@ Global
 		{6F7ADA63-4421-429E-903A-3E6B1921CF37} = {2AF69753-2271-4302-96AF-9101E99D14F8}
 		{4227D1A5-B490-4F69-AA2A-3B104E996602} = {2AF69753-2271-4302-96AF-9101E99D14F8}
 		{C0D99245-FACA-4897-8659-08227DE992FA} = {17A1C1B8-19EB-4DAB-9C60-E4DF49A1190A}
+		{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A} = {17A1C1B8-19EB-4DAB-9C60-E4DF49A1190A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -291,5 +294,9 @@ Global
 		{C0D99245-FACA-4897-8659-08227DE992FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D99245-FACA-4897-8659-08227DE992FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0D99245-FACA-4897-8659-08227DE992FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1BAA7E-3333-4E1D-AC10-4D2064F79C9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
