@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
-      <ProjectReference Include="..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
+    
 
 </Project>
