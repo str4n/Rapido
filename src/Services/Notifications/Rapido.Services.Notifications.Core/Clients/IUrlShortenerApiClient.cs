@@ -4,5 +4,5 @@ namespace Rapido.Services.Notifications.Core.Clients;
 
 internal interface IUrlShortenerApiClient
 {
-    Task<ShortenedUrlDto> ShortenUrl(string url);
+    Task<ShortenedUrlDto?> ShortenUrl(string url);
 }

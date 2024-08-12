@@ -13,6 +13,7 @@ public static class Extensions
         services.AddPostgres<UrlsDbContext>(configuration);
 
         services.AddSingleton<IUrlAliasGenerator, UrlAliasGenerator>();
+        services.AddScoped<IUrlShortenerService, UrlShortenerService>();
         
         return services;
     }

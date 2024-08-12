@@ -1,8 +1,7 @@
 using Rapido.Framework;
-using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Services.Urls.Core;
-using Rapido.Services.Urls.Core.Commands;
-using Rapido.Services.Urls.Core.Queries;
+using Rapido.Services.Urls.Core.Requests;
+using Rapido.Services.Urls.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,16 +22,16 @@ app
     .WithTags("API")
     .WithName("Pong");
 
-app.MapPost("/", async (ShortenUrl command, IDispatcher dispatcher) =>
+app.MapPost("/", async (ShortenUrl request, IUrlShortenerService service) =>
 {
-    await dispatcher.DispatchAsync(command);
+    await service.ShortenUrl(request);
 
     return Results.NoContent();
 });
 
-app.MapGet("/link/{alias}", async (string alias, IDispatcher dispatcher) =>
+app.MapGet("{alias}", async (string alias, IUrlShortenerService service) =>
 {
-    var url = await dispatcher.DispatchAsync(new GetRedirection(alias));
+    var url = await service.GetRedirection(alias);
 
     return Results.Redirect(url);
 });
