@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Rapido.Framework.Auth.ApiKeys;
 using Rapido.Framework.Auth.Authenticator;
 using Rapido.Framework.Auth.Policies;
 using Rapido.Framework.Auth.Policies.Handlers;
@@ -65,6 +66,8 @@ public static class Extensions
          authOptions.AddPolicy(Policies.Policies.User, 
             builder => builder.AddRequirements(new RoleRequirement("user")));
       });
+
+      services.AddApiKeyAuth(configuration);
 
       return services;
    }
