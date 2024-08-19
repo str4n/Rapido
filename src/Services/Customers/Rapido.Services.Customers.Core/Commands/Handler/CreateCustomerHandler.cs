@@ -28,7 +28,7 @@ internal sealed class CreateCustomerHandler : ICommandHandler<CreateCustomer>
     {
         var email = command.Email;
         
-        if (Enum.TryParse(command.CustomerType, out CustomerType type))
+        if (!Enum.TryParse(command.CustomerType, out CustomerType type))
         {
             throw new InvalidCustomerTypeException();
         }

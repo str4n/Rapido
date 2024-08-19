@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>Rapido.Services.Users.Api</RootNamespace>
+        <UserSecretsId>3e9e1b7e-a582-4e74-8d0e-545c95fb7221</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

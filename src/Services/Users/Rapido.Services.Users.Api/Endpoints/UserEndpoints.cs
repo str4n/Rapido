@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
+﻿using Rapido.Framework.Auth.ApiKeys.Filters;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Services.Users.Core.Queries;
 
 namespace Rapido.Services.Users.Api.Endpoints;
@@ -7,7 +8,7 @@ internal static class UserEndpoints
 {
     public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/users/{email}", GetUser);
+        app.MapGet("/users/{email}", GetUser).AddEndpointFilter<ApiKeyEndpointFilter>();
         
         return app;
     }

@@ -7,7 +7,6 @@ namespace Rapido.Framework.Auth.ApiKeys.Filters;
 internal sealed class ApiKeyAuthorizationFilter : IAuthorizationFilter
 {
     private readonly IApiKeyVault _vault;
-    private const string ApiKeyHeaderName = "X-API-Key";
 
     public ApiKeyAuthorizationFilter(IApiKeyVault vault)
     {
@@ -16,7 +15,7 @@ internal sealed class ApiKeyAuthorizationFilter : IAuthorizationFilter
     
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        string apiKey = context.HttpContext.Request.Headers[ApiKeyHeaderName];
+        string apiKey = context.HttpContext.Request.Headers[ApiKey.HeaderName];
 
         if (!_vault.Validate(apiKey).Succeeded)
         {

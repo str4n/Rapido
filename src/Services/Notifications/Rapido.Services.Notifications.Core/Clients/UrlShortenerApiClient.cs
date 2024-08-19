@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using Rapido.Framework.Auth.ApiKeys;
+using Rapido.Framework.Auth.ApiKeys.Vault;
 using Rapido.Services.Notifications.Core.Clients.DTO;
 using Rapido.Services.Notifications.Core.Clients.Requests;
 
@@ -12,15 +14,21 @@ internal sealed class UrlShortenerApiClient : IUrlShortenerApiClient
     private const string DefaultScheme = "https";
     private const string DefaultHost = "localhost";
     private readonly IHttpClientFactory _clientFactory;
-    
-    public UrlShortenerApiClient(IHttpClientFactory clientFactory)
+    private readonly IApiKeyVault _vault;
+
+    public UrlShortenerApiClient(IHttpClientFactory clientFactory, IApiKeyVault vault)
     {
         _clientFactory = clientFactory;
+        _vault = vault;
     }
     
     public async Task<ShortenedUrlDto> ShortenUrl(string url)
     {
         var client = _clientFactory.CreateClient(ClientName);
+
+        var key = _vault.GetInternalKey("notifications");
+        
+        client.DefaultRequestHeaders.Add(ApiKey.HeaderName, key);
         
         var result = await client.PostAsJsonAsync(ApiUrl, new ShortenUrl(DefaultScheme, DefaultHost, url));
 

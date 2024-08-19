@@ -5,7 +5,6 @@ namespace Rapido.Framework.Auth.ApiKeys.Filters;
 
 public sealed class ApiKeyEndpointFilter : IEndpointFilter
 {
-    private const string ApiKeyHeaderName = "X-API-Key";
     private readonly IApiKeyVault _vault;
 
     public ApiKeyEndpointFilter(IApiKeyVault vault)
@@ -15,7 +14,7 @@ public sealed class ApiKeyEndpointFilter : IEndpointFilter
     
     public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        string apiKey = context.HttpContext.Request.Headers[ApiKeyHeaderName];
+        string apiKey = context.HttpContext.Request.Headers[ApiKey.HeaderName];
 
         if (apiKey is null)
         {
