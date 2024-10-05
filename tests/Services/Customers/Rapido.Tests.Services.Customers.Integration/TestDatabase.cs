@@ -4,6 +4,7 @@ using Rapido.Framework.Common.Time;
 using Rapido.Framework.Testing;
 using Rapido.Services.Customers.Core.EF;
 using Rapido.Services.Customers.Core.Entities.Customer;
+using Rapido.Services.Customers.Core.Entities.Customer.Information;
 
 namespace Rapido.Tests.Services.Customers.Integration;
 

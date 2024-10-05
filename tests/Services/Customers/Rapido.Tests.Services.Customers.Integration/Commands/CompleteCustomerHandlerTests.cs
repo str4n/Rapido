@@ -4,6 +4,7 @@ using Rapido.Services.Customers.Core.Commands;
 using Rapido.Services.Customers.Core.Commands.Handler;
 using Rapido.Services.Customers.Core.EF.Repositories;
 using Rapido.Services.Customers.Core.Entities.Customer;
+using Rapido.Services.Customers.Core.Entities.Customer.Information;
 using Rapido.Services.Customers.Core.Repositories;
 using Xunit;
 

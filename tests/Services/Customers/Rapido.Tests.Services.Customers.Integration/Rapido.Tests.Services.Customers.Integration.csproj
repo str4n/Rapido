@@ -24,7 +24,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\src\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
-      <ProjectReference Include="..\..\..\..\src\Services\Customers\Rapido.Services.Customers.Core\Rapido.Services.Customers.Core.csproj" />
     </ItemGroup>
 
 </Project>
