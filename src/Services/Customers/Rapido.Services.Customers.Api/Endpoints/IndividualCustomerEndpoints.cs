@@ -13,20 +13,20 @@ internal static class IndividualCustomerEndpoints
         app
             .MapGet("/individual/me", GetMe)
             .RequireAuthorization()
-            .WithTags("Customer")
-            .WithName("Get customer");
+            .WithTags("Individual Customer")
+            .WithName("Get individual customer");
         
         app.MapPost("/individual/complete", Complete)
             .RequireAuthorization()
-            .WithTags("Customer")
-            .WithName("Complete customer");
+            .WithTags("Individual Customer")
+            .WithName("Complete individual customer");
         
         //A backup method if for some reason the event consumer wouldn't work.
         app
             .MapPost("/customers/individual/create", Create)
             .RequireAuthorization(Policies.Admin)
-            .WithTags("Customer")
-            .WithName("Create customer")
+            .WithTags("Individual Customer")
+            .WithName("Create individual customer")
             .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
 
         return app;

@@ -10,12 +10,12 @@ public sealed record TaxId
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new InvalidTaxIdException(value);
+            throw new InvalidTaxIdException();
         }
 
         if (value.Length is > 20 or < 3)
         {
-            throw new InvalidTaxIdException(value);
+            throw new InvalidTaxIdException();
         }
 
         Value = value;

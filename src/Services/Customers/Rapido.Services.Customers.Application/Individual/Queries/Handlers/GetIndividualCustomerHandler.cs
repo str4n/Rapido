@@ -1,4 +1,5 @@
 ﻿using Rapido.Framework.Common.Abstractions.Queries;
+using Rapido.Services.Customers.Application.Common.Exceptions;
 using Rapido.Services.Customers.Application.Individual.DTO;
 using Rapido.Services.Customers.Application.Individual.Mappings;
 using Rapido.Services.Customers.Domain.Individual.Repositories;
@@ -15,5 +16,14 @@ internal sealed class GetIndividualCustomerHandler : IQueryHandler<GetIndividual
     }
 
     public async Task<IndividualCustomerDto> HandleAsync(GetIndividualCustomer query)
-        => (await _repository.GetAsync(query.Id)).AsDto();
+    {
+        var customer = await _repository.GetAsync(query.Id);
+
+        if (customer is null)
+        {
+            throw new CustomerNotFoundException(query.Id);
+        }
+
+        return customer.AsDto();
+    }
 }

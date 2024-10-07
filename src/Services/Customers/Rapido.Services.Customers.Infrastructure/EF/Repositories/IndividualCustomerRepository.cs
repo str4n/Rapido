@@ -36,9 +36,7 @@ internal sealed class IndividualCustomerRepository : IIndividualCustomerReposito
                 .AsNoTracking()
                 .Include(x => x.Lockouts)
                 .SingleOrDefaultAsync(x => x.Email == email);
-
-    public Task<bool> AnyAsync(string name)
-        => _dbContext.IndividualCustomers.AnyAsync(x => x.Name == name);
+    
 
     public async Task AddAsync(IndividualCustomer customer)
     {

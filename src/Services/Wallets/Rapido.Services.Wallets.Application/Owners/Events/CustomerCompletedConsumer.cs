@@ -8,7 +8,7 @@ using Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 namespace Rapido.Services.Wallets.Application.Owners.Events;
 
-internal sealed class CustomerCompletedConsumer : IConsumer<CustomerCompleted>
+internal sealed class CustomerCompletedConsumer : IConsumer<IndividualCustomerCompleted>
 {
     private readonly IIndividualOwnerRepository _ownerRepository;
     private readonly IClock _clock;
@@ -21,7 +21,7 @@ internal sealed class CustomerCompletedConsumer : IConsumer<CustomerCompleted>
         _messageBroker = messageBroker;
     }
     
-    public async Task Consume(ConsumeContext<CustomerCompleted> context)
+    public async Task Consume(ConsumeContext<IndividualCustomerCompleted> context)
     {
         var message = context.Message;
 

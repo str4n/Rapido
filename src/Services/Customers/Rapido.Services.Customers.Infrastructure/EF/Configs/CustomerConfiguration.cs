@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Rapido.Services.Customers.Domain.Common.Customer;
+using Rapido.Services.Customers.Domain.Corporate.Customer;
+using Rapido.Services.Customers.Domain.Individual.Customer;
 
 namespace Rapido.Services.Customers.Infrastructure.EF.Configs;
 
@@ -29,6 +31,10 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         
         builder.Property(x => x.IsCompleted)
             .HasConversion<string>();
+
+        builder.HasDiscriminator<string>("Type")
+            .HasValue<IndividualCustomer>("Individual")
+            .HasValue<CorporateCustomer>("Corporate");
 
         builder.Property(x => x.Address)
             .HasColumnType("text")

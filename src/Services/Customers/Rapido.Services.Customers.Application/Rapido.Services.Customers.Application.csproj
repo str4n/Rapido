@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Corporate\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj" />
       <ProjectReference Include="..\Rapido.Services.Customers.Infrastructure\Rapido.Services.Customers.Infrastructure.csproj" />

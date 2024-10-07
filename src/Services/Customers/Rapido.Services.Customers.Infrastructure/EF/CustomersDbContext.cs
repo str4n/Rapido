@@ -8,6 +8,7 @@ namespace Rapido.Services.Customers.Infrastructure.EF;
 
 internal sealed class CustomersDbContext : DbContext
 {
+    public DbSet<Customer> Customers { get; set; }
     public DbSet<IndividualCustomer> IndividualCustomers { get; set; }
     public DbSet<CorporateCustomer> CorporateCustomers { get; set; }
     public DbSet<Lockout> Lockouts { get; set; }

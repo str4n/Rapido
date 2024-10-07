@@ -19,7 +19,8 @@ var app = builder.Build();
 
 app
     .MapCustomerEndpoints()
-    .MapIndividualCustomerEndpoints();
+    .MapIndividualCustomerEndpoints()
+    .MapCorporateCustomerEndpoints();
 
 app.UseHealth();
 

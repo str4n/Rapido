@@ -36,9 +36,6 @@ internal sealed class CorporateCustomerRepository : ICorporateCustomerRepository
                 .Include(x => x.Lockouts)
                 .SingleOrDefaultAsync(x => x.Email == email);
 
-    public Task<bool> AnyAsync(string name)
-        => _dbContext.CorporateCustomers.AnyAsync(x => x.Name == name);
-
     public async Task AddAsync(CorporateCustomer customer)
     {
         await _dbContext.CorporateCustomers.AddAsync(customer);

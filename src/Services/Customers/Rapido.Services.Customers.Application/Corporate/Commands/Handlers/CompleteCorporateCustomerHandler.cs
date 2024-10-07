@@ -5,30 +5,31 @@ using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Application.Common.Exceptions;
 using Rapido.Services.Customers.Domain.Common.Customer;
 using Rapido.Services.Customers.Domain.Common.Repositories;
+using Rapido.Services.Customers.Domain.Corporate.Customer;
+using Rapido.Services.Customers.Domain.Corporate.Repositories;
 using Rapido.Services.Customers.Domain.Individual.Customer;
-using Rapido.Services.Customers.Domain.Individual.Repositories;
 
-namespace Rapido.Services.Customers.Application.Individual.Commands.Handlers;
+namespace Rapido.Services.Customers.Application.Corporate.Commands.Handlers;
 
-internal sealed class CompleteIndividualCustomerHandler : ICommandHandler<CompleteIndividualCustomer>
+internal sealed class CompleteCorporateCustomerHandler : ICommandHandler<CompleteCorporateCustomer>
 {
-    private readonly IIndividualCustomerRepository _individualCustomerRepository;
+    private readonly ICorporateCustomerRepository _repository;
     private readonly ICustomerRepository _customerRepository;
-    private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
+    private readonly IClock _clock;
 
-    public CompleteIndividualCustomerHandler(IIndividualCustomerRepository individualCustomerRepository, 
-        ICustomerRepository customerRepository, IClock clock, IMessageBroker messageBroker)
+    public CompleteCorporateCustomerHandler(ICorporateCustomerRepository repository, ICustomerRepository customerRepository, 
+        IMessageBroker messageBroker, IClock clock)
     {
-        _individualCustomerRepository = individualCustomerRepository;
+        _repository = repository;
         _customerRepository = customerRepository;
-        _clock = clock;
         _messageBroker = messageBroker;
+        _clock = clock;
     }
-
-    public async Task HandleAsync(CompleteIndividualCustomer command)
+    
+    public async Task HandleAsync(CompleteCorporateCustomer command)
     {
-        var customer = await _individualCustomerRepository.GetAsync(command.CustomerId);
+        var customer = await _repository.GetAsync(command.CustomerId);
 
         if (customer is null)
         {
@@ -36,7 +37,7 @@ internal sealed class CompleteIndividualCustomerHandler : ICommandHandler<Comple
         }
 
         var name = new Name(command.Name);
-        var fullName = new FullName(command.FullName);
+        var taxId = new TaxId(command.TaxId);
         var address = new Address(command.Country, command.Province, command.City, command.Street, command.Postalcode);
         var nationality = new Nationality(command.Nationality);
 
@@ -45,10 +46,10 @@ internal sealed class CompleteIndividualCustomerHandler : ICommandHandler<Comple
             throw new CustomerAlreadyExistsException($"Customer with name: {name} already exists.");
         }
         
-        customer.Complete(name, fullName, address, nationality, _clock.Now());
+        customer.Complete(name, address, nationality, taxId, _clock.Now());
 
-        await _individualCustomerRepository.UpdateAsync(customer);
-        await _messageBroker.PublishAsync(new IndividualCustomerCompleted(customer.Id, customer.Name, 
-            customer.FullName, customer.Nationality));
+        await _repository.UpdateAsync(customer);
+        await _messageBroker.PublishAsync(new CorporateCustomerCompleted(customer.Id, customer.Name, 
+            customer.TaxId, customer.Nationality));
     }
 }

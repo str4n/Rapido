@@ -2,26 +2,25 @@
 using Rapido.Framework.Common.Time;
 using Rapido.Services.Customers.Application.Common.Clients;
 using Rapido.Services.Customers.Application.Common.Exceptions;
-using Rapido.Services.Customers.Domain.Individual.Customer;
-using Rapido.Services.Customers.Domain.Individual.Repositories;
+using Rapido.Services.Customers.Domain.Corporate.Customer;
+using Rapido.Services.Customers.Domain.Corporate.Repositories;
 
-namespace Rapido.Services.Customers.Application.Individual.Commands.Handlers;
+namespace Rapido.Services.Customers.Application.Corporate.Commands.Handlers;
 
-internal sealed class CreateIndividualCustomerHandler : ICommandHandler<CreateIndividualCustomer>
+internal sealed class CreateCorporateCustomerHandler : ICommandHandler<CreateCorporateCustomer>
 {
-    private readonly IIndividualCustomerRepository _repository;
-    private readonly IClock _clock;
+    private readonly ICorporateCustomerRepository _repository;
     private readonly IUserApiClient _apiClient;
+    private readonly IClock _clock;
 
-    public CreateIndividualCustomerHandler(IIndividualCustomerRepository repository, IClock clock,
-        IUserApiClient apiClient)
+    public CreateCorporateCustomerHandler(ICorporateCustomerRepository repository, IUserApiClient apiClient, IClock clock)
     {
         _repository = repository;
-        _clock = clock;
         _apiClient = apiClient;
+        _clock = clock;
     }
     
-    public async Task HandleAsync(CreateIndividualCustomer command)
+    public async Task HandleAsync(CreateCorporateCustomer command)
     {
         var email = command.Email;
 
@@ -39,7 +38,7 @@ internal sealed class CreateIndividualCustomerHandler : ICommandHandler<CreateIn
 
         var customerId = user.UserId;
 
-        var customer = new IndividualCustomer(customerId, user.Email,_clock.Now());
+        var customer = new CorporateCustomer(customerId, user.Email,_clock.Now());
 
         await _repository.AddAsync(customer);
     }

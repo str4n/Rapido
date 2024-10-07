@@ -14,25 +14,13 @@ internal sealed class CustomerRepository : ICustomerRepository
     }
 
     public async Task<IEnumerable<Customer>> GetAllAsync()
-    {
-        var corporateCustomers = _dbContext.CorporateCustomers;
-        var individualCustomers = _dbContext.IndividualCustomers;
-
-        var result = individualCustomers.Union<Customer>(corporateCustomers);
-
-        return await result.Include(x => x.Lockouts).ToListAsync();
-    }
+        => await _dbContext.Customers.Include(x => x.Lockouts).ToListAsync();
 
     public async Task<Customer> GetAsync(Guid id)
-    {
-        var corporateCustomers = await _dbContext.CorporateCustomers.ToListAsync();
-        var individualCustomers = await _dbContext.IndividualCustomers.ToListAsync();
+        => await _dbContext.Customers.SingleOrDefaultAsync(x => x.Id == id);
 
-        var customer = (Customer)corporateCustomers.SingleOrDefault(x => x.Id == id) 
-                             ?? individualCustomers.SingleOrDefault(x => x.Id == id);
-
-        return customer;
-    }
+    public async Task<bool> AnyAsync(string name)
+        => await _dbContext.Customers.AnyAsync(x => x.Name == name);
 
     public async Task UpdateAsync(Customer customer)
     {
