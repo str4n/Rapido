@@ -1,6 +1,7 @@
 ﻿using Rapido.Framework.Auth.Policies;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
+using Rapido.Services.Customers.Application.Common.Commands;
 using Rapido.Services.Customers.Application.Corporate.Commands;
 using Rapido.Services.Customers.Application.Corporate.Queries;
 using Rapido.Services.Customers.Application.Individual.Queries;
@@ -21,6 +22,16 @@ internal static class CorporateCustomerEndpoints
             .RequireAuthorization()
             .WithTags("Corporate Customer")
             .WithName("Complete corporate customer");
+        
+        app.MapPut("/corporate/change-address", ChangeAddress)
+            .RequireAuthorization()
+            .WithTags("Corporate Customer")
+            .WithName("Change customer address");
+        
+        app.MapPut("/corporate/change-nationality", ChangeNationality)
+            .RequireAuthorization()
+            .WithTags("Corporate Customer")
+            .WithName("Change customer nationality");
         
         //A backup method if for some reason the event consumer wouldn't work.
         app
@@ -54,6 +65,24 @@ internal static class CorporateCustomerEndpoints
     private static async Task<IResult> Create(CreateCorporateCustomer command, IDispatcher dispatcher)
     {
         await dispatcher.DispatchAsync(command);
+
+        return Results.Ok();
+    }
+
+    private static async Task<IResult> ChangeAddress(ChangeAddress command, IDispatcher dispatcher, IContext context)
+    {
+        var id = context.Identity.UserId;
+        
+        await dispatcher.DispatchAsync(command with { Id =  id});
+
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> ChangeNationality(ChangeNationality command, IDispatcher dispatcher, IContext context)
+    {
+        var id = context.Identity.UserId;
+        
+        await dispatcher.DispatchAsync(command with { Id =  id});
 
         return Results.Ok();
     }

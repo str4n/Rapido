@@ -28,7 +28,12 @@ public abstract class Customer
     private Customer()
     {
     }
-    
+
+    public void ChangeAddress(Address address) 
+        => Address = address;
+
+    public void ChangeNationality(Nationality nationality)
+        => Nationality = nationality;
 
     public void Lock(Lockout.Lockout lockout)
     {
