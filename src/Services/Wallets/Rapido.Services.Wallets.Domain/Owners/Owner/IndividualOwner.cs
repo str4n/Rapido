@@ -14,5 +14,5 @@ public sealed class IndividualOwner : Owner
         FullName = fullName;
     }
 
-    public CorporateOwner TransformToCorporateOwner(TaxId taxId) => new CorporateOwner(Id, Name, taxId, State, CreatedAt);
+    public CorporateOwner TransformToCorporateOwner(TaxId taxId) => new CorporateOwner(Id, Name, taxId, CreatedAt);
 }

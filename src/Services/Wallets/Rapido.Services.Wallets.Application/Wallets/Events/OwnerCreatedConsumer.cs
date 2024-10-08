@@ -8,7 +8,7 @@ using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Events;
 
-internal sealed class OwnerCreatedConsumer : IConsumer<OwnerCreated>
+internal sealed class OwnerCreatedConsumer : IConsumer<IndividualOwnerCreated>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IClock _clock;
@@ -19,7 +19,7 @@ internal sealed class OwnerCreatedConsumer : IConsumer<OwnerCreated>
         _clock = clock;
     }
     
-    public async Task Consume(ConsumeContext<OwnerCreated> context)
+    public async Task Consume(ConsumeContext<IndividualOwnerCreated> context)
     {
         var message = context.Message;
 

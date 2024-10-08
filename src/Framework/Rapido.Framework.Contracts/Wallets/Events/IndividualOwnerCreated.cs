@@ -2,4 +2,4 @@
 
 namespace Rapido.Framework.Contracts.Wallets.Events;
 
-public sealed record OwnerCreated(Guid OwnerId, string Nationality) : IEvent;
+public sealed record IndividualOwnerCreated(Guid OwnerId, string Nationality) : IEvent;

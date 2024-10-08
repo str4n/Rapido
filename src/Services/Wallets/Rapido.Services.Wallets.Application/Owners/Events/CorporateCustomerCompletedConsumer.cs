@@ -8,26 +8,26 @@ using Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 namespace Rapido.Services.Wallets.Application.Owners.Events;
 
-internal sealed class CustomerCompletedConsumer : IConsumer<IndividualCustomerCompleted>
+internal sealed class CorporateCustomerCompletedConsumer : IConsumer<CorporateCustomerCompleted>
 {
-    private readonly IIndividualOwnerRepository _ownerRepository;
+    private readonly ICorporateOwnerRepository _ownerRepository;
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
 
-    public CustomerCompletedConsumer(IIndividualOwnerRepository ownerRepository, IClock clock, IMessageBroker messageBroker)
+    public CorporateCustomerCompletedConsumer(ICorporateOwnerRepository ownerRepository, IClock clock, IMessageBroker messageBroker)
     {
         _ownerRepository = ownerRepository;
         _clock = clock;
         _messageBroker = messageBroker;
     }
     
-    public async Task Consume(ConsumeContext<IndividualCustomerCompleted> context)
+    public async Task Consume(ConsumeContext<CorporateCustomerCompleted> context)
     {
         var message = context.Message;
 
-        var owner = new IndividualOwner(message.CustomerId, message.Name, message.FullName, _clock.Now());
+        var owner = new CorporateOwner(message.CustomerId, message.Name, message.TaxId, _clock.Now());
 
         await _ownerRepository.AddAsync(owner);
-        await _messageBroker.PublishAsync(new OwnerCreated(message.CustomerId, message.Nationality));
+        await _messageBroker.PublishAsync(new CorporateOwnerCreated(message.CustomerId, message.Nationality));
     }
 }

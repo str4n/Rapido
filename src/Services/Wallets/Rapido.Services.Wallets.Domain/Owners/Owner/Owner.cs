@@ -21,8 +21,5 @@ public abstract class Owner
     
     public void Lock() => State = OwnerState.Locked;
 
-    public void Unlock()
-    {
-        State = OwnerState.Active;
-    }
+    public void Unlock() => State = OwnerState.Active;
 }
