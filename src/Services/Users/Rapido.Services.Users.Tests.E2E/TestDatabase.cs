@@ -3,7 +3,7 @@ using Rapido.Framework.Common.Time;
 using Rapido.Framework.Testing;
 using Rapido.Services.Users.Core.EF;
 
-namespace Rapido.Tests.Services.Users.E2E;
+namespace Rapido.Services.Users.Tests.E2E;
 
 internal sealed class TestDatabase : IDisposable
 {
@@ -12,7 +12,7 @@ internal sealed class TestDatabase : IDisposable
 
     public TestDatabase()
     {
-        var connectionString = $"Host=localhost;Database=rapido-users-tests;Username=postgres;Password=Admin12!";
+        var connectionString = $"Host=localhost;Database=rapido-users-tests-{Guid.NewGuid():N};Username=postgres;Password=Admin12!";
         DbContext = new UsersDbContext(new DbContextOptionsBuilder<UsersDbContext>()
             .UseNpgsql(connectionString)
             .EnableDetailedErrors()

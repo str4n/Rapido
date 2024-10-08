@@ -6,7 +6,6 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Rapido.Tests.Services.Users.Integration</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

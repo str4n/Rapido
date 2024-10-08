@@ -6,14 +6,16 @@ using Rapido.Framework.Testing;
 using Rapido.Services.Users.Core.Commands;
 using Xunit;
 
-namespace Rapido.Tests.Services.Users.E2E.Endpoints;
+namespace Rapido.Services.Users.Tests.E2E.Endpoints;
 
 public class SignInEndpointTests : IDisposable
 {
     [Fact]
     public async Task post_sign_up_should_create_account_and_sign_in_should_return_proper_jwt()
     {
-        var email = "test756@gmail.com";
+        await _testDatabase.InitAsync();
+        
+        var email = $"test{Guid.NewGuid():N}@gmail.com";
         var password = "TestPassword12!";
         var accountType = "Individual";
 

@@ -1,4 +1,4 @@
-﻿namespace Rapido.Tests.Services.Users.Integration;
+﻿namespace Rapido.Services.Users.Tests.Integration;
 
 public static class Const
 {

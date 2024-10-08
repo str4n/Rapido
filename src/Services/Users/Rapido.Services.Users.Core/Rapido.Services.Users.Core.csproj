@@ -14,8 +14,8 @@
     </ItemGroup>
     
     <ItemGroup>
-        <InternalsVisibleTo Include="Rapido.Tests.Services.Users.Integration"/>
-        <InternalsVisibleTo Include="Rapido.Tests.Services.Users.E2E"/>
+        <InternalsVisibleTo Include="Rapido.Services.Users.Tests.Integration"/>
+        <InternalsVisibleTo Include="Rapido.Services.Users.Tests.E2E"/>
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Rapido.Framework.Auth;
 using Rapido.Services.Users.Core.Storage;
 
-namespace Rapido.Tests.Services.Users.Integration;
+namespace Rapido.Services.Users.Tests.Integration;
 
 public class TestTokenStorage : ITokenStorage
 {

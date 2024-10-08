@@ -16,7 +16,7 @@ using Rapido.Services.Users.Core.Services;
 using Rapido.Services.Users.Core.Storage;
 using Xunit;
 
-namespace Rapido.Tests.Services.Users.Integration.Commands;
+namespace Rapido.Services.Users.Tests.Integration.Commands;
 
 public class SignInHandlerTests : IDisposable
 {

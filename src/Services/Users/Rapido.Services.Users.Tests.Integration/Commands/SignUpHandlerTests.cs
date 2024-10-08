@@ -12,7 +12,7 @@ using Rapido.Services.Users.Core.Services;
 using Rapido.Services.Users.Core.Validators;
 using Xunit;
 
-namespace Rapido.Tests.Services.Users.Integration.Commands;
+namespace Rapido.Services.Users.Tests.Integration.Commands;
 
 public class SignUpHandlerTests : IDisposable
 {

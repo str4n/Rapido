@@ -7,7 +7,7 @@ using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
 using Rapido.Services.Users.Core.Services;
 
-namespace Rapido.Tests.Services.Users.Integration;
+namespace Rapido.Services.Users.Tests.Integration;
 
 internal sealed class TestDatabase : IDisposable
 {
