@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
+﻿using Rapido.Framework.Auth.Policies;
+using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Services.Customers.Application.Corporate.Commands;
 using Rapido.Services.Customers.Application.Corporate.Queries;
@@ -21,6 +22,14 @@ internal static class CorporateCustomerEndpoints
             .WithTags("Corporate Customer")
             .WithName("Complete corporate customer");
         
+        //A backup method if for some reason the event consumer wouldn't work.
+        app
+            .MapPost("/customers/corporate/create", Create)
+            .RequireAuthorization(Policies.Admin)
+            .WithTags("Corporate Customer")
+            .WithName("Create corporate customer")
+            .WithDescription("A backup method, if for some reason the event consumer wouldn't work");
+        
         return app;
     }
     
@@ -38,6 +47,13 @@ internal static class CorporateCustomerEndpoints
         var id = context.Identity.UserId;
 
         await dispatcher.DispatchAsync(command with { CustomerId = id });
+
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> Create(CreateCorporateCustomer command, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(command);
 
         return Results.Ok();
     }
