@@ -1,5 +1,4 @@
-﻿using Rapido.Services.Notifications.Core.Clients;
-using Rapido.Services.Notifications.Core.Entities;
+﻿using Rapido.Services.Notifications.Core.Entities;
 
 namespace Rapido.Services.Notifications.Core.Facades;
 
@@ -7,11 +6,8 @@ namespace Rapido.Services.Notifications.Core.Facades;
 
 internal sealed class FakeEmailSenderFacade : IEmailSenderFacade
 {
-    private readonly IUrlShortenerApiClient _client;
-
-    public FakeEmailSenderFacade(IUrlShortenerApiClient client)
+    public FakeEmailSenderFacade()
     {
-        _client = client;
     }
     
     public async Task SendEmail(string emailAddress, Template template)
