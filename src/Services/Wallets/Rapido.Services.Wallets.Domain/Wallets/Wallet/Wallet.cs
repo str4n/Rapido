@@ -45,17 +45,6 @@ public sealed class Wallet : AggregateRoot<WalletId>
         IncrementVersion();
     }
 
-    public Transaction TransferFunds(Wallet receiverWallet, TransferName name, Amount amount, Currency currency, 
-        List<ExchangeRate> exchangeRates, DateTime now)
-    {
-        var incomingTransfer = receiverWallet.AddFunds(name, amount, 
-            currency, exchangeRates.SingleOrDefault(x => x.From == currency && x.To == receiverWallet.GetPrimaryCurrency()), now);
-
-        var outgoingTransfer = DeductFunds(name, amount, currency, exchangeRates, now);
-
-        return new Transaction(outgoingTransfer, incomingTransfer);
-    }
-
     public IncomingTransfer AddFunds(TransferName name, Amount amount, 
         Currency currency, ExchangeRate exchangeRate, DateTime now)
     {
@@ -99,83 +88,19 @@ public sealed class Wallet : AggregateRoot<WalletId>
         List<ExchangeRate> exchangeRates, DateTime now)
     {
         var transferId = new TransferId();
-
-        var primaryBalance = GetPrimaryBalance();
-        var primaryCurrency = GetPrimaryCurrency();
-
-        if (primaryBalance is null)
+        
+        var balance = GetPrimaryBalance();
+        
+        if (balance is null)
         {
             throw new BalanceNotFoundException();
         }
         
-        if (amount <= 0)
-        {
-            throw new InvalidTransferAmountException(amount);
-        }
         
-        var exchangeRatePrimary = GetExchangeRate(primaryCurrency, currency);
-
-        var exchangedAmount = primaryBalance.Amount * exchangeRatePrimary.Value;
-
-        var transfer = new OutgoingTransfer(transferId, Id, name, currency, amount, now, GetMetadata(transferId, Id));
         
-        var remainingAmount = amount.Value;
-        
-        if (exchangedAmount >= amount)
-        {
-            var amountToDeductFromPrimary = remainingAmount / exchangeRatePrimary.Value;
-            primaryBalance.DeductFunds(amountToDeductFromPrimary);
-            remainingAmount = 0;
-        }
-        else
-        {
-            var amountToDeductFromPrimary = primaryBalance.Amount;
-            primaryBalance.DeductFunds(amountToDeductFromPrimary);
-            remainingAmount -= exchangedAmount;
-        }
-        
-        foreach (var balance in _balances.Where(b => b.Currency != primaryCurrency))
-        {
-            if (remainingAmount <= 0)
-            {
-                break;
-            }
-
-            var exchangeRate = GetExchangeRate(balance.Currency, currency);
-
-            var balanceInTargetCurrency = balance.Amount * exchangeRate.Value;
-
-            if (balanceInTargetCurrency >= remainingAmount)
-            {
-                var amountToDeduct = remainingAmount / exchangeRate.Value;
-                balance.DeductFunds(amountToDeduct);
-                remainingAmount = 0;
-            }
-            else
-            {
-                var amountToDeduct = balance.Amount;
-                balance.DeductFunds(amountToDeduct);
-                remainingAmount -= balanceInTargetCurrency;
-            }
-        }
-
-        if (remainingAmount > 0)
-        {
-            throw new InsufficientWalletFundsException(Id);
-        }
-        
-        _transfers.Add(transfer);
-        
-        IncrementVersion();
-
-        return transfer;
-        
-        double? GetExchangeRate(Currency from, Currency to) => exchangeRates
-            .SingleOrDefault(x => x.From == from && x.To == to)?.Rate;
+        return default;
     }
     
-
-    public bool BalanceExists(Currency currency) => _balances.Any(x => x.Currency == currency);
     public Currency GetPrimaryCurrency() => _balances.SingleOrDefault(x => x.IsPrimary)?.Currency;
 
     public Amount GetAmount(Currency currency)
@@ -195,6 +120,9 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
     private Balance.Balance GetPrimaryBalance() 
         => _balances.SingleOrDefault(x => x.IsPrimary);
+    
+    private bool BalanceExists(Currency currency) 
+        => _balances.Any(x => x.Currency == currency);
     
     private static TransferMetadata GetMetadata(TransferId transferId, WalletId walletId)
         => new($"{{\"transferId\": \"{transferId}\", \"walletId\": \"{walletId}\"}}");

@@ -6,6 +6,7 @@ using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
+using Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
@@ -16,15 +17,17 @@ namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;
 internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
 {
     private readonly IWalletRepository _walletRepository;
+    private readonly ITransferService _transferService;
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
     private readonly ILogger<TransferFundsHandler> _logger;
     private readonly ICurrencyApiClient _client;
 
-    public TransferFundsHandler(IWalletRepository walletRepository, IClock clock, IMessageBroker messageBroker, 
-        ILogger<TransferFundsHandler> logger, ICurrencyApiClient client)
+    public TransferFundsHandler(IWalletRepository walletRepository, ITransferService transferService, IClock clock, 
+        IMessageBroker messageBroker, ILogger<TransferFundsHandler> logger, ICurrencyApiClient client)
     {
         _walletRepository = walletRepository;
+        _transferService = transferService;
         _clock = clock;
         _messageBroker = messageBroker;
         _logger = logger;
@@ -65,9 +68,7 @@ internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
             throw new ExchangeRateNotFoundException();
         }
         
-        var now = _clock.Now();
-        
-        wallet.TransferFunds(receiverWallet, transferName, amount, currency, exchangeRates, now);
+        _transferService.Transfer(wallet, receiverWallet, transferName, amount, currency, exchangeRates);
         
         await _walletRepository.UpdateAsync(wallet);
         await _walletRepository.UpdateAsync(receiverWallet);
