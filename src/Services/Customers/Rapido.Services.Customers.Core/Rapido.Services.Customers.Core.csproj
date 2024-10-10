@@ -21,4 +21,8 @@
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Rapido.Services.Customers.Tests.Integration"/>
+    </ItemGroup>
+
 </Project>
