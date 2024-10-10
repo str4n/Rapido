@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Health\Rapido.Framework.Health.csproj" />
-      <ProjectReference Include="..\Rapido.Services.Customers.Application\Rapido.Services.Customers.Application.csproj" />
+      <ProjectReference Include="..\Rapido.Services.Customers.Core\Rapido.Services.Customers.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

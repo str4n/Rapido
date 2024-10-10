@@ -1,18 +1,14 @@
 using Rapido.Framework;
 using Rapido.Framework.Health.HealthChecks;
 using Rapido.Services.Customers.Api.Endpoints;
-using Rapido.Services.Customers.Application;
-using Rapido.Services.Customers.Domain;
-using Rapido.Services.Customers.Infrastructure;
+using Rapido.Services.Customers.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddFramework();
 
 builder.Services
-    .AddApplication()
-    .AddDomain()
-    .AddInfrastructure(builder.Configuration)
+    .AddCore(builder.Configuration)
     .AddHealth(builder.Configuration);
 
 var app = builder.Build();

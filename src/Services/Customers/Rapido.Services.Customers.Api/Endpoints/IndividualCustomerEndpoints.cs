@@ -1,9 +1,9 @@
 ﻿using Rapido.Framework.Auth.Policies;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
-using Rapido.Services.Customers.Application.Common.Commands;
-using Rapido.Services.Customers.Application.Individual.Commands;
-using Rapido.Services.Customers.Application.Individual.Queries;
+using Rapido.Services.Customers.Core.Common.Commands;
+using Rapido.Services.Customers.Core.Individual.Commands;
+using Rapido.Services.Customers.Core.Individual.Queries;
 
 namespace Rapido.Services.Customers.Api.Endpoints;
 
