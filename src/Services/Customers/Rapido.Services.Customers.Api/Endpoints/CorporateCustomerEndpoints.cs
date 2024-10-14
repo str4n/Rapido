@@ -25,12 +25,12 @@ internal static class CorporateCustomerEndpoints
         app.MapPut("/corporate/change-address", ChangeAddress)
             .RequireAuthorization()
             .WithTags("Corporate Customer")
-            .WithName("Change customer address");
+            .WithName("Change corporate customer address");
         
         app.MapPut("/corporate/change-nationality", ChangeNationality)
             .RequireAuthorization()
             .WithTags("Corporate Customer")
-            .WithName("Change customer nationality");
+            .WithName("Change corporate customer nationality");
         
         //A backup method if for some reason the event consumer wouldn't work.
         app

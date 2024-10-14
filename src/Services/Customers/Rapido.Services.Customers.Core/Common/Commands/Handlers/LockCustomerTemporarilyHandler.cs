@@ -32,6 +32,11 @@ internal sealed class LockCustomerTemporarilyHandler : ICommandHandler<LockCusto
 
         var now = _clock.Now();
 
+        if (now >= command.EndDate)
+        {
+            throw new CannotLockCustomerException("End date must be from future.");
+        }
+
         var lockout = new TemporaryLockout(customer.Id, command.Reason, command.Description, now, command.EndDate);
         
         customer.Lock(lockout);

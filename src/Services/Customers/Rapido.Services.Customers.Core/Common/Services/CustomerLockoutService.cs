@@ -43,25 +43,13 @@ internal sealed class CustomerLockoutService : IHostedService
 
             var now = _clock.Now();
             
-            var lockedIndividualCustomers = await dbContext.IndividualCustomers
-                .Include(x => x.Lockouts)
-                .Where(c => c.IsLocked && c.Lockouts.Any())
-                .ToListAsync();
-            
-            var lockedCorporateCustomers = await dbContext.CorporateCustomers
+            var lockedCustomers = await dbContext.Customers
                 .Include(x => x.Lockouts)
                 .Where(c => c.IsLocked && c.Lockouts.Any())
                 .ToListAsync();
 
-            var customersWithEndedLockout = new List<Customer>();
-            
-            customersWithEndedLockout.AddRange(lockedIndividualCustomers
-                .Where(x => x.Lockouts.Last() is TemporaryLockout lockout && lockout.IsActive(now))
-                .ToList());
-            
-            customersWithEndedLockout.AddRange(lockedCorporateCustomers
-                .Where(x => x.Lockouts.Last() is TemporaryLockout lockout && lockout.IsActive(now))
-                .ToList());
+            var customersWithEndedLockout = lockedCustomers
+                .Where(x => x.Lockouts.Last() is TemporaryLockout lockout && !lockout.IsActive(now)).ToList();
             
             foreach (var customer in customersWithEndedLockout)
             {
