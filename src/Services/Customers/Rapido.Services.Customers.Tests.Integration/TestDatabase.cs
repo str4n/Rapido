@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rapido.Framework.Common.Time;
 using Rapido.Framework.Testing;
+using Rapido.Services.Customers.Core.Common.Domain.Customer;
 using Rapido.Services.Customers.Core.Common.EF;
 using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
@@ -28,14 +29,16 @@ internal sealed class TestDatabase
     {
         await DbContext.Database.MigrateAsync();
 
-        var individualCustomer = 
-            new IndividualCustomer(Guid.Parse(Const.IndividualCustomerGuid), Const.IndividualCustomerEmail, _clock.Now());
-        
-        var corporateCustomer = 
-            new CorporateCustomer(Guid.NewGuid(), Const.CorporateCustomerEmail, _clock.Now());
+        var customers = new List<Customer>
+        {
+            new CorporateCustomer(Guid.Parse(Const.CorporateCustomerGuid), Const.CorporateCustomerEmail,
+                _clock.Now()),
 
-        await DbContext.Customers.AddAsync(individualCustomer);
-        await DbContext.Customers.AddAsync(corporateCustomer);
+            new IndividualCustomer(Guid.Parse(Const.IndividualCustomerGuid), Const.IndividualCustomerEmail,
+                _clock.Now())
+        };
+
+        await DbContext.Customers.AddRangeAsync(customers);
 
         await DbContext.SaveChangesAsync();
     }
