@@ -15,7 +15,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
     public IEnumerable<Transfer.Transfer> Transfers => _transfers;
     public IEnumerable<Balance.Balance> Balances => _balances;
     public DateTime CreatedAt { get; }
-    public Wallet(WalletId id, OwnerId ownerId, Currency currency, DateTime createdAt)
+    internal Wallet(WalletId id, OwnerId ownerId, Currency currency, DateTime createdAt)
     {
         Id = new(id);
         OwnerId = ownerId;
@@ -106,7 +106,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
         if (remainingAmount > 0)
         {
-            throw new InsufficientWalletFundsException(Id);
+            throw new InsufficientFundsException(Id);
         }
         
         var transfer = new OutgoingTransfer(transferId, Id, name, currency, amount, now, GetMetadata(transferId, Id));
