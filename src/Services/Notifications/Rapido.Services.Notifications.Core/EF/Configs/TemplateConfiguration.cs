@@ -8,6 +8,8 @@ internal sealed class TemplateConfiguration : IEntityTypeConfiguration<Template>
 {
     public void Configure(EntityTypeBuilder<Template> builder)
     {
+        builder.HasKey(x => x.Id);
+        
         builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.Name).IsRequired();
         builder.Property(x => x.Title).IsRequired();

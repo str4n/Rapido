@@ -14,4 +14,8 @@ internal sealed class Template
         Title = title;
         Body = body;
     }
+
+    private Template()
+    {
+    }
 }

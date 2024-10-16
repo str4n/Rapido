@@ -8,6 +8,8 @@ internal sealed class RecipientConfiguration : IEntityTypeConfiguration<Recipien
 {
     public void Configure(EntityTypeBuilder<Recipient> builder)
     {
+        builder.HasKey(x => x.Id);
+        
         builder.HasIndex(x => x.Email).IsUnique();
         builder.Property(x => x.Email).IsRequired();
     }

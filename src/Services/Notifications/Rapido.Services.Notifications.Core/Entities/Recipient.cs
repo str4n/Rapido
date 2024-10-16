@@ -10,4 +10,8 @@ internal sealed class Recipient
         Id = id;
         Email = email;
     }
+
+    private Recipient()
+    {
+    }
 }
