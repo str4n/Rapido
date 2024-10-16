@@ -57,7 +57,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
             throw new BalanceNotFoundException();
         }
         
-        if (amount <= 0)
+        if (amount <= Amount.Zero)
         {
             throw new InvalidTransferAmountException(amount);
         }
@@ -89,20 +89,61 @@ public sealed class Wallet : AggregateRoot<WalletId>
     {
         var transferId = new TransferId();
         
-        var balance = GetPrimaryBalance();
-        
-        if (balance is null)
+        if (amount <= Amount.Zero)
         {
-            throw new BalanceNotFoundException();
+            throw new InvalidTransferAmountException(amount);
         }
         
+        var remainingAmount = amount.Value;
+
+        foreach (var balance in _balances
+                     .OrderByDescending(x => x.IsPrimary)
+                     .TakeWhile(_ => !(remainingAmount <= 0)))
+            
+        {
+            DeductFundsFromBalance(balance);
+        }
+
+        if (remainingAmount > 0)
+        {
+            throw new InsufficientWalletFundsException(Id);
+        }
         
+        var transfer = new OutgoingTransfer(transferId, Id, name, currency, amount, now, GetMetadata(transferId, Id));
+        _transfers.Add(transfer);
         
-        return default;
+        IncrementVersion();
+
+        return transfer;
+        
+        void DeductFundsFromBalance(Balance.Balance balance)
+        {
+            var exchangeRate = GetExchangeRate(balance.Currency, currency);
+            var exchangedAmountFromBalance = balance.Amount * exchangeRate;
+
+            if (exchangedAmountFromBalance <= Amount.Zero)
+            {
+                return;
+            }
+            
+            if (exchangedAmountFromBalance >= remainingAmount)
+            {
+                var amountToDeduct = remainingAmount / exchangeRate;
+                balance.DeductFunds(amountToDeduct);
+                remainingAmount = 0;
+            }
+            else
+            {
+                var amountToDeduct = balance.Amount;
+                balance.DeductFunds(amountToDeduct);
+                remainingAmount -= exchangedAmountFromBalance;
+            }
+        }
+        
+        double GetExchangeRate(Currency from, Currency to) => exchangeRates
+            .Single(x => x.From == from && x.To == to).Rate;
     }
     
-    public Currency GetPrimaryCurrency() => _balances.SingleOrDefault(x => x.IsPrimary)?.Currency;
-
     public Amount GetAmount(Currency currency)
     {
         var balance = GetBalance(currency);
@@ -114,6 +155,9 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
         return balance.Amount;
     }
+    
+    public Currency GetPrimaryCurrency() 
+        => _balances.SingleOrDefault(x => x.IsPrimary)?.Currency;
 
     private Balance.Balance GetBalance(Currency currency) 
         => _balances.SingleOrDefault(x => x.Currency == currency);

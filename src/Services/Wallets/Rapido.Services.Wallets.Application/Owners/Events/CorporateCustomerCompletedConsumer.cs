@@ -28,6 +28,6 @@ internal sealed class CorporateCustomerCompletedConsumer : IConsumer<CorporateCu
         var owner = new CorporateOwner(message.CustomerId, message.Name, message.TaxId, _clock.Now());
 
         await _ownerRepository.AddAsync(owner);
-        await _messageBroker.PublishAsync(new CorporateOwnerCreated(message.CustomerId, message.Nationality));
+        await _messageBroker.PublishAsync(new OwnerCreated(message.CustomerId, message.Nationality));
     }
 }
