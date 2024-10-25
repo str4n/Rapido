@@ -144,7 +144,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
             .Single(x => x.From == from && x.To == to).Rate;
     }
     
-    public Amount GetAmount(Currency currency)
+    public Amount GetFunds(Currency currency)
     {
         var balance = GetBalance(currency);
 
@@ -154,6 +154,21 @@ public sealed class Wallet : AggregateRoot<WalletId>
         }
 
         return balance.Amount;
+    }
+
+    public Amount GetTotalFunds(List<ExchangeRate> exchangeRates)
+    {
+        var totalAmountInPrimaryCurrency = Amount.Zero;
+
+        foreach (var balance in _balances)
+        {
+            var primaryCurrency = GetPrimaryCurrency();
+            var exchangeRate = exchangeRates.Single(x => x.From == balance.Currency && x.To == primaryCurrency).Rate;
+
+            totalAmountInPrimaryCurrency += balance.Amount * exchangeRate;
+        }
+
+        return totalAmountInPrimaryCurrency;
     }
     
     public Currency GetPrimaryCurrency() 
