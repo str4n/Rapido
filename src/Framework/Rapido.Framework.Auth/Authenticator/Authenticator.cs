@@ -30,7 +30,10 @@ public sealed class Authenticator : IAuthenticator
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
             new(JwtRegisteredClaimNames.Email, email),
-            new(ClaimTypes.Role, role)
+            new(ClaimTypes.Role, role),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeMilliseconds().ToString()),
+            new(JwtRegisteredClaimNames.Exp, new DateTimeOffset(expires).ToUnixTimeMilliseconds().ToString())
         };
 
         var signingCredentials = new SigningCredentials(
@@ -39,6 +42,6 @@ public sealed class Authenticator : IAuthenticator
         var jwt = new JwtSecurityToken(_options.Issuer, _options.Audience, claims, now, expires, signingCredentials);
         var accessToken = _tokenHandler.WriteToken(jwt);
 
-        return new JsonWebToken(accessToken, userId, email, role);
+        return new JsonWebToken(accessToken, string.Empty, userId, email, role, expires);
     }
 }

@@ -1,3 +1,3 @@
 ﻿namespace Rapido.Framework.Auth;
 
-public sealed record JsonWebToken(string Token, Guid UserId, string Email, string Role);
+public sealed record JsonWebToken(string AccessToken, string RefreshToken, Guid UserId, string Email, string Role, DateTime Expires);
