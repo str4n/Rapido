@@ -39,7 +39,7 @@ public class SignInHandlerTests : IDisposable
         jwt.Email.Should().Be(email.ToLowerInvariant());
         jwt.Role.Should().Be(Role.User);
         jwt.UserId.Should().NotBeEmpty();
-        jwt.Token.Should().NotBeNullOrWhiteSpace();
+        jwt.AccessToken.Should().NotBeNullOrWhiteSpace();
     }
     
     [Fact]

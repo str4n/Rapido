@@ -1,6 +1,7 @@
 ﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Services.Users.Core.Commands;
+using Rapido.Services.Users.Core.DTO;
 using Rapido.Services.Users.Core.Queries;
 using Rapido.Services.Users.Core.Storage;
 
@@ -21,7 +22,7 @@ internal static class AccountEndpoints
             .WithName("Sign in");;
 
         app
-            .MapGet("/me", GetMe)
+            .MapGet("/", GetMe)
             .RequireAuthorization()
             .WithTags("Account")
             .WithName("Get account");
@@ -47,8 +48,9 @@ internal static class AccountEndpoints
     {
         await dispatcher.DispatchAsync(command);
         var token = tokenStorage.Get();
+        var user = await dispatcher.DispatchAsync(new GetUser(token.UserId));
 
-        return Results.Ok(token);
+        return Results.Ok(new AuthDto(token, user.AccountType));
     }
 
     private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context)

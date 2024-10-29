@@ -16,5 +16,5 @@ public sealed class TestAuthenticator
     }
     
     public string GenerateJwt(Guid userId, string role, string email) =>
-        _authenticator.CreateToken(userId, role, email).Token;
+        _authenticator.CreateToken(userId, role, email).AccessToken;
 }

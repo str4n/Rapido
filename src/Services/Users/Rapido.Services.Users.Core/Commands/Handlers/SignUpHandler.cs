@@ -62,6 +62,7 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
             Email = email,
             Password = securedPassword,
             Role = role,
+            Type = accountType,
             State = UserState.Active,
             CreatedAt = _clock.Now()
         };

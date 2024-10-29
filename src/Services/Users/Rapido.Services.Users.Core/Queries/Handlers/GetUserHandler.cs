@@ -24,6 +24,6 @@ internal sealed class GetUserHandler : IQueryHandler<GetUser, UserDto>
             throw new UserNotFoundException($"User with id: {userId} was not found.");
         }
 
-        return new UserDto(user.Id, user.Email, user.Role.Name);
+        return new UserDto(user.Id, user.Email, user.Role.Name, user.Type.ToString());
     }
 }

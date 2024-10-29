@@ -24,6 +24,6 @@ internal sealed class GetUserByEmailHandler : IQueryHandler<GetUserByEmail, User
             throw new UserNotFoundException($"User with email: {email} was not found.");
         }
 
-        return new UserDto(user.Id, user.Email, user.Role.Name);
+        return new UserDto(user.Id, user.Email, user.Role.Name, user.Type.ToString());
     }
 }

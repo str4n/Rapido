@@ -36,7 +36,7 @@ public class SignInEndpointTests : IDisposable
         content.Should().NotBeNull();
         content?.Email.Should().Be(email);
         content?.Role.Should().Be("user");
-        content?.Token.Should().NotBeNullOrEmpty();
+        content?.AccessToken.Should().NotBeNullOrEmpty();
     }
     
     public void Dispose()
