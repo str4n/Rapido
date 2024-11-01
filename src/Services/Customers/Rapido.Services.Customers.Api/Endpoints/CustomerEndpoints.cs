@@ -1,6 +1,7 @@
 ﻿using Rapido.Framework.Auth.Policies;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Services.Customers.Core.Common.Commands;
+using Rapido.Services.Customers.Core.Common.Queries;
 
 namespace Rapido.Services.Customers.Api.Endpoints;
 
@@ -26,6 +27,8 @@ internal static class CustomerEndpoints
             .WithTags("Customer")
             .WithName("Unlock customer");
 
+        app.MapGet("/customers/check-name/{name}", IsEmailTaken);
+
         return app;
     }
     
@@ -48,5 +51,12 @@ internal static class CustomerEndpoints
         await dispatcher.DispatchAsync(new UnlockCustomer(customerId));
 
         return Results.Ok();
+    }
+
+    private static async Task<IResult> IsEmailTaken(string name, IDispatcher dispatcher)
+    {
+        var result = await dispatcher.DispatchAsync(new CheckNameUniqueness(name));
+
+        return Results.Ok(new { IsNameTaken = result });
     }
 }

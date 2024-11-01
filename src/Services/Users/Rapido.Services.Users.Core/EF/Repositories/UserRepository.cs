@@ -33,6 +33,9 @@ internal sealed class UserRepository : IUserRepository
                 .Include(x => x.Role)
                 .SingleOrDefaultAsync(x => x.Email == email);
 
+    public Task<bool> AnyAsync(string email)
+        => _dbContext.Users.AnyAsync(x => x.Email == email);
+
     public async Task AddAsync(User user)
     {
         await _dbContext.Users.AddAsync(user);

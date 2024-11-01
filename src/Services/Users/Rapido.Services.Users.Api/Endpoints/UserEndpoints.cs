@@ -10,6 +10,9 @@ internal static class UserEndpoints
     {
         app.MapGet("/users/{email}", GetUser).AddEndpointFilter<ApiKeyEndpointFilter>();
         
+        // Endpoint for frontend validator
+        app.MapGet("users/check-email/{email}", IsEmailTaken);
+        
         return app;
     }
 
@@ -19,4 +22,13 @@ internal static class UserEndpoints
 
         return Results.Ok(result);
     }
+
+    // Endpoint for frontend validator
+    private static async Task<IResult> IsEmailTaken(string email, IDispatcher dispatcher)
+    {
+        var result = await dispatcher.DispatchAsync(new CheckUserEmailUniqueness(email));
+
+        return Results.Ok(new { IsEmailTaken = result });
+    }
+    
 }
