@@ -17,7 +17,8 @@ public static class Extensions
         services
             .AddScoped<IWalletRepository, WalletRepository>()
             .AddScoped<IIndividualOwnerRepository, IndividualOwnerRepository>()
-            .AddScoped<ICorporateOwnerRepository, CorporateOwnerRepository>();
+            .AddScoped<ICorporateOwnerRepository, CorporateOwnerRepository>()
+            .AddScoped<IOwnerRepository, OwnerRepository>();
         
         return services;
     }

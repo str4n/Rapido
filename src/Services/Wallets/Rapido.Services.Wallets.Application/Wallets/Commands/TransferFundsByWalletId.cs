@@ -2,7 +2,7 @@
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands;
 
-public sealed record TransferFunds(
+public sealed record TransferFundsByWalletId(
     Guid OwnerId, 
     Guid WalletId, 
     Guid ReceiverWalletId, 

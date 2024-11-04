@@ -14,27 +14,25 @@ using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;
 
-internal sealed class TransferFundsHandler : ICommandHandler<TransferFunds>
+internal sealed class TransferFundsByWalletIdHandler : ICommandHandler<TransferFundsByWalletId>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly ITransferService _transferService;
-    private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
-    private readonly ILogger<TransferFundsHandler> _logger;
+    private readonly ILogger<TransferFundsByWalletIdHandler> _logger;
     private readonly ICurrencyApiClient _client;
 
-    public TransferFundsHandler(IWalletRepository walletRepository, ITransferService transferService, IClock clock, 
-        IMessageBroker messageBroker, ILogger<TransferFundsHandler> logger, ICurrencyApiClient client)
+    public TransferFundsByWalletIdHandler(IWalletRepository walletRepository, ITransferService transferService,
+        IMessageBroker messageBroker, ILogger<TransferFundsByWalletIdHandler> logger, ICurrencyApiClient client)
     {
         _walletRepository = walletRepository;
         _transferService = transferService;
-        _clock = clock;
         _messageBroker = messageBroker;
         _logger = logger;
         _client = client;
     }
     
-    public async Task HandleAsync(TransferFunds command)
+    public async Task HandleAsync(TransferFundsByWalletId command)
     {
         var walletId = new WalletId(command.WalletId);
         var receiverWalletId = new WalletId(command.ReceiverWalletId);

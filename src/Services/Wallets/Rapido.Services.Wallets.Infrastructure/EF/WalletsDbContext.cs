@@ -9,6 +9,7 @@ internal sealed class WalletsDbContext : DbContext
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<IndividualOwner> IndividualOwners { get; set; }
     public DbSet<CorporateOwner> CorporateOwners { get; set; }
+    public DbSet<Owner> Owners { get; set; }
 
     public WalletsDbContext(DbContextOptions<WalletsDbContext> options) : base(options)
     {

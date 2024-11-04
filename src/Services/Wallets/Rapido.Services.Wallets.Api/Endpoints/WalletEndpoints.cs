@@ -10,10 +10,15 @@ internal static class WalletEndpoints
 {
     public static IEndpointRouteBuilder MapWalletEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/transfer", TransferFunds)
+        app.MapPost("/transfer/id", TransferFundsByWalletId)
             .RequireAuthorization()
             .WithTags("Wallets")
-            .WithName("Transfer funds");
+            .WithName("Transfer funds by wallet id");
+        
+        app.MapPost("/transfer/name", TransferFundsByReceiverName)
+            .RequireAuthorization()
+            .WithTags("Wallets")
+            .WithName("Transfer receiver name");
 
         app.MapPut("/add-funds", AddFunds)
             .RequireAuthorization(Policies.Admin)
@@ -38,7 +43,16 @@ internal static class WalletEndpoints
         return app;
     }
 
-    private static async Task<IResult> TransferFunds(TransferFunds command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> TransferFundsByWalletId(TransferFundsByWalletId command, IDispatcher dispatcher, IContext context)
+    {
+        var id = context.Identity.UserId;
+
+        await dispatcher.DispatchAsync(command with { OwnerId = id });
+
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> TransferFundsByReceiverName(TransferFundsByReceiverName command, IDispatcher dispatcher, IContext context)
     {
         var id = context.Identity.UserId;
 
