@@ -143,6 +143,11 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
     public bool HasSufficientFunds(Amount amount, Currency currency, List<ExchangeRate> exchangeRates)
     {
+        if (amount < Amount.Zero)
+        {
+            throw new NegativeAmountException();
+        }
+        
         var remainingAmount = amount;
         
         foreach (var balance in _balances
