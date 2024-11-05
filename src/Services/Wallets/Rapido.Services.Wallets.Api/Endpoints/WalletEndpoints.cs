@@ -1,4 +1,5 @@
-﻿using Rapido.Framework.Auth.Policies;
+﻿using Microsoft.AspNetCore.Mvc;
+using Rapido.Framework.Auth.Policies;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Services.Wallets.Application.Wallets.Commands;
@@ -39,6 +40,13 @@ internal static class WalletEndpoints
             .RequireAuthorization()
             .WithTags("Wallets")
             .WithName("Add balance to wallet");
+        
+        //Endpoint for frontend validator
+        
+        app.MapGet("/has-sufficient-funds", HasSufficientFunds)
+            .RequireAuthorization()
+            .WithTags("Wallets")
+            .WithName("Check if wallet has enough funds");
 
         return app;
     }
@@ -91,5 +99,14 @@ internal static class WalletEndpoints
         await dispatcher.DispatchAsync(command with { OwnerId = id });
 
         return Results.Created();
+    }
+
+    private static async Task<IResult> HasSufficientFunds([FromBody]CheckSufficiencyOfFunds query, [FromServices]IDispatcher dispatcher, [FromServices]IContext context)
+    {
+        var id = context.Identity.UserId;
+        
+        var result = await dispatcher.DispatchAsync(query with { OwnerId = id });
+
+        return Results.Ok(new { HasSufficientFunds = result });
     }
 }

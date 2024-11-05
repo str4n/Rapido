@@ -118,7 +118,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
         
         void DeductFundsFromBalance(Balance.Balance balance)
         {
-            var exchangeRate = GetExchangeRate(balance.Currency, currency);
+            var exchangeRate = GetExchangeRate(balance.Currency, currency, exchangeRates);
             var exchangedAmountFromBalance = balance.Amount * exchangeRate;
 
             if (exchangedAmountFromBalance <= Amount.Zero)
@@ -139,9 +139,41 @@ public sealed class Wallet : AggregateRoot<WalletId>
                 remainingAmount -= exchangedAmountFromBalance;
             }
         }
+    }
+
+    public bool HasSufficientFunds(Amount amount, Currency currency, List<ExchangeRate> exchangeRates)
+    {
+        var remainingAmount = amount;
         
-        double GetExchangeRate(Currency from, Currency to) => exchangeRates
-            .Single(x => x.From == from && x.To == to).Rate;
+        foreach (var balance in _balances
+                     .OrderByDescending(x => x.IsPrimary)
+                     .TakeWhile(_ => !(remainingAmount <= 0)))
+            
+        {
+            DeductFundsFromBalance(balance);
+        }
+
+        return remainingAmount == Amount.Zero;
+
+        void DeductFundsFromBalance(Balance.Balance balance)
+        {
+            var exchangeRate = GetExchangeRate(balance.Currency, currency, exchangeRates);
+            var exchangedAmountFromBalance = balance.Amount * exchangeRate;
+
+            if (exchangedAmountFromBalance <= Amount.Zero)
+            {
+                return;
+            }
+            
+            if (exchangedAmountFromBalance >= remainingAmount)
+            {
+                remainingAmount = 0;
+            }
+            else
+            {
+                remainingAmount -= exchangedAmountFromBalance;
+            }
+        }
     }
     
     public Amount GetFunds(Currency currency)
@@ -182,6 +214,9 @@ public sealed class Wallet : AggregateRoot<WalletId>
     
     private bool BalanceExists(Currency currency) 
         => _balances.Any(x => x.Currency == currency);
+    
+    private double GetExchangeRate(Currency from, Currency to, List<ExchangeRate> exchangeRates) => exchangeRates
+        .Single(x => x.From == from && x.To == to).Rate;
     
     private static TransferMetadata GetMetadata(TransferId transferId, WalletId walletId)
         => new($"{{\"transferId\": \"{transferId}\", \"walletId\": \"{walletId}\"}}");

@@ -38,20 +38,15 @@ internal sealed class TransferFundsByReceiverNameHandler : ICommandHandler<Trans
     
     public async Task HandleAsync(TransferFundsByReceiverName command)
     {
-        var walletId = new WalletId(command.WalletId);
+        var ownerId = new OwnerId(command.OwnerId);
         var receiverName = new OwnerName(command.ReceiverName);
         var transferName = new TransferName(command.TransferName);
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         
-        var wallet = await _walletRepository.GetAsync(walletId);
+        var wallet = await _walletRepository.GetAsync(ownerId);
         
         if (wallet is null)
-        {
-            throw new WalletNotFoundException();
-        }
-        
-        if (wallet.OwnerId != (OwnerId)command.OwnerId)
         {
             throw new WalletNotFoundException();
         }
@@ -69,6 +64,11 @@ internal sealed class TransferFundsByReceiverNameHandler : ICommandHandler<Trans
         {
             throw new WalletNotFoundException();
         }
+        
+        if (wallet.Id == receiverWallet.Id)
+        {
+            throw new CannotMakeSelfFundsTransferException();
+        }
 
         var exchangeRates = (await _client.GetExchangeRates()).ToList();
         
@@ -85,6 +85,6 @@ internal sealed class TransferFundsByReceiverNameHandler : ICommandHandler<Trans
         await _messageBroker.PublishAsync(
             new FundsTransferred(wallet.Id, receiverWallet.Id, transferName, currency, amount));
         
-        _logger.LogInformation("Transferred {amount} {currency} from wallet with id: {walletId} to wallet with id: {receiverWalletId}.", amount, currency, walletId, receiverWallet.Id);
+        _logger.LogInformation("Transferred {amount} {currency} from wallet with id: {walletId} to wallet with id: {receiverWalletId}.", amount, currency, wallet.Id, receiverWallet.Id);
     }
 }

@@ -59,6 +59,11 @@ internal sealed class TransferFundsByWalletIdHandler : ICommandHandler<TransferF
             throw new WalletNotFoundException();
         }
 
+        if (wallet.Id == receiverWallet.Id)
+        {
+            throw new CannotMakeSelfFundsTransferException();
+        }
+
         var exchangeRates = (await _client.GetExchangeRates()).ToList();
         
         if (exchangeRates is null || !exchangeRates.Any())

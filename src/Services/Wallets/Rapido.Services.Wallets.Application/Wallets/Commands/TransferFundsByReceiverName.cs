@@ -4,7 +4,6 @@ namespace Rapido.Services.Wallets.Application.Wallets.Commands;
 
 public sealed record TransferFundsByReceiverName(
     Guid OwnerId, 
-    Guid WalletId, 
     string ReceiverName, 
     string TransferName,
     string Currency, 
