@@ -22,7 +22,7 @@ internal static class AccountEndpoints
             .WithName("Sign in");;
 
         app
-            .MapGet("/", GetMe)
+            .MapGet("/me", GetMe)
             .RequireAuthorization()
             .WithTags("Account")
             .WithName("Get account");

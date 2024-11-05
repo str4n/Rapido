@@ -34,7 +34,7 @@ public class GetUserEndpointTests : IDisposable
 
         signInResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var jwt = (await signInResponse.Content.ReadFromJsonAsync<JsonWebToken>())?.AccessToken;
+        var jwt = (await signInResponse.Content.ReadFromJsonAsync<AuthDto>())?.Token.AccessToken;
 
         _app.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 

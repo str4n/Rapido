@@ -4,6 +4,7 @@ using FluentAssertions;
 using Rapido.Framework.Auth;
 using Rapido.Framework.Testing;
 using Rapido.Services.Users.Core.Commands;
+using Rapido.Services.Users.Core.DTO;
 using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
@@ -31,12 +32,12 @@ public class SignInEndpointTests : IDisposable
 
         signInResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await signInResponse.Content.ReadFromJsonAsync<JsonWebToken>();
+        var content = await signInResponse.Content.ReadFromJsonAsync<AuthDto>();
 
         content.Should().NotBeNull();
-        content?.Email.Should().Be(email);
-        content?.Role.Should().Be("user");
-        content?.AccessToken.Should().NotBeNullOrEmpty();
+        content?.Token.Email.Should().Be(email);
+        content?.Token.Role.Should().Be("user");
+        content?.Token.AccessToken.Should().NotBeNullOrEmpty();
     }
     
     public void Dispose()
