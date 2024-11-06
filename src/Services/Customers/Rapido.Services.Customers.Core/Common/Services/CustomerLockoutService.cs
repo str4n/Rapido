@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Time;
+using Rapido.Framework.Contracts.Customers.Events;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.Common.Domain.Customer;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.EF;
@@ -40,6 +42,7 @@ internal sealed class CustomerLockoutService : IHostedService
             using var scope = _serviceProvider.CreateScope();
 
             var dbContext = scope.ServiceProvider.GetRequiredService<CustomersDbContext>();
+            var messageBroker = scope.ServiceProvider.GetRequiredService<IMessageBroker>();
 
             var now = _clock.Now();
             
@@ -50,14 +53,18 @@ internal sealed class CustomerLockoutService : IHostedService
 
             var customersWithEndedLockout = lockedCustomers
                 .Where(x => x.Lockouts.Last() is TemporaryLockout lockout && !lockout.IsActive(now)).ToList();
+
+            var messageTasks = new List<Task>();
             
             foreach (var customer in customersWithEndedLockout)
             {
                 customer.Unlock(now);
+                messageTasks.Add(messageBroker.PublishAsync(new CustomerUnlocked(customer.Id)));
             }
             
             dbContext.UpdateRange(customersWithEndedLockout);
             await dbContext.SaveChangesAsync();
+            await Task.WhenAll(messageTasks);
         }
         catch (Exception exception)
         {

@@ -16,16 +16,24 @@ internal sealed class CustomerRepository : ICustomerRepository
     }
 
     public async Task<IEnumerable<Customer>> GetCustomersAllAsync()
-        => await _dbContext.Customers.Include(x => x.Lockouts).ToListAsync();
+        => await _dbContext.Customers
+            .Include(x => x.Lockouts)
+            .ToListAsync();
 
     public async Task<IndividualCustomer> GetIndividualCustomerAsync(Guid id)
-        => await _dbContext.Customers.OfType<IndividualCustomer>().SingleOrDefaultAsync(x => x.Id == id);
+        => await _dbContext.Customers
+            .OfType<IndividualCustomer>()
+            .SingleOrDefaultAsync(x => x.Id == id);
 
     public async Task<CorporateCustomer> GetCorporateCustomerAsync(Guid id)
-        => await _dbContext.Customers.OfType<CorporateCustomer>().SingleOrDefaultAsync(x => x.Id == id);
+        => await _dbContext.Customers
+            .OfType<CorporateCustomer>()
+            .SingleOrDefaultAsync(x => x.Id == id);
 
     public async Task<Customer> GetCustomerAsync(Guid id)
-        => await _dbContext.Customers.SingleOrDefaultAsync(x => x.Id == id);
+        => await _dbContext.Customers
+            .Include(x => x.Lockouts)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
     public async Task<bool> AnyWithNameAsync(string name)
         => await _dbContext.Customers.AnyAsync(x => x.Name == name);

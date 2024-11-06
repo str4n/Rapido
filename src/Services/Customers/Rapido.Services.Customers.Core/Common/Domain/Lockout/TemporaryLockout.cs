@@ -9,5 +9,5 @@ public sealed class TemporaryLockout : Lockout
         EndDate = endDate;
     }
 
-    public bool IsActive(DateTime now) => now <= EndDate;
+    public bool IsActive(DateTime now) => now >= EndDate;
 }

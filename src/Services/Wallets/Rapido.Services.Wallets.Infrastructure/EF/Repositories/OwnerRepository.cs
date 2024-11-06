@@ -15,4 +15,13 @@ internal sealed class OwnerRepository : IOwnerRepository
 
     public Task<Owner> GetAsync(string name)
         => _dbContext.Owners.SingleOrDefaultAsync(x => x.Name == name);
+
+    public Task<Owner> GetAsync(OwnerId id)
+        => _dbContext.Owners.SingleOrDefaultAsync(x => x.Id == id);
+
+    public async Task UpdateAsync(Owner owner)
+    {
+        _dbContext.Owners.Update(owner);
+        await _dbContext.SaveChangesAsync();
+    }
 }
