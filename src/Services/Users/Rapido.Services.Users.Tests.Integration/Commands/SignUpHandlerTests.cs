@@ -1,27 +1,28 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
-using Rapido.Framework.Common.Time;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Users.Core.Commands;
-using Rapido.Services.Users.Core.Commands.Handlers;
-using Rapido.Services.Users.Core.EF.Repositories;
+using Rapido.Services.Users.Core.EF;
+using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
 using Rapido.Services.Users.Core.Exceptions;
-using Rapido.Services.Users.Core.Repositories;
 using Rapido.Services.Users.Core.Services;
-using Rapido.Services.Users.Core.Validators;
 using Xunit;
+using TestMessageBroker = Rapido.Framework.Testing.Abstractions.TestMessageBroker;
 
 namespace Rapido.Services.Users.Tests.Integration.Commands;
 
-public class SignUpHandlerTests : IDisposable
+public class SignUpHandlerTests : ApiTests<Program, UsersDbContext>
 {
-    private Task Act(SignUp command) => _handler.HandleAsync(command);
+    private Task Act(SignUp command) => Dispatcher.DispatchAsync(command);
 
     [Fact]
     public async Task given_valid_sign_up_command_should_succeed()
     {
-        await _testDatabase.InitAsync();
         var email = Const.ValidEmail;
         var password = Const.ValidPassword;
         var accountType = AccountType.Individual;
@@ -29,17 +30,18 @@ public class SignUpHandlerTests : IDisposable
 
         await Act(command);
 
-        var user = await _userRepository.GetAsync(email);
-        var passwordValid = _passwordManager.Validate(password, user.Password);
-
+        var user = await TestDbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
         user.Should().NotBeNull();
+        
+        var passwordValid = new PasswordManager(new PasswordHasher<User>())
+            .Validate(password, user.Password);
+        
         passwordValid.Should().BeTrue();
     }
 
     [Fact]
     public async Task given_sign_up_command_with_already_taken_email_should_throw_exception()
     {
-        await _testDatabase.InitAsync();
         var email = Const.EmailInUse;
         var password = Const.ValidPassword;
         var accountType = AccountType.Individual;
@@ -59,8 +61,6 @@ public class SignUpHandlerTests : IDisposable
     [InlineData("Pa-s@ord12")]
     public async Task given_sign_up_command_with_invalid_password_syntax_should_throw_exception(string password)
     {
-        await _testDatabase.InitAsync();
-
         var email = Const.ValidEmail;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
@@ -69,31 +69,46 @@ public class SignUpHandlerTests : IDisposable
 
         await act.Should().ThrowAsync<InvalidPasswordException>();
     }
-    
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
-    
+
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly IUserRepository _userRepository;
-    private readonly IPasswordManager _passwordManager;
-
-    private readonly SignUpHandler _handler;
-
-    public SignUpHandlerTests()
+    public SignUpHandlerTests() : base(options => new UsersDbContext(options))
     {
-        _testDatabase = new TestDatabase();
-        var clock = new TestClock();
-        _userRepository = new UserRepository(_testDatabase.DbContext);
-        var roleRepository = new RoleRepository(_testDatabase.DbContext);
-        var validator = new SignUpValidator(_userRepository);
-        _passwordManager = new PasswordManager(new PasswordHasher<User>());
-        var messageBroker = new TestMessageBroker();
-        _handler = new SignUpHandler(_userRepository, roleRepository, clock, validator, _passwordManager, messageBroker);
     }
-    
-    #endregion Arrange
+
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+    };
+
+    protected override async Task SeedAsync()
+    {
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
+        
+        var clock = new TestClock();
+        
+        var role = new Role
+        {
+            Name = Role.User
+        };
+
+        await dbContext.Roles.AddAsync(role);
+
+        var password = new PasswordManager(new PasswordHasher<User>()).Secure(Const.ValidPassword);
+
+        await dbContext.Users.AddAsync(new User
+        {
+            Id = Guid.NewGuid(),
+            Email = Const.EmailInUse,
+            Password = password,
+            State = UserState.Active,
+            CreatedAt = clock.Now(),
+            Role = role
+        });
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    #endregion
 }

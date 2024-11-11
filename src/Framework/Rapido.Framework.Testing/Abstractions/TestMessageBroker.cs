@@ -1,12 +1,10 @@
 ﻿using Rapido.Framework.Common.Abstractions;
 using Rapido.Framework.Messaging.Brokers;
 
-namespace Rapido.Framework.Testing;
+namespace Rapido.Framework.Testing.Abstractions;
 
-public class TestMessageBroker : IMessageBroker
+public sealed class TestMessageBroker : IMessageBroker
 {
-    
-    //TODO: test message broker
     public Task PublishAsync<T>(params T[] messages) where T : class, IMessage
         => Task.CompletedTask;
 }

@@ -32,3 +32,6 @@ app
 app.UseFramework();
 
 app.Run();
+
+
+public abstract partial class Program {}

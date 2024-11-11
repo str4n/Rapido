@@ -1,32 +1,28 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Rapido.Framework.Auth;
-using Rapido.Framework.Auth.Authenticator;
-using Rapido.Framework.Common.Time;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Users.Core.Commands;
-using Rapido.Services.Users.Core.Commands.Handlers;
-using Rapido.Services.Users.Core.EF.Repositories;
+using Rapido.Services.Users.Core.EF;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
 using Rapido.Services.Users.Core.Exceptions;
-using Rapido.Services.Users.Core.Repositories;
 using Rapido.Services.Users.Core.Services;
 using Rapido.Services.Users.Core.Storage;
 using Xunit;
 
 namespace Rapido.Services.Users.Tests.Integration.Commands;
 
-public class SignInHandlerTests : IDisposable
+public class SignInHandlerTests : ApiTests<Program, UsersDbContext>
 {
-    private Task Act(SignIn command) => _handler.HandleAsync(command);
+    private Task Act(SignIn command) => Dispatcher.DispatchAsync(command);
     
     [Fact]
     public async Task given_valid_sign_in_command_should_create_proper_jwt()
     {
-        await _testDatabase.InitAsync();
-
+        var tokenStorage = Scope.ServiceProvider.GetRequiredService<ITokenStorage>();
         var email = Const.EmailInUse;
         var password = Const.ValidPassword;
 
@@ -34,7 +30,7 @@ public class SignInHandlerTests : IDisposable
 
         await Act(command);
 
-        var jwt = _tokenStorage.Get();
+        var jwt = tokenStorage.Get();
 
         jwt.Email.Should().Be(email.ToLowerInvariant());
         jwt.Role.Should().Be(Role.User);
@@ -45,8 +41,6 @@ public class SignInHandlerTests : IDisposable
     [Fact]
     public async Task given_sign_in_command_should_throw_exception()
     {
-        await _testDatabase.InitAsync();
-
         var email = Const.EmailInUse;
         var password = "PasswOrd42@";
 
@@ -56,33 +50,46 @@ public class SignInHandlerTests : IDisposable
 
         await act.Should().ThrowAsync<InvalidCredentialsException>();
     }
-    
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
-    
+
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly ITokenStorage _tokenStorage;
-
-    private readonly SignInHandler _handler;
-
-    public SignInHandlerTests()
+    protected override async Task SeedAsync()
     {
-        var clock = new TestClock();
-        _testDatabase = new TestDatabase();
-        var userRepository = new UserRepository(_testDatabase.DbContext);
-        var passwordManager = new PasswordManager(new PasswordHasher<User>());
-
-        var options = new OptionsProvider().GetOptions<AuthOptions>("auth");
-        var authenticator = new Authenticator(clock, Options.Create(options));
-
-        _tokenStorage = new TestTokenStorage();
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
         
-        _handler = new SignInHandler(userRepository, passwordManager, authenticator, _tokenStorage);
+        var clock = new TestClock();
+        
+        var role = new Role
+        {
+            Name = Role.User
+        };
+
+        await dbContext.Roles.AddAsync(role);
+
+        var password = new PasswordManager(new PasswordHasher<User>()).Secure(Const.ValidPassword);
+
+        await dbContext.Users.AddAsync(new User
+        {
+            Id = Guid.NewGuid(),
+            Email = Const.EmailInUse,
+            Password = password,
+            State = UserState.Active,
+            CreatedAt = clock.Now(),
+            Role = role
+        });
+
+        await dbContext.SaveChangesAsync();
     }
-    
-    #endregion Arrange
+
+    public SignInHandlerTests() : base(options => new UsersDbContext(options))
+    {
+    }
+
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<ITokenStorage, TestTokenStorage>();
+    };
+
+    #endregion
 }

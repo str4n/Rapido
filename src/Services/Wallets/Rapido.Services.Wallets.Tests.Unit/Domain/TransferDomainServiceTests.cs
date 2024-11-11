@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Rapido.Framework.Common.Time;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 using Rapido.Services.Wallets.Domain.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Wallets.Money;

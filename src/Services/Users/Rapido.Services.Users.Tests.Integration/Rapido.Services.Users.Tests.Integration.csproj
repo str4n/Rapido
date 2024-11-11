@@ -23,14 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\src\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
-      <ProjectReference Include="..\..\..\..\src\Services\Users\Rapido.Services.Users.Core\Rapido.Services.Users.Core.csproj" />
+      <ProjectReference Include="..\Rapido.Services.Users.Api\Rapido.Services.Users.Api.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="appsettings.test.json" />
-      <Content Include="appsettings.test.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
 </Project>

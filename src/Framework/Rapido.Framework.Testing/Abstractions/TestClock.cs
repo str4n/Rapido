@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Common.Time;
 
-namespace Rapido.Framework.Testing;
+namespace Rapido.Framework.Testing.Abstractions;
 
 public class TestClock : IClock
 {

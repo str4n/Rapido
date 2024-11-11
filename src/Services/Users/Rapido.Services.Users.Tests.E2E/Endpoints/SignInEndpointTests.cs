@@ -1,34 +1,36 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Auth;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.DTO;
+using Rapido.Services.Users.Core.EF;
 using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
 
-public class SignInEndpointTests : IDisposable
+public class SignInEndpointTests : ApiTests<Program, UsersDbContext>
 {
     [Fact]
     public async Task post_sign_up_should_create_account_and_sign_in_should_return_proper_jwt()
     {
-        await _testDatabase.InitAsync();
-        
         var email = $"test{Guid.NewGuid():N}@gmail.com";
         var password = "TestPassword12!";
         var accountType = "Individual";
 
         var signUpCommand = new SignUp(Guid.Empty, email, password, accountType);
         
-        var signUpResponse = await _app.Client.PostAsJsonAsync("/sign-up", signUpCommand);
+        var signUpResponse = await Client.PostAsJsonAsync("/sign-up", signUpCommand);
         
         signUpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var signInCommand = new SignIn(email, password);
 
-        var signInResponse = await _app.Client.PostAsJsonAsync("/sign-in", signInCommand);
+        var signInResponse = await Client.PostAsJsonAsync("/sign-in", signInCommand);
 
         signInResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -40,21 +42,16 @@ public class SignInEndpointTests : IDisposable
         content?.Token.AccessToken.Should().NotBeNullOrEmpty();
     }
     
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
-
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly TestApp<Program> _app;
-
-    public SignInEndpointTests()
+    public SignInEndpointTests() : base(options => new UsersDbContext(options))
     {
-        _testDatabase = new TestDatabase();
-        _app = new TestApp<Program>();
     }
+    
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+    };
 
-    #endregion Arrange
+    #endregion
 }

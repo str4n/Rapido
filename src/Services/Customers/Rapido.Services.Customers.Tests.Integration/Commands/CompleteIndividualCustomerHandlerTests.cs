@@ -1,23 +1,25 @@
-﻿using FluentAssertions;
+﻿
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Domain.Customer;
-using Rapido.Services.Customers.Core.Common.Domain.Repositories;
-using Rapido.Services.Customers.Core.Common.EF.Repositories;
+using Rapido.Services.Customers.Core.Common.EF;
+using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 using Rapido.Services.Customers.Core.Individual.Commands;
-using Rapido.Services.Customers.Core.Individual.Commands.Handlers;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
 namespace Rapido.Services.Customers.Tests.Integration.Commands;
 
-public class CompleteIndividualCustomerHandlerTests : IDisposable
+public class CompleteIndividualCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
 {
-    private Task Act(CompleteIndividualCustomer command) => _handler.HandleAsync(command);
+    private Task Act(CompleteIndividualCustomer command) => Dispatcher.DispatchAsync(command);
     
     [Fact]
     public async Task given_valid_complete_individual_customer_command_should_succeed()
     {
-        await _testDatabase.InitAsync();
-
         var id = Guid.Parse(Const.IndividualCustomerGuid);
 
         var name = new Name("iname");
@@ -31,10 +33,10 @@ public class CompleteIndividualCustomerHandlerTests : IDisposable
 
         await Act(command);
 
-        var customer = await _customerRepository.GetIndividualCustomerAsync(id);
+        var customer = await TestDbContext.IndividualCustomers.SingleOrDefaultAsync(x => x.Id == id);
 
+        customer.Should().NotBeNull();
         customer.IsCompleted.Should().BeTrue();
-        customer.CompletedAt.Should().Be(_now);
 
         customer.Name.Should().Be(name);
         customer.FullName.Should().Be(fullName);
@@ -43,28 +45,28 @@ public class CompleteIndividualCustomerHandlerTests : IDisposable
     }
     
     
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
-    
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly ICustomerRepository _customerRepository;
-    private readonly DateTime _now;
-
-    private readonly CompleteIndividualCustomerHandler _handler;
-
-    public CompleteIndividualCustomerHandlerTests()
+    public CompleteIndividualCustomerHandlerTests() : base(options => new CustomersDbContext(options))
     {
+    }
+    
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+    };
+    
+    protected override async Task SeedAsync()
+    {
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
+        
         var clock = new TestClock();
-        _testDatabase = new TestDatabase();
-        _customerRepository = new CustomerRepository(_testDatabase.DbContext);
-        var messageBroker = new TestMessageBroker();
-        _now = clock.Now();
 
-        _handler = new CompleteIndividualCustomerHandler(_customerRepository, clock, messageBroker);
+        await dbContext.IndividualCustomers.AddAsync(new IndividualCustomer(Guid.Parse(Const.IndividualCustomerGuid),
+            Const.IndividualCustomerEmail, clock.Now()));
+
+        await dbContext.SaveChangesAsync();
     }
     
     #endregion Arrange

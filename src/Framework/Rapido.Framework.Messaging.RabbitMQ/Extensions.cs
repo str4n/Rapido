@@ -15,11 +15,16 @@ public static class Extensions
     
     public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
     {
+        var options = configuration.BindOptions<RabbitMqOptions>(SectionName);
+        
+        if (!options.Enabled)
+        {
+            return services;
+        }
+        
         services.AddMassTransit(busConfig =>
         {
             busConfig.SetKebabCaseEndpointNameFormatter();
-            
-            var options = configuration.BindOptions<RabbitMqOptions>(SectionName);
 
             var assemblies = AppDomain.CurrentDomain
                 .GetAssemblies()

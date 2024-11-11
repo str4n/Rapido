@@ -4,7 +4,7 @@ using Rapido.Services.Users.Core.Entities.User;
 
 namespace Rapido.Services.Users.Core.EF;
 
-internal sealed class UsersDbContext : DbContext
+public sealed class UsersDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }

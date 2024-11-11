@@ -3,7 +3,7 @@ using Rapido.Framework.Auth;
 using Rapido.Framework.Auth.Authenticator;
 using Rapido.Framework.Common.Time;
 
-namespace Rapido.Framework.Testing;
+namespace Rapido.Framework.Testing.Abstractions;
 
 public sealed class TestAuthenticator
 {

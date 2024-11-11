@@ -1,23 +1,26 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Common.Time;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Commands;
-using Rapido.Services.Customers.Core.Common.Commands.Handlers;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
-using Rapido.Services.Customers.Core.Common.Domain.Repositories;
-using Rapido.Services.Customers.Core.Common.EF.Repositories;
+using Rapido.Services.Customers.Core.Common.EF;
 using Rapido.Services.Customers.Core.Common.Exceptions;
+using Rapido.Services.Customers.Core.Individual.Domain.Customer;
+using TestMessageBroker = Rapido.Framework.Testing.Abstractions.TestMessageBroker;
 
 namespace Rapido.Services.Customers.Tests.Integration.Commands;
 
-public class LockCustomerTemporarilyHandlerTests : IDisposable
+public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDbContext>
 {
-    private Task Act(LockCustomerTemporarily command) => _handler.HandleAsync(command);
+    private Task Act(LockCustomerTemporarily command) => Dispatcher.DispatchAsync(command);
     
     [Fact]
     public async Task given_valid_lock_customer_temporarily_command_should_succeed()
     {
-        await _testDatabase.InitAsync();
-        
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
         var description = "description";
@@ -28,7 +31,9 @@ public class LockCustomerTemporarilyHandlerTests : IDisposable
 
         await Act(command);
 
-        var customer = await _customerRepository.GetCustomerAsync(id);
+        var customer = await TestDbContext.IndividualCustomers
+            .Include(x => x.Lockouts)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         customer.IsLocked.Should().BeTrue();
         customer.Lockouts.Should().NotBeEmpty();
@@ -45,8 +50,6 @@ public class LockCustomerTemporarilyHandlerTests : IDisposable
     [Fact]
     public async Task given_lock_customer_temporarily_command_with_invalid_end_date_should_throw_exception()
     {
-        await _testDatabase.InitAsync();
-        
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
         var description = "description";
@@ -60,28 +63,32 @@ public class LockCustomerTemporarilyHandlerTests : IDisposable
         await act.Should().ThrowAsync<CannotLockCustomerException>();
     }
     
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
-    
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly ICustomerRepository _customerRepository;
     private readonly DateTime _now;
 
-    private readonly LockCustomerTemporarilyHandler _handler;
-
-    public LockCustomerTemporarilyHandlerTests()
+    public LockCustomerTemporarilyHandlerTests() : base(options => new CustomersDbContext(options))
     {
+        _now = new TestClock().Now();
+    }
+    
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+        s.AddScoped<IClock, TestClock>();
+    };
+    
+    protected override async Task SeedAsync()
+    {
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
+        
         var clock = new TestClock();
-        _testDatabase = new TestDatabase();
-        _customerRepository = new CustomerRepository(_testDatabase.DbContext);
-        var messageBroker = new TestMessageBroker();
-        _now = clock.Now();
 
-        _handler = new LockCustomerTemporarilyHandler(_customerRepository, clock, messageBroker);
+        await dbContext.IndividualCustomers.AddAsync(new IndividualCustomer(Guid.Parse(Const.IndividualCustomerGuid),
+            Const.IndividualCustomerEmail, clock.Now()));
+
+        await dbContext.SaveChangesAsync();
     }
     
     #endregion Arrange

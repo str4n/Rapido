@@ -1,6 +1,6 @@
 ﻿namespace Rapido.Services.Users.Core.Entities.Role;
 
-internal sealed record Role
+public sealed record Role
 {
     public string Name { get; set; }
 

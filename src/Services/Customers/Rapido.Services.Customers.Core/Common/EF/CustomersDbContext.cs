@@ -6,7 +6,7 @@ using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
 namespace Rapido.Services.Customers.Core.Common.EF;
 
-internal sealed class CustomersDbContext : DbContext
+public sealed class CustomersDbContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; }
     public DbSet<IndividualCustomer> IndividualCustomers { get; set; }

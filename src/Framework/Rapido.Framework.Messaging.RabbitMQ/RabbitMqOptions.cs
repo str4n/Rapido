@@ -6,4 +6,5 @@ public sealed class RabbitMqOptions
     public string Username { get; set; }
     public string Password { get; set; }
     public bool Durable { get; set; }
+    public bool Enabled { get; set; }
 }

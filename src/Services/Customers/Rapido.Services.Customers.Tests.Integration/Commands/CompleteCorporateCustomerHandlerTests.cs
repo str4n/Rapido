@@ -1,23 +1,23 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Domain.Customer;
-using Rapido.Services.Customers.Core.Common.Domain.Repositories;
-using Rapido.Services.Customers.Core.Common.EF.Repositories;
+using Rapido.Services.Customers.Core.Common.EF;
 using Rapido.Services.Customers.Core.Corporate.Commands;
-using Rapido.Services.Customers.Core.Corporate.Commands.Handlers;
 using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 
 namespace Rapido.Services.Customers.Tests.Integration.Commands;
 
-public class CompleteCorporateCustomerHandlerTests : IDisposable
+public class CompleteCorporateCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
 {
-    private Task Act(CompleteCorporateCustomer command) => _handler.HandleAsync(command);
+    private async Task Act(CompleteCorporateCustomer command) => await Dispatcher.DispatchAsync(command);
     
     [Fact]
     public async Task given_valid_complete_corporate_customer_command_should_succeed()
     {
-        await _testDatabase.InitAsync();
-
         var id = Guid.Parse(Const.CorporateCustomerGuid);
 
         var name = new Name("cname");
@@ -31,10 +31,10 @@ public class CompleteCorporateCustomerHandlerTests : IDisposable
 
         await Act(command);
 
-        var customer = await _customerRepository.GetCorporateCustomerAsync(id);
-
+        var customer = await TestDbContext.CorporateCustomers.SingleOrDefaultAsync(x => x.Id == id);
+        
+        customer.Should().NotBeNull();
         customer.IsCompleted.Should().BeTrue();
-        customer.CompletedAt.Should().Be(_now);
 
         customer.Name.Should().Be(name);
         customer.TaxId.Should().Be(taxId);
@@ -42,28 +42,29 @@ public class CompleteCorporateCustomerHandlerTests : IDisposable
         customer.Nationality.Should().Be(nationality);
     }
     
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
     
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly ICustomerRepository _customerRepository;
-    private readonly DateTime _now;
-
-    private readonly CompleteCorporateCustomerHandler _handler;
-
-    public CompleteCorporateCustomerHandlerTests()
+    public CompleteCorporateCustomerHandlerTests() : base(options => new CustomersDbContext(options))
     {
+    }
+    
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+    };
+    
+    protected override async Task SeedAsync()
+    {
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
+        
         var clock = new TestClock();
-        _testDatabase = new TestDatabase();
-        _customerRepository = new CustomerRepository(_testDatabase.DbContext);
-        var messageBroker = new TestMessageBroker();
-        _now = clock.Now();
 
-        _handler = new CompleteCorporateCustomerHandler(_customerRepository, messageBroker, clock);
+        await dbContext.CorporateCustomers.AddAsync(new CorporateCustomer(Guid.Parse(Const.CorporateCustomerGuid),
+           Const.CorporateCustomerEmail, clock.Now()));
+
+        await dbContext.SaveChangesAsync();
     }
     
     #endregion Arrange

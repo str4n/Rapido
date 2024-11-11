@@ -33,3 +33,8 @@ app
 app.UseFramework();
 
 app.Run();
+
+
+
+
+public partial class Program {}

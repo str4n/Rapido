@@ -1,22 +1,24 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
+using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Commands;
-using Rapido.Services.Customers.Core.Common.Commands.Handlers;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
-using Rapido.Services.Customers.Core.Common.Domain.Repositories;
-using Rapido.Services.Customers.Core.Common.EF.Repositories;
+using Rapido.Services.Customers.Core.Common.EF;
+using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
+using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
 namespace Rapido.Services.Customers.Tests.Integration.Commands;
 
-public class LockCustomerPermanentlyHandlerTests : IDisposable
+public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDbContext>
 {
-    private Task Act(LockCustomerPermanently command) => _handler.HandleAsync(command);
+    private Task Act(LockCustomerPermanently command) => Dispatcher.DispatchAsync(command);
 
     [Fact]
     public async Task given_valid_lock_customer_permanently_command_should_succeed()
     {
-        await _testDatabase.InitAsync();
-        
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
         var description = "description";
@@ -25,7 +27,9 @@ public class LockCustomerPermanentlyHandlerTests : IDisposable
 
         await Act(command);
 
-        var customer = await _customerRepository.GetCustomerAsync(id);
+        var customer = await TestDbContext.IndividualCustomers
+            .Include(x => x.Lockouts)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         customer.IsLocked.Should().BeTrue();
         customer.Lockouts.Should().NotBeEmpty();
@@ -35,29 +39,32 @@ public class LockCustomerPermanentlyHandlerTests : IDisposable
         lockout.Should().BeOfType<PermanentLockout>();
     }
     
-    public void Dispose()
-    {
-        _testDatabase.Dispose();
-    }
     
     #region Arrange
 
-    private readonly TestDatabase _testDatabase;
-    private readonly ICustomerRepository _customerRepository;
-    private readonly DateTime _now;
-
-    private readonly LockCustomerPermanentlyHandler _handler;
-
-    public LockCustomerPermanentlyHandlerTests()
+    public LockCustomerPermanentlyHandlerTests() : base(options => new CustomersDbContext(options))
     {
+    }
+    
+    protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
+    {
+        s.AddScoped<IMessageBroker, TestMessageBroker>();
+    };
+    
+    protected override async Task SeedAsync()
+    {
+        var dbContext = GetDbContext();
+        await dbContext.Database.MigrateAsync();
+        
         var clock = new TestClock();
-        _testDatabase = new TestDatabase();
-        _customerRepository = new CustomerRepository(_testDatabase.DbContext);
-        var messageBroker = new TestMessageBroker();
-        _now = clock.Now();
 
-        _handler = new LockCustomerPermanentlyHandler(_customerRepository, clock, messageBroker);
+        await dbContext.IndividualCustomers.AddAsync(new IndividualCustomer(Guid.Parse(Const.IndividualCustomerGuid),
+            Const.IndividualCustomerEmail, clock.Now()));
+
+        await dbContext.SaveChangesAsync();
     }
     
     #endregion Arrange
+
+    
 }

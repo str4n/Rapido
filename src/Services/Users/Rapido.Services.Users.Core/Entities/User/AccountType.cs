@@ -1,6 +1,6 @@
 ﻿namespace Rapido.Services.Users.Core.Entities.User;
 
-internal enum AccountType
+public enum AccountType
 {
     Individual,
     Corporate,

@@ -8,8 +8,15 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
       <PackageReference Include="FluentAssertions" Version="6.12.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+      <PackageReference Include="Testcontainers.PostgreSql" Version="4.0.0" />
+      <PackageReference Include="Testcontainers" Version="4.0.0" />
+      <PackageReference Include="Testcontainers.Consul" Version="4.0.0" />
+      <PackageReference Include="Testcontainers.RabbitMq" Version="4.0.0" />
+      <PackageReference Include="Testcontainers.Redis" Version="4.0.0" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.4.2" />
     </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="..\Rapido.Framework.Auth\Rapido.Framework.Auth.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Messaging\Rapido.Framework.Messaging.csproj" />

@@ -3,7 +3,7 @@ using Rapido.Services.Users.Core.Exceptions;
 
 namespace Rapido.Services.Users.Core.Entities.User;
 
-internal sealed record Email
+public sealed record Email
 {
     private static readonly Regex Regex =
         new(

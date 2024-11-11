@@ -1,6 +1,6 @@
 ﻿namespace Rapido.Services.Users.Core.Entities.User;
 
-internal sealed class User
+public sealed class User
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Email Email { get; set; }
