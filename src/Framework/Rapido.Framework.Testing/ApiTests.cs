@@ -46,9 +46,6 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
         };
         _testApp = new TestApp<TApp>(ConfigureServices, options);
     }
-    
-    protected TContext GetDbContext() 
-        => TestDatabase<TContext>.CreateDbContext(_createContext, _postgres.GetConnectionString());
 
     protected virtual Task SeedAsync() => Task.CompletedTask;
 
@@ -57,4 +54,7 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
         await _testApp.DisposeAsync();
         await _postgres.DisposeAsync();
     }
+    
+    private TContext GetDbContext() 
+        => TestDatabase<TContext>.CreateDbContext(_createContext, _postgres.GetConnectionString());
 }

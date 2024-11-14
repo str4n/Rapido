@@ -83,7 +83,7 @@ public class SignUpHandlerTests : ApiTests<Program, UsersDbContext>
 
     protected override async Task SeedAsync()
     {
-        var dbContext = GetDbContext();
+        var dbContext = TestDbContext;
         await dbContext.Database.MigrateAsync();
         
         var clock = new TestClock();

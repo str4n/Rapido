@@ -53,7 +53,7 @@ public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDb
     
     protected override async Task SeedAsync()
     {
-        var dbContext = GetDbContext();
+        var dbContext = TestDbContext;
         await dbContext.Database.MigrateAsync();
         
         var clock = new TestClock();
