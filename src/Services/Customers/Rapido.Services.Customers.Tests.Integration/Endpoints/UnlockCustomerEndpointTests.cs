@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using System.Net.Http.Json;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Common.Time;
@@ -6,19 +8,20 @@ using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
 using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Commands;
-using Rapido.Services.Customers.Core.Common.Domain.Exceptions;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.EF;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
-namespace Rapido.Services.Customers.Tests.Integration.Commands;
+namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
-public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
+public class UnlockCustomerEndpointTests()
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
 {
-    private Task Act(UnlockCustomer command) => Dispatcher.DispatchAsync(command);
+    private Task<HttpResponseMessage> Act(UnlockCustomer command) => 
+        Client.PostAsJsonAsync($"/customers/unlock/{command.CustomerId}", command);
     
     [Fact]
-    public async Task given_valid_unlock_customer_command__customer_with_perm_lock_should_succeed()
+    public async Task given_valid_unlock_customer_request__customer_with_perm_lock__should_succeed()
     {
         var dbContext = TestDbContext;
         var id = Guid.Parse(Const.IndividualCustomerGuid);
@@ -32,7 +35,9 @@ public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
         
         var command = new UnlockCustomer(id);
 
-        await Act(command);
+        var response = await Act(command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
         
         customer = await TestDbContext.IndividualCustomers
             .Include(x => x.Lockouts)
@@ -46,7 +51,7 @@ public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
     }
     
     [Fact]
-    public async Task given_valid_unlock_customer_command__customer_with_temp_lock_should_succeed()
+    public async Task given_valid_unlock_customer_request__customer_with_temp_lock__should_succeed()
     {
         var dbContext = TestDbContext;
         var id = Guid.Parse(Const.IndividualCustomerGuid);
@@ -61,7 +66,9 @@ public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
         
         var command = new UnlockCustomer(id);
 
-        await Act(command);
+        var response = await Act(command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
         
         customer = await TestDbContext.IndividualCustomers
             .Include(x => x.Lockouts)
@@ -76,23 +83,19 @@ public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
     }
 
     [Fact]
-    public async Task unlock_not_locked_customer_should_throw_exception()
+    public async Task unlock_not_locked_customer_should_return_bad_request_status_code()
     {
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var command = new UnlockCustomer(id);
 
-        var act = async () => await Act(command);
+        var response = await Act(command);
 
-        await act.Should().ThrowAsync<CannotUnlockCustomerException>();
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     
     #region Arrange
 
-    public UnlockCustomerHandlerTests() : base(options => new CustomersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();
@@ -113,6 +116,14 @@ public class UnlockCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
         await dbContext.IndividualCustomers.AddAsync(customer);
 
         await dbContext.SaveChangesAsync();
+    }
+    
+    protected override void AddClientHeaders()
+    {
+        var jwt = new TestAuthenticator()
+            .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "admin", Const.IndividualCustomerEmail);
+        
+        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
 
     #endregion

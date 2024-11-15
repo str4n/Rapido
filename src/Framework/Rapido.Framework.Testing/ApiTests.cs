@@ -19,8 +19,6 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
     // private RedisContainer _redis;
     // private RabbitMqContainer _rabbitMq;
     protected HttpClient Client => _testApp.Client;
-    protected IServiceScope Scope => _testApp.Scope;
-    protected IDispatcher Dispatcher => _testApp.Dispatcher;
     protected TContext TestDbContext => GetDbContext();
     protected virtual Action<IServiceCollection> ConfigureServices => default;
 
@@ -45,9 +43,14 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
             { "rabbitMQ:enabled", false.ToString() }
         };
         _testApp = new TestApp<TApp>(ConfigureServices, options);
+        AddClientHeaders();
     }
 
     protected virtual Task SeedAsync() => Task.CompletedTask;
+
+    protected virtual void AddClientHeaders()
+    {
+    }
 
     public async Task DisposeAsync()
     {

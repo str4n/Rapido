@@ -1,4 +1,5 @@
-﻿
+﻿using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,18 +8,19 @@ using Rapido.Framework.Testing;
 using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Domain.Customer;
 using Rapido.Services.Customers.Core.Common.EF;
-using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 using Rapido.Services.Customers.Core.Individual.Commands;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
-namespace Rapido.Services.Customers.Tests.Integration.Commands;
+namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
-public class CompleteIndividualCustomerHandlerTests : ApiTests<Program, CustomersDbContext>
+public class CompleteIndividualCustomerEndpointTests()
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
 {
-    private Task Act(CompleteIndividualCustomer command) => Dispatcher.DispatchAsync(command);
+    private Task<HttpResponseMessage> Act(CompleteIndividualCustomer command) 
+        => Client.PostAsJsonAsync("/individual/complete", command);
     
     [Fact]
-    public async Task given_valid_complete_individual_customer_command_should_succeed()
+    public async Task given_valid_complete_individual_customer_request_should_succeed()
     {
         var id = Guid.Parse(Const.IndividualCustomerGuid);
 
@@ -31,7 +33,9 @@ public class CompleteIndividualCustomerHandlerTests : ApiTests<Program, Customer
             address.Country, address.Province, address.City, address.Street,
             address.PostalCode, nationality);
 
-        await Act(command);
+        var response = await Act(command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var customer = await TestDbContext.IndividualCustomers.SingleOrDefaultAsync(x => x.Id == id);
 
@@ -47,10 +51,6 @@ public class CompleteIndividualCustomerHandlerTests : ApiTests<Program, Customer
     
     #region Arrange
 
-    public CompleteIndividualCustomerHandlerTests() : base(options => new CustomersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();
@@ -67,6 +67,14 @@ public class CompleteIndividualCustomerHandlerTests : ApiTests<Program, Customer
             Const.IndividualCustomerEmail, clock.Now()));
 
         await dbContext.SaveChangesAsync();
+    }
+    
+    protected override void AddClientHeaders()
+    {
+        var jwt = new TestAuthenticator()
+            .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "user", Const.IndividualCustomerEmail);
+        
+        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
     
     #endregion Arrange

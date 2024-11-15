@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
 
-public class GetUserEndpointTests : ApiTests<Program, UsersDbContext>
+public class GetUserEndpointTests() : ApiTests<Program, UsersDbContext>(options => new UsersDbContext(options))
 {
     [Fact]
     public async Task
@@ -56,10 +56,6 @@ public class GetUserEndpointTests : ApiTests<Program, UsersDbContext>
 
     #region Arrange
 
-    public GetUserEndpointTests() : base(options => new UsersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();

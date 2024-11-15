@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
 
-public class SignInEndpointTests : ApiTests<Program, UsersDbContext>
+public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options => new UsersDbContext(options))
 {
     [Fact]
     public async Task post_sign_up_should_create_account_and_sign_in_should_return_proper_jwt()
@@ -44,10 +44,6 @@ public class SignInEndpointTests : ApiTests<Program, UsersDbContext>
     
     #region Arrange
 
-    public SignInEndpointTests() : base(options => new UsersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();

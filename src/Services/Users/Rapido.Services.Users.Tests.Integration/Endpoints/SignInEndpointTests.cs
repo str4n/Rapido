@@ -1,10 +1,13 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using System.Net.Http.Json;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Testing;
 using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Users.Core.Commands;
+using Rapido.Services.Users.Core.DTO;
 using Rapido.Services.Users.Core.EF;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
@@ -13,24 +16,25 @@ using Rapido.Services.Users.Core.Services;
 using Rapido.Services.Users.Core.Storage;
 using Xunit;
 
-namespace Rapido.Services.Users.Tests.Integration.Commands;
+namespace Rapido.Services.Users.Tests.Integration.Endpoints;
 
-public class SignInHandlerTests : ApiTests<Program, UsersDbContext>
+public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options => new UsersDbContext(options))
 {
-    private Task Act(SignIn command) => Dispatcher.DispatchAsync(command);
+    private Task<HttpResponseMessage> Act(SignIn command) => Client.PostAsJsonAsync("/sign-in", command);
     
     [Fact]
-    public async Task given_valid_sign_in_command_should_create_proper_jwt()
+    public async Task given_valid_sign_in_request_should_create_proper_jwt()
     {
-        var tokenStorage = Scope.ServiceProvider.GetRequiredService<ITokenStorage>();
         var email = Const.EmailInUse;
         var password = Const.ValidPassword;
 
         var command = new SignIn(email, password);
 
-        await Act(command);
+        var response = await Act(command);
 
-        var jwt = tokenStorage.Get();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var jwt = (await response.Content.ReadFromJsonAsync<AuthDto>()).Token;
 
         jwt.Email.Should().Be(email.ToLowerInvariant());
         jwt.Role.Should().Be(Role.User);
@@ -39,16 +43,16 @@ public class SignInHandlerTests : ApiTests<Program, UsersDbContext>
     }
     
     [Fact]
-    public async Task given_sign_in_command_should_throw_exception()
+    public async Task given_sign_in_request_with_invalid_credentials_should_return_bad_request_status_code()
     {
         var email = Const.EmailInUse;
         var password = "PasswOrd42@";
 
         var command = new SignIn(email, password);
 
-        var act = async () => await Act(command);
+        var response = await Act(command);
 
-        await act.Should().ThrowAsync<InvalidCredentialsException>();
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     #region Arrange
@@ -80,10 +84,6 @@ public class SignInHandlerTests : ApiTests<Program, UsersDbContext>
         });
 
         await dbContext.SaveChangesAsync();
-    }
-
-    public SignInHandlerTests() : base(options => new UsersDbContext(options))
-    {
     }
 
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
