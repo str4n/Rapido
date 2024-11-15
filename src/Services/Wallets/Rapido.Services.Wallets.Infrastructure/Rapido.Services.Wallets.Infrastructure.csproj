@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Rapido.Services.Wallets.Domain\Rapido.Services.Wallets.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Rapido.Services.Wallets.Tests.Integration"/>
+    </ItemGroup>
+
 </Project>
