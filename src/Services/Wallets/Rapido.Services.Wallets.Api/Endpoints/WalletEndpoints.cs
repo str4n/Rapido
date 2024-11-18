@@ -101,12 +101,14 @@ internal static class WalletEndpoints
         return Results.Created();
     }
 
-    private static async Task<IResult> HasSufficientFunds([FromBody]CheckSufficiencyOfFunds query, [FromServices]IDispatcher dispatcher, [FromServices]IContext context)
+    private static async Task<IResult> HasSufficientFunds([FromQuery] double amount, [FromQuery] string currency, [FromServices]IDispatcher dispatcher, [FromServices]IContext context)
     {
         var id = context.Identity.UserId;
+
+        var query = new CheckSufficiencyOfFunds(id, amount, currency);
         
         var result = await dispatcher.DispatchAsync(query with { OwnerId = id });
 
-        return Results.Ok(new { HasSufficientFunds = result });
+        return Results.Ok(result);
     }
 }

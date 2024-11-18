@@ -1,5 +1,6 @@
 ﻿using Rapido.Framework.Common.Abstractions.Queries;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
+using Rapido.Services.Wallets.Application.Wallets.DTO;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
@@ -7,7 +8,7 @@ using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Queries.Handlers;
 
-internal sealed class CheckSufficiencyOfFundsHandler : IQueryHandler<CheckSufficiencyOfFunds, bool>
+internal sealed class CheckSufficiencyOfFundsHandler : IQueryHandler<CheckSufficiencyOfFunds, SufficientFundsDto>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly ICurrencyApiClient _client;
@@ -18,7 +19,7 @@ internal sealed class CheckSufficiencyOfFundsHandler : IQueryHandler<CheckSuffic
         _client = client;
     }
 
-    public async Task<bool> HandleAsync(CheckSufficiencyOfFunds query)
+    public async Task<SufficientFundsDto> HandleAsync(CheckSufficiencyOfFunds query)
     {
         var ownerId = new OwnerId(query.OwnerId);
         var amount = new Amount(query.Amount);
@@ -38,6 +39,8 @@ internal sealed class CheckSufficiencyOfFundsHandler : IQueryHandler<CheckSuffic
             throw new ExchangeRateNotFoundException();
         }
 
-        return wallet.HasSufficientFunds(amount, currency, exchangeRates);
+        var result = wallet.HasSufficientFunds(amount, currency, exchangeRates);
+
+        return new SufficientFundsDto(wallet.Id, result);
     }
 }
