@@ -29,5 +29,5 @@ jobs:
       run: dotnet build ./Rapido.sln --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test ./Rapido.sln --configration Release --no-restore
+      run: dotnet test ./Rapido.sln --configuration Release --no-restore
       
