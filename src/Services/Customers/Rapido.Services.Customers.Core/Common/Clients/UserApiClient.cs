@@ -9,7 +9,7 @@ namespace Rapido.Services.Customers.Core.Common.Clients;
 internal sealed class UserApiClient : IUserApiClient
 {
     private const string ClientName = "consul";
-    private const string ApiUrl = "http://users/users";
+    private const string ApiUrl = "http://users-service/users";
     private readonly IHttpClientFactory _clientFactory;
     private readonly IApiKeyVault _vault;
 

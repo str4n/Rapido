@@ -66,6 +66,8 @@ services:
   papercut:
     image: changemakerstudiosus/papercut-smtp:latest
     container_name: papercut
+    networks:
+      - rapido
     ports:
       - 8080:80
       - 25:25
