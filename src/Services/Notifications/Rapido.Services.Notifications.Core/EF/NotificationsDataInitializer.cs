@@ -30,7 +30,7 @@ internal sealed class NotificationsDataInitializer : IDataInitializer
     private async Task AddTemplatesAsync()
     {
         await _dbContext.Templates
-            .AddAsync(new Template(Guid.NewGuid(), "account_created", "Rapido account created", "Your Rapido account has been created"));
+            .AddAsync(new Template(Guid.NewGuid(), "verify_email", "Email verification for Rapido", "Templates/VerifyEmail.cshtml"));
         
         _logger.LogInformation("Templates initialized.");
     }

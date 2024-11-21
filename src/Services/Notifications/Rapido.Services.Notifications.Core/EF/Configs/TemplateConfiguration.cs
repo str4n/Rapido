@@ -12,7 +12,7 @@ internal sealed class TemplateConfiguration : IEntityTypeConfiguration<Template>
         
         builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.Name).IsRequired();
-        builder.Property(x => x.Title).IsRequired();
-        builder.Property(x => x.Body).IsRequired();
+        builder.Property(x => x.Subject).IsRequired();
+        builder.Property(x => x.TemplatePath).IsRequired();
     }
 }

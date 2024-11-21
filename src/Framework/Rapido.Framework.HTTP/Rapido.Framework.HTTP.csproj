@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="Consul" Version="1.7.14.3" />
+      <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.8" />
     </ItemGroup>
 
 </Project>

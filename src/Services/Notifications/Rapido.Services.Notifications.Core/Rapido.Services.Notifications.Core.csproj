@@ -6,8 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
+      <PackageReference Include="Razor.Templating.Core" Version="2.1.0" />
     </ItemGroup>
     
 

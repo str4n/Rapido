@@ -1,5 +1,5 @@
 version: "3.9"
-name: rapido
+name: Rapido
 
 services:
   postgres:
@@ -63,6 +63,15 @@ services:
       - 4318:4318
       - 16686:16686
 
+  papercut:
+    image: changemakerstudiosus/papercut-smtp:latest
+    container_name: papercut
+    networks:
+      - rapido
+    ports:
+      - 8080:80
+      - 25:25
+
 networks:
   rapido:
     name: rapido
@@ -81,4 +90,7 @@ volumes:
     driver: local
 
   jaeger:
+    driver: local
+
+  papercut:
     driver: local

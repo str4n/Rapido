@@ -17,4 +17,14 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="Templates\VerifyEmail.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Templates\VerifyEmail.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

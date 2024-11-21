@@ -20,8 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
-      <ProjectReference Include="..\Rapido.Services.Wallets.Api\Rapido.Services.Wallets.Api.csproj" />
+        <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
+        <ProjectReference Include="..\Rapido.Services.Wallets.Api\Rapido.Services.Wallets.Api.csproj" />
     </ItemGroup>
 
 </Project>
