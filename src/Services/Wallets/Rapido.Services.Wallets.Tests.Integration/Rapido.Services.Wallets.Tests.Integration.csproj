@@ -18,6 +18,7 @@
     <ItemGroup>
         <Using Include="Xunit"/>
     </ItemGroup>
+    
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\Framework\Rapido.Framework.Testing\Rapido.Framework.Testing.csproj" />
