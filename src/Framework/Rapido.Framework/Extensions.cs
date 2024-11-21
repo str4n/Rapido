@@ -37,7 +37,6 @@ public static class Extensions
             .AddMemoryCache()
             .AddEndpointsApiExplorer()
             .AddHttpClient()
-            .AddConsulHandler(builder.Configuration)
             .AddSwaggerDocs(builder.Configuration)
             .AddAuth(builder.Configuration)
             .AddConsul(builder.Configuration)

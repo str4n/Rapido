@@ -13,7 +13,6 @@ internal sealed class CurrencyApiClient : ICurrencyApiClient
     private readonly IApiKeyVault _vault;
     private const string ClientName = "consul";
     private const string ApiUrl = "http://currencies-service/rates";
-    private readonly HttpClient _client;
     
     public CurrencyApiClient(IHttpClientFactory clientFactory, IApiKeyVault vault)
     {
