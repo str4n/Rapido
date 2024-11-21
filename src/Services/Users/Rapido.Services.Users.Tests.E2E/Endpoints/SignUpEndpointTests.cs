@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
 
-public class SignUpEndpointTests : ApiTests<Program, UsersDbContext>
+public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options => new UsersDbContext(options))
 {
     [Fact]
     public async Task post_sign_up_should_create_account_and_return_ok_status_code()
@@ -42,10 +42,6 @@ public class SignUpEndpointTests : ApiTests<Program, UsersDbContext>
 
     #region Arrange
 
-    public SignUpEndpointTests() : base(options => new UsersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();

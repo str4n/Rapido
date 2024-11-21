@@ -4,7 +4,7 @@ using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF;
 
-internal sealed class WalletsDbContext : DbContext
+public sealed class WalletsDbContext : DbContext
 {
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<IndividualOwner> IndividualOwners { get; set; }

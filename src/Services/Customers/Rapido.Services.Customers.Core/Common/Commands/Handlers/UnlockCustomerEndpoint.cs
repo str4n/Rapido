@@ -7,13 +7,13 @@ using Rapido.Services.Customers.Core.Common.Exceptions;
 
 namespace Rapido.Services.Customers.Core.Common.Commands.Handlers;
 
-internal sealed class UnlockCustomerHandler : ICommandHandler<UnlockCustomer>
+internal sealed class UnlockCustomerEndpoint : ICommandHandler<UnlockCustomer>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IClock _clock;
     private readonly IMessageBroker _messageBroker;
 
-    public UnlockCustomerHandler(ICustomerRepository customerRepository, IClock clock, IMessageBroker messageBroker)
+    public UnlockCustomerEndpoint(ICustomerRepository customerRepository, IClock clock, IMessageBroker messageBroker)
     {
         _customerRepository = customerRepository;
         _clock = clock;

@@ -9,13 +9,13 @@ using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 
 namespace Rapido.Services.Customers.Core.Corporate.Commands.Handlers;
 
-internal sealed class CompleteCorporateCustomerHandler : ICommandHandler<CompleteCorporateCustomer>
+internal sealed class CompleteCorporateCustomerEndpoint : ICommandHandler<CompleteCorporateCustomer>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IMessageBroker _messageBroker;
     private readonly IClock _clock;
 
-    public CompleteCorporateCustomerHandler(ICustomerRepository customerRepository, IMessageBroker messageBroker, 
+    public CompleteCorporateCustomerEndpoint(ICustomerRepository customerRepository, IMessageBroker messageBroker, 
         IClock clock)
     {
         _customerRepository = customerRepository;

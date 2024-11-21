@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using System.Net.Http.Json;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Common.Time;
@@ -8,18 +10,19 @@ using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Commands;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.EF;
-using Rapido.Services.Customers.Core.Common.Exceptions;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 using TestMessageBroker = Rapido.Framework.Testing.Abstractions.TestMessageBroker;
 
-namespace Rapido.Services.Customers.Tests.Integration.Commands;
+namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
-public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDbContext>
+public class LockCustomerTemporarilyEndpointTests()
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
 {
-    private Task Act(LockCustomerTemporarily command) => Dispatcher.DispatchAsync(command);
+    private Task<HttpResponseMessage> Act(LockCustomerTemporarily command) 
+        => Client.PostAsJsonAsync($"/customers/lock/temp/{command.CustomerId}", command);
     
     [Fact]
-    public async Task given_valid_lock_customer_temporarily_command_should_succeed()
+    public async Task given_valid_lock_customer_temporarily_request_should_succeed()
     {
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
@@ -29,7 +32,9 @@ public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDb
 
         var command = new LockCustomerTemporarily(id, reason, description, endDate);
 
-        await Act(command);
+        var response = await Act(command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var customer = await TestDbContext.IndividualCustomers
             .Include(x => x.Lockouts)
@@ -48,7 +53,7 @@ public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDb
     }
     
     [Fact]
-    public async Task given_lock_customer_temporarily_command_with_invalid_end_date_should_throw_exception()
+    public async Task given_lock_customer_temporarily_request_with_invalid_end_date_should_return_bad_request_status_code()
     {
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
@@ -58,20 +63,15 @@ public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDb
 
         var command = new LockCustomerTemporarily(id, reason, description, endDate);
 
-        var act = async () => await Act(command);
+        var response = await Act(command);
 
-        await act.Should().ThrowAsync<CannotLockCustomerException>();
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     #region Arrange
 
-    private readonly DateTime _now;
+    private readonly DateTime _now = new TestClock().Now();
 
-    public LockCustomerTemporarilyHandlerTests() : base(options => new CustomersDbContext(options))
-    {
-        _now = new TestClock().Now();
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();
@@ -80,7 +80,7 @@ public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDb
     
     protected override async Task SeedAsync()
     {
-        var dbContext = GetDbContext();
+        var dbContext = TestDbContext;
         await dbContext.Database.MigrateAsync();
         
         var clock = new TestClock();
@@ -89,6 +89,14 @@ public class LockCustomerTemporarilyHandlerTests : ApiTests<Program, CustomersDb
             Const.IndividualCustomerEmail, clock.Now()));
 
         await dbContext.SaveChangesAsync();
+    }
+    
+    protected override void AddClientHeaders()
+    {
+        var jwt = new TestAuthenticator()
+            .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "admin", Const.IndividualCustomerEmail);
+        
+        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
     
     #endregion Arrange

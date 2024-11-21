@@ -15,6 +15,8 @@ public static class TestDatabase<TContext> where TContext : DbContext
         var context = createContext(options);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+        // var context = Activator.CreateInstance(typeof(TContext), args: options) as TContext;
+
         return context;
     }
     

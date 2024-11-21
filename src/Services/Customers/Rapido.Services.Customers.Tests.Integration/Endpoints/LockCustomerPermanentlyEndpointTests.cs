@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using System.Net.Http.Json;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Messaging.Brokers;
@@ -7,17 +9,18 @@ using Rapido.Framework.Testing.Abstractions;
 using Rapido.Services.Customers.Core.Common.Commands;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.EF;
-using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
-namespace Rapido.Services.Customers.Tests.Integration.Commands;
+namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
-public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDbContext>
+public class LockCustomerPermanentlyEndpointTests()
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
 {
-    private Task Act(LockCustomerPermanently command) => Dispatcher.DispatchAsync(command);
+    private Task<HttpResponseMessage> Act(LockCustomerPermanently command) 
+        => Client.PostAsJsonAsync($"/customers/lock/perm/{command.CustomerId}", command);
 
     [Fact]
-    public async Task given_valid_lock_customer_permanently_command_should_succeed()
+    public async Task given_valid_lock_customer_permanently_request_should_succeed()
     {
         var id = Guid.Parse(Const.IndividualCustomerGuid);
         var reason = "reason";
@@ -25,7 +28,9 @@ public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDb
 
         var command = new LockCustomerPermanently(id, reason, description);
 
-        await Act(command);
+        var response = await Act(command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var customer = await TestDbContext.IndividualCustomers
             .Include(x => x.Lockouts)
@@ -42,10 +47,6 @@ public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDb
     
     #region Arrange
 
-    public LockCustomerPermanentlyHandlerTests() : base(options => new CustomersDbContext(options))
-    {
-    }
-    
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();
@@ -53,7 +54,7 @@ public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDb
     
     protected override async Task SeedAsync()
     {
-        var dbContext = GetDbContext();
+        var dbContext = TestDbContext;
         await dbContext.Database.MigrateAsync();
         
         var clock = new TestClock();
@@ -62,6 +63,14 @@ public class LockCustomerPermanentlyHandlerTests : ApiTests<Program, CustomersDb
             Const.IndividualCustomerEmail, clock.Now()));
 
         await dbContext.SaveChangesAsync();
+    }
+    
+    protected override void AddClientHeaders()
+    {
+        var jwt = new TestAuthenticator()
+            .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "admin", Const.IndividualCustomerEmail);
+        
+        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
     
     #endregion Arrange

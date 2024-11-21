@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Rapido.Services.Wallets.Tests.Unit"/>
+        <InternalsVisibleTo Include="Rapido.Services.Wallets.Tests.Integration"/>
     </ItemGroup>
 
 </Project>
