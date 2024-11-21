@@ -39,7 +39,7 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
         var options = new Dictionary<string, string>
         {
             { "postgres:connectionString", connectionString },
-            { "consul:enabled", false.ToString() },
+            { "consul:discovery:register", false.ToString() },
             { "rabbitMQ:enabled", false.ToString() }
         };
         _testApp = new TestApp<TApp>(ConfigureServices, options);
