@@ -4,15 +4,15 @@ internal sealed class Template
 {
     public Guid Id { get; }
     public string Name { get; private set; }
-    public string Title { get; private set; }
-    public string Body { get; private set; }
+    public string Subject { get; private set; }
+    public string TemplatePath { get; private set; }
 
-    public Template(Guid id, string name, string title, string body)
+    public Template(Guid id, string name, string subject, string templatePath)
     {
         Id = id;
         Name = name;
-        Title = title;
-        Body = body;
+        Subject = subject;
+        TemplatePath = templatePath;
     }
 
     private Template()

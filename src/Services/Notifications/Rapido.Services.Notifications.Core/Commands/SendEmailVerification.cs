@@ -2,4 +2,4 @@
 
 namespace Rapido.Services.Notifications.Core.Commands;
 
-public sealed record SendEmail(Guid RecipientId, string TemplateName) : ICommand;
+public sealed record SendEmailVerification(Guid RecipientId, string VerificationToken) : ICommand;
