@@ -1,5 +1,4 @@
 using Rapido.Framework;
-using Rapido.Framework.Health.HealthChecks;
 using Rapido.Services.Wallets.Api.Endpoints;
 using Rapido.Services.Wallets.Application;
 using Rapido.Services.Wallets.Domain;
@@ -12,16 +11,13 @@ builder.AddFramework();
 builder.Services
     .AddApplication()
     .AddDomain()
-    .AddInfrastructure(builder.Configuration)
-    .AddHealth(builder.Configuration);
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
 app
     .MapWalletEndpoints()
     .MapOwnerEndpoints();
-
-app.UseHealth();
 
 app
     .MapGet("/", (AppInfo appInfo) => appInfo)
