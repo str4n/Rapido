@@ -1,8 +1,7 @@
-version: "3.9"
-name: Rapido
+name: rapido-infrastructure
 
 services:
-  postgres:
+  rapido.postgres:
     image: postgres
     shm_size: '4gb'
     container_name: postgres
@@ -16,7 +15,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  rabbitmq:
+  rapido.rabbitmq:
     image: "rabbitmq:3.11.7-management"
     container_name: rabbitmq
     restart: unless-stopped
@@ -30,7 +29,7 @@ services:
         - 5672:5672
         - 15672:15672
 
-  redis:
+  rapido.redis:
     image: redis:7.2
     container_name: redis
     restart: unless-stopped
@@ -41,7 +40,7 @@ services:
     volumes: 
       - redis:/data
 
-  consul:
+  rapido.consul:
     image: hashicorp/consul:latest
     container_name: consul
     hostname: consul
@@ -53,7 +52,7 @@ services:
       - consul:/var/lib/consul/data
       - consul:/var/lib/consul/config
 
-  jaeger:
+  rapido.jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
     networks:
@@ -63,7 +62,7 @@ services:
       - 4318:4318
       - 16686:16686
 
-  papercut:
+  rapido.papercut:
     image: changemakerstudiosus/papercut-smtp:latest
     container_name: papercut
     networks:

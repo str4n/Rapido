@@ -23,5 +23,11 @@
         <InternalsVisibleTo Include="Rapido.Services.Users.Tests.E2E"/>
         <InternalsVisibleTo Include="Rapido.Services.Users.Tests.Integration"/>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
 
 </Project>

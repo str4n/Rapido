@@ -40,3 +40,4 @@ msbuild.wrn
 # Docker
 .containers/
 .containers
+.env

@@ -1,29 +1,128 @@
-version: "3.9"
-name: rapido
+name: rapido-services
 
 services:
-  users-service:
+  rapido.api-gateway:
     build:
       context: ../
-      dockerfile: src/Services/Users/Dockerfile
+      dockerfile: src/APIGateway/Rapido.APIGateway/Dockerfile
+    container_name: api-gateway
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5000
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+    ports:
+      - 5000:5000
+    networks:
+      - rapido
+
+  rapido.users:
+    build:
+      context: ../
+      dockerfile: src/Services/Users/Rapido.Services.Users.Api/Dockerfile
     container_name: users-service
     restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5020
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
-      - 5020:80
+      - 5020
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
-  customers-service:
+  rapido.customers:
     build:
       context: ../
-      dockerfile: src/Services/Customers/Dockerfile
+      dockerfile: src/Services/Customers/Rapido.Services.Customers.Api/Dockerfile
     container_name: customers-service
     restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5030
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
-      - 5030:80
+      - 5020
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
+  rapido.currencies:
+    build:
+      context: ../
+      dockerfile: src/Services/Currencies/Rapido.Services.Currencies.Api/Dockerfile
+    container_name: currencies-service
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5060
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+    ports:
+      - 5060
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
+    networks:
+      - rapido
+
+  rapido.wallets:
+    build:
+      context: ../
+      dockerfile: src/Services/Wallets/Rapido.Services.Wallets.Api/Dockerfile
+    container_name: wallets-service
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5040
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+    ports:
+      - 5040
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
+    networks:
+      - rapido
+
+  rapido.payments:
+    build:
+      context: ../
+      dockerfile: src/Services/Payments/Rapido.Services.Payments.Api/Dockerfile
+    container_name: payments-service
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5050
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+    ports:
+      - 5050
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
+    networks:
+      - rapido
+
+  rapido.notifications:
+    build:
+      context: ../
+      dockerfile: src/Services/Notifications/Rapido.Services.Notifications.Api/Dockerfile
+    container_name: notifications-service
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 5090
+      USER_SECRETS_ID: $USER_SECRETS_ID
+      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+    ports:
+      - 5090
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
+    networks:
+      - rapido
 
 networks:
   rapido:

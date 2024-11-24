@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Api.CORS;
 using Rapido.Framework.Api.Exceptions;
@@ -53,6 +55,13 @@ public static class Extensions
 
         builder.Services
             .AddRabbitMq(builder.Configuration);
+
+        if (builder.Environment.EnvironmentName == "Docker")
+        {
+            builder.Configuration
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true)
+                .AddUserSecrets<AppInfo>();
+        }
 
         return builder;
     }
