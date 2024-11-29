@@ -13,6 +13,7 @@ using Rapido.Framework.HTTP.ServiceDiscovery;
 using Rapido.Framework.Messaging.RabbitMQ;
 using Rapido.Framework.Observability.Logging;
 using Rapido.Framework.Observability.Tracing;
+using Rapido.Framework.Vault;
 
 namespace Rapido.Framework;
 
@@ -44,6 +45,8 @@ public static class Extensions
             .AddConsul(builder.Configuration)
             .AddTracing(builder.Configuration);
 
+        builder.AddVault();
+
         builder.Services
             .AddCommands()
             .AddQueries()
@@ -59,8 +62,7 @@ public static class Extensions
         if (builder.Environment.EnvironmentName == "Docker")
         {
             builder.Configuration
-                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true)
-                .AddUserSecrets<AppInfo>();
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true);
         }
 
         return builder;

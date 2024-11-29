@@ -5,5 +5,6 @@ public enum ExceptionCategory
     ValidationError,
     NotFound,
     AlreadyExists,
-    BadRequest
+    BadRequest,
+    InternalError
 }

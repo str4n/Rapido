@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>3e9e1b7e-a582-4e74-8d0e-545c95fb7221</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +13,7 @@
       <ProjectReference Include="..\Rapido.Framework.HTTP\Rapido.Framework.HTTP.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Messaging.RabbitMQ\Rapido.Framework.Messaging.RabbitMQ.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Observability\Rapido.Framework.Observability.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.Vault\Rapido.Framework.Vault.csproj" />
     </ItemGroup>
     
 </Project>

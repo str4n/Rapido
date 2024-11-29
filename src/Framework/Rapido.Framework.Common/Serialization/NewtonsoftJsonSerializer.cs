@@ -2,11 +2,9 @@
 
 namespace Rapido.Framework.Common.Serialization;
 
-internal sealed class NewtonsoftJsonSerializer : IJsonSerializer
+public sealed class NewtonsoftJsonSerializer : IJsonSerializer
 {
-    private readonly JsonSerializerSettings _settings = new()
-    {
-    };
+    private readonly JsonSerializerSettings _settings = new();
     
     public string Serialize<T>(T value)
         => JsonConvert.SerializeObject(value, _settings);

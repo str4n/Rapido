@@ -25,12 +25,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5020
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5020
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
@@ -43,12 +40,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5030
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5020
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
@@ -61,12 +55,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5060
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5060
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
@@ -79,12 +70,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5040
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5040
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
@@ -97,12 +85,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5050
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5050
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 
@@ -115,12 +100,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5090
-      USER_SECRETS_ID: $USER_SECRETS_ID
       "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
     ports:
       - 5090
-    volumes:
-      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
     networks:
       - rapido
 

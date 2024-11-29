@@ -21,6 +21,7 @@ internal sealed class ExceptionToResponseMapper : IExceptionToResponseMapper
             ExceptionCategory.ValidationError => new ExceptionResponse(HttpStatusCode.BadRequest, error),
             ExceptionCategory.AlreadyExists => new ExceptionResponse(HttpStatusCode.BadRequest, error),
             ExceptionCategory.BadRequest => new ExceptionResponse(HttpStatusCode.BadRequest, error),
+            ExceptionCategory.InternalError => new ExceptionResponse(HttpStatusCode.InternalServerError, error),
             _ => new ExceptionResponse(HttpStatusCode.BadRequest, error)
         };
 

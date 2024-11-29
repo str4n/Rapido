@@ -70,6 +70,14 @@ services:
     ports:
       - 8080:80
       - 25:25
+        
+  rapido.vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    networks:
+      - rapido
+    ports: 
+      - 8200:8200
 
 networks:
   rapido:
@@ -92,4 +100,7 @@ volumes:
     driver: local
 
   papercut:
+    driver: local
+    
+  vault:
     driver: local

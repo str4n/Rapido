@@ -93,6 +93,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Services.Wallets.Tests.Integration", "src\Services\Wallets\Rapido.Services.Wallets.Tests.Integration\Rapido.Services.Wallets.Tests.Integration.csproj", "{622D7071-8AEB-47EB-9B18-5B55E5A93F93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapido.Framework.Vault", "src\Framework\Rapido.Framework.Vault\Rapido.Framework.Vault.csproj", "{29E92200-B013-4404-9FE4-71D43B2005A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,7 @@ Global
 		{85CEB092-E52B-4738-B8D0-1E57E5E96E8D} = {0CD210CC-9174-4159-B584-1C046B6FE790}
 		{E415889B-2472-4713-AAD1-75206855D873} = {B3F45679-98D7-4001-B423-250AA9C044B1}
 		{622D7071-8AEB-47EB-9B18-5B55E5A93F93} = {B3F45679-98D7-4001-B423-250AA9C044B1}
+		{29E92200-B013-4404-9FE4-71D43B2005A1} = {CAB1501F-6E8F-44B8-8860-CAE6F1CBCC8E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9DFC7678-255E-48B3-A2C5-F94AE3923911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -279,5 +282,9 @@ Global
 		{622D7071-8AEB-47EB-9B18-5B55E5A93F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{622D7071-8AEB-47EB-9B18-5B55E5A93F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{622D7071-8AEB-47EB-9B18-5B55E5A93F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E92200-B013-4404-9FE4-71D43B2005A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E92200-B013-4404-9FE4-71D43B2005A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E92200-B013-4404-9FE4-71D43B2005A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E92200-B013-4404-9FE4-71D43B2005A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
