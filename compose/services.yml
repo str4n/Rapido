@@ -10,11 +10,26 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5000
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5000:5000
     networks:
       - rapido
+        
+  rapido.saga:
+      build:
+        context: ../
+        dockerfile: src/Saga/Rapido.Saga/Dockerfile
+      container_name: saga
+      restart: unless-stopped
+      environment:
+        ASPNETCORE_ENVIRONMENT: Docker
+        ASPNETCORE_HTTP_PORTS: 5100
+        OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
+      ports:
+        - 5100
+      networks:
+        - rapido
 
   rapido.users:
     build:
@@ -25,7 +40,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5020
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5020
     networks:
@@ -40,7 +55,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5030
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5020
     networks:
@@ -55,7 +70,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5060
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5060
     networks:
@@ -70,7 +85,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5040
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5040
     networks:
@@ -85,7 +100,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5050
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5050
     networks:
@@ -100,7 +115,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       ASPNETCORE_HTTP_PORTS: 5090
-      "OTEL_EXPORTER_OTLP_ENDPOINT": "http://rapido.jaeger:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://rapido.jaeger:4317"
     ports:
       - 5090
     networks:
