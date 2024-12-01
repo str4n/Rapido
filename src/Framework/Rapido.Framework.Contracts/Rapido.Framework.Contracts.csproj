@@ -9,8 +9,4 @@
       <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Customers\" />
-    </ItemGroup>
-
 </Project>

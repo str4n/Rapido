@@ -7,17 +7,26 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Framework\Rapido.Framework.Contracts\Rapido.Framework.Contracts.csproj" />
+      <ProjectReference Include="..\..\Framework\Rapido.Framework.Postgres\Rapido.Framework.Postgres.csproj" />
       <ProjectReference Include="..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Sagas\" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Persistence\Migrations\" />
     </ItemGroup>
 
 </Project>
