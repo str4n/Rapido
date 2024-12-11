@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Customers.Events;
+using Rapido.Messages;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.Domain.Repositories;

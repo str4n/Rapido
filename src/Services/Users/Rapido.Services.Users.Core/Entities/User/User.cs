@@ -7,6 +7,9 @@ public sealed class User
     public string Password { get; set; }
     public AccountType Type { get; set; }
     public Role.Role Role { get; set; }
-    public UserState State { get; set; }
+    public bool IsActivated { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime ActivatedAt { get; set; }
+    public DateTime DeletedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }

@@ -3,9 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Customers.Events;
+using Rapido.Messages;
 using Rapido.Framework.Messaging.Brokers;
-using Rapido.Services.Customers.Core.Common.Domain.Customer;
 using Rapido.Services.Customers.Core.Common.Domain.Lockout;
 using Rapido.Services.Customers.Core.Common.EF;
 

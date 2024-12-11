@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Wallets.Events;
 using Rapido.Framework.Messaging.Brokers;
+using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Wallets.Money;

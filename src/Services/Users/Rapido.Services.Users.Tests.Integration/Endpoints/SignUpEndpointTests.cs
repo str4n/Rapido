@@ -103,7 +103,8 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
             Id = Guid.NewGuid(),
             Email = Const.EmailInUse,
             Password = password,
-            State = UserState.Active,
+            IsActivated = true,
+            IsDeleted = false,
             CreatedAt = clock.Now(),
             Role = role
         });

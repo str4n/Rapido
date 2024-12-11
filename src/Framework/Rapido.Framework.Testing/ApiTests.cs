@@ -40,7 +40,8 @@ public abstract class ApiTests<TApp, TContext> : IAsyncLifetime where TApp : cla
         {
             { "postgres:connectionString", connectionString },
             { "consul:discovery:register", false.ToString() },
-            { "rabbitMQ:enabled", false.ToString() }
+            { "rabbitMQ:enabled", false.ToString() },
+            { "vault:enabled", false.ToString() }
         };
         _testApp = new TestApp<TApp>(ConfigureServices, options);
         AddClientHeaders();

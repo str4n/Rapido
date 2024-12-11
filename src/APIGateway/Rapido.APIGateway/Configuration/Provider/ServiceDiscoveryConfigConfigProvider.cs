@@ -64,6 +64,8 @@ internal sealed class ServiceDiscoveryConfigConfigProvider : IServiceDiscoveryCo
                     }
                 }
             };
+            
+            //TODO: Check for duplicates
 
             if ((await _configValidator.ValidateRouteAsync(routeConfig)).Count == 0)
             {

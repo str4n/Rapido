@@ -22,6 +22,35 @@ namespace Rapido.Services.Users.Core.EF.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Rapido.Services.Users.Core.Entities.ActivationToken.UserActivationToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("ExpiresOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActivationTokens");
+                });
+
             modelBuilder.Entity("Rapido.Services.Users.Core.Entities.Role.Role", b =>
                 {
                     b.Property<string>("Name")
@@ -39,13 +68,25 @@ namespace Rapido.Services.Users.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("ActivatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DeletedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
+
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -54,10 +95,6 @@ namespace Rapido.Services.Users.Core.EF.Migrations
 
                     b.Property<string>("RoleName")
                         .HasColumnType("character varying(100)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -71,6 +108,15 @@ namespace Rapido.Services.Users.Core.EF.Migrations
                     b.HasIndex("RoleName");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Rapido.Services.Users.Core.Entities.ActivationToken.UserActivationToken", b =>
+                {
+                    b.HasOne("Rapido.Services.Users.Core.Entities.User.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Rapido.Services.Users.Core.Entities.User.User", b =>

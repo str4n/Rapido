@@ -11,18 +11,19 @@ internal static class AccountEndpoints
 {
     public static IEndpointRouteBuilder MapAccountEndpoints(this IEndpointRouteBuilder app)
     {
-        app
-            .MapPost("/sign-up", SignUp)
+        app.MapPost("/sign-up", SignUp)
             .WithTags("Account")
             .WithName("Sign up");
 
-        app
-            .MapPost("/sign-in", SignIn)
+        app.MapPost("/sign-in", SignIn)
             .WithTags("Account")
-            .WithName("Sign in");;
+            .WithName("Sign in");
+        
+        app.MapPut("/activate/{token}", Activate)
+            .WithTags("Account")
+            .WithName("Activate account");
 
-        app
-            .MapGet("/me", GetMe)
+        app.MapGet("/me", GetMe)
             .RequireAuthorization()
             .WithTags("Account")
             .WithName("Get account");
@@ -51,6 +52,13 @@ internal static class AccountEndpoints
         var user = await dispatcher.DispatchAsync(new GetUser(token.UserId));
 
         return Results.Ok(new AuthDto(token, user.AccountType));
+    }
+
+    private static async Task<IResult> Activate(string token, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(new ActivateUser(token));
+
+        return Results.Ok();
     }
 
     private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context)

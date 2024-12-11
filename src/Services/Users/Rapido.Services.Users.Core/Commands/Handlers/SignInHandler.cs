@@ -42,9 +42,9 @@ internal sealed class SignInHandler : ICommandHandler<SignIn>
             throw new InvalidCredentialsException();
         }
 
-        if (user.State is not UserState.Active)
+        if (!user.IsActivated)
         {
-            throw new UserNotActiveException(email.Value);
+            throw new UserNotActivatedException();
         }
 
         var jwt = _authenticator.CreateToken(user.Id, user.Role.Name, user.Email);

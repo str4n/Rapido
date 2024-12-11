@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Abstractions.Commands;
-using Rapido.Framework.Contracts.Wallets.Events;
 using Rapido.Framework.Messaging.Brokers;
-using Rapido.Services.Wallets.Application.Owners.Exceptions;
+using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
@@ -11,7 +10,6 @@ using Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
-using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 using OwnerNotFoundException = Rapido.Services.Wallets.Application.Wallets.Exceptions.OwnerNotFoundException;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;

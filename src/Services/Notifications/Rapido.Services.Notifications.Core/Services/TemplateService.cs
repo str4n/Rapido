@@ -11,7 +11,7 @@ internal sealed class TemplateService(NotificationsDbContext dbContext) : ITempl
 {
     private const string TemplateName = "verify_email";
 
-    public async Task<EmailTemplate> GetEmailVerificationTemplate(string verificationToken)
+    public async Task<EmailTemplate> GetUserActivationTemplate(string verificationToken)
     {
         var templateEntity = await dbContext.Templates.SingleOrDefaultAsync(x => x.Name == TemplateName);
 

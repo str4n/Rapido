@@ -1,7 +1,6 @@
-﻿using Rapido.Framework.Auth.Authenticator;
-using Rapido.Framework.Common.Abstractions.Commands;
+﻿using Rapido.Framework.Common.Abstractions.Commands;
 using Rapido.Framework.Common.Time;
-using Rapido.Framework.Contracts.Users.Events;
+using Rapido.Messages.Events;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Users.Core.Entities.Role;
 using Rapido.Services.Users.Core.Entities.User;
@@ -63,7 +62,8 @@ internal sealed class SignUpHandler : ICommandHandler<SignUp>
             Password = securedPassword,
             Role = role,
             Type = accountType,
-            State = UserState.Active,
+            IsActivated = false,
+            IsDeleted = false,
             CreatedAt = _clock.Now()
         };
 

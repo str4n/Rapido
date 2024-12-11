@@ -52,6 +52,9 @@ namespace Rapido.Saga.Persistence.Migrations
                     b.Property<bool>("OwnerCreated")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("RecipientCreated")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("UserActivated")
                         .HasColumnType("boolean");
 

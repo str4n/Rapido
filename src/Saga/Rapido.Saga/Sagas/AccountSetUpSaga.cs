@@ -1,12 +1,6 @@
 ﻿using MassTransit;
-using Rapido.Framework.Contracts.Customers.Commands;
-using Rapido.Framework.Contracts.Customers.Events;
-using Rapido.Framework.Contracts.Notifications;
-using Rapido.Framework.Contracts.Notifications.Commands;
-using Rapido.Framework.Contracts.Notifications.Events;
-using Rapido.Framework.Contracts.Users.Events;
-using Rapido.Framework.Contracts.Wallets.Commands;
-using Rapido.Framework.Contracts.Wallets.Events;
+using Rapido.Messages.Events;
+using Rapido.Messages.Commands;
 
 namespace Rapido.Saga.Sagas;
 
@@ -17,6 +11,7 @@ public class AccountSetUpSagaData : SagaStateMachineInstance
     public Guid AccountId { get; set; }
     public string Email { get; set; }
     public string AccountType { get; set; }
+    public bool RecipientCreated { get; set; }
     public bool UserActivated { get; set; }
     public bool CustomerCreated { get; set; }
     public bool CustomerCompleted { get; set; }
@@ -27,6 +22,7 @@ public class AccountSetUpSagaData : SagaStateMachineInstance
 
 public class AccountSetUpSaga : MassTransitStateMachine<AccountSetUpSagaData>
 {
+    public State RecipientCreation { get; set; }
     public State Activation { get; set; }
     public State CustomerCreation { get; set; }
     public State CustomerCompleting { get; set; }
@@ -35,6 +31,8 @@ public class AccountSetUpSaga : MassTransitStateMachine<AccountSetUpSagaData>
     public State AccountCompletion { get; set; }
     
     public Event<UserSignedUp> UserSignedUp { get; set; }
+    public Event<RecipientCreated> RecipientCreated { get; set; }
+    public Event<ActivationTokenCreated> ActivationTokenCreated { get; set; }
     public Event<UserActivated> UserActivated { get; set; }
     public Event<CustomerCreated> CustomerCreated { get; set; }
     public Event<IndividualCustomerCompleted> IndividualCustomerCompleted { get; set; }
@@ -47,6 +45,8 @@ public class AccountSetUpSaga : MassTransitStateMachine<AccountSetUpSagaData>
         InstanceState(x => x.CurrentState);
 
         Event(() => UserSignedUp, e => e.CorrelateById(m => m.Message.UserId));
+        Event(() => RecipientCreated, e => e.CorrelateById(m => m.Message.RecipientId));
+        Event(() => ActivationTokenCreated, e => e.CorrelateById(m => m.Message.UserId));
         Event(() => UserActivated, e => e.CorrelateById(m => m.Message.UserId));
         Event(() => CustomerCreated, e => e.CorrelateById(m => m.Message.CustomerId));
         Event(() => IndividualCustomerCompleted, e => e.CorrelateById(m => m.Message.CustomerId));
@@ -62,10 +62,18 @@ public class AccountSetUpSaga : MassTransitStateMachine<AccountSetUpSagaData>
                 context.Saga.Email = context.Message.Email;
                 context.Saga.AccountType = context.Message.AccountType;
             })
-            .TransitionTo(Activation)
-            .Publish(context => new SendActivationEmail(context.Message.UserId, "test-value")));
+            .TransitionTo(RecipientCreation)
+            .Publish(context => new CreateRecipient(context.Saga.AccountId, context.Saga.Email)));
+        
+        During(RecipientCreation, 
+            When(RecipientCreated)
+                .Then(context => context.Saga.RecipientCreated = true)
+                .TransitionTo(Activation)
+                .Publish(context => new CreateActivationToken(context.Saga.Email)));
         
         During(Activation, 
+            When(ActivationTokenCreated)
+                .Publish(context => new SendActivationEmail(context.Message.UserId, context.Message.Token)),
             When(UserActivated)
                 .Then(context => context.Saga.UserActivated = true)
                 .TransitionTo(CustomerCreation)

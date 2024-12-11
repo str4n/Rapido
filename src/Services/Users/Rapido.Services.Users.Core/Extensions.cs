@@ -21,6 +21,8 @@ public static class Extensions
             .AddScoped<ITokenStorage, HttpContextTokenStorage>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IRoleRepository, RoleRepository>()
+            .AddScoped<IActivationTokenRepository, ActivationTokenRepository>()
+            .AddScoped<IActivationTokenGenerator, ActivationTokenGenerator>()
             .AddScoped<ISignUpValidator, SignUpValidator>()
             .AddScoped<IPasswordManager, PasswordManager>()
             .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();

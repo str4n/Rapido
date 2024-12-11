@@ -1,5 +1,5 @@
 ﻿using Rapido.Framework.Common.Abstractions.Commands;
-using Rapido.Framework.Contracts.Customers.Events;
+using Rapido.Messages;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Services.Customers.Core.Common.Domain.Customer;
 using Rapido.Services.Customers.Core.Common.Domain.Repositories;
