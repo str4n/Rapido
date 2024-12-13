@@ -25,5 +25,6 @@ public static class Extensions
             .AddScoped<IActivationTokenGenerator, ActivationTokenGenerator>()
             .AddScoped<ISignUpValidator, SignUpValidator>()
             .AddScoped<IPasswordManager, PasswordManager>()
-            .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+            .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
+            .AddHostedService<ActivationTokenCleaner>();
 }
