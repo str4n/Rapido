@@ -3,7 +3,7 @@ using Yarp.ReverseProxy.Configuration;
 
 namespace Rapido.APIGateway.Configuration;
 
-public class ProxyConfig : IProxyConfig
+public record ProxyConfig : IProxyConfig
 {
     public IReadOnlyList<RouteConfig> Routes { get; }
     public IReadOnlyList<ClusterConfig> Clusters { get; }

@@ -1,4 +1,5 @@
-﻿using Rapido.APIGateway.Configuration.Provider;
+﻿using Rapido.APIGateway.Configuration.Builder;
+using Rapido.APIGateway.Configuration.Loader;
 using Rapido.Framework.Common;
 using Yarp.ReverseProxy.Configuration;
 
@@ -26,9 +27,10 @@ public static class Extensions
     
     private static IReverseProxyBuilder LoadFromConsul(this IReverseProxyBuilder builder)
     {
-        builder.LoadFromMemory(default, default);
+        builder.LoadFromMemory(Enumerable.Empty<RouteConfig>().ToList(), Enumerable.Empty<ClusterConfig>().ToList());
 
-        builder.Services.AddSingleton<IServiceDiscoveryConfigProvider, ServiceDiscoveryConfigConfigProvider>();
+        builder.Services.AddSingleton<IProxyConfigLoader, ServiceDiscoveryProxyConfigLoader>();
+        builder.Services.AddSingleton<IProxyConfigBuilder, ServiceDiscoveryProxyConfigBuilder>();
         builder.Services.AddHostedService<ServiceDiscoveryConfigUpdater>();
 
         return builder;
