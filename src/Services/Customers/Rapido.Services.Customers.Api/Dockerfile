@@ -17,7 +17,6 @@ COPY ["src/Framework/Rapido.Framework.Api/Rapido.Framework.Api.csproj", "src/Fra
 COPY ["src/Framework/Rapido.Framework/Rapido.Framework.csproj", "src/Framework/Rapido.Framework/"]
 COPY ["src/Framework/Rapido.Framework.Auth/Rapido.Framework.Auth.csproj", "src/Framework/Rapido.Framework.Auth/"]
 COPY ["src/Framework/Rapido.Framework.Postgres/Rapido.Framework.Postgres.csproj", "src/Framework/Rapido.Framework.Postgres/"]
-COPY ["src/Framework/Rapido.Framework.Contracts/Rapido.Framework.Contracts.csproj", "src/Framework/Rapido.Framework.Contracts/"]
 COPY ["src/Services/Customers/Rapido.Services.Customers.Core/Rapido.Services.Customers.Core.csproj", "src/Services/Customers/Rapido.Services.Customers.Core/"]
 RUN dotnet restore "src/Services/Customers/Rapido.Services.Customers.Api/Rapido.Services.Customers.Api.csproj"
 COPY . .

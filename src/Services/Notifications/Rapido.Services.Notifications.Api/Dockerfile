@@ -17,7 +17,6 @@ COPY ["src/Framework/Rapido.Framework.HTTP/Rapido.Framework.HTTP.csproj", "src/F
 COPY ["src/Framework/Rapido.Framework.Auth/Rapido.Framework.Auth.csproj", "src/Framework/Rapido.Framework.Auth/"]
 COPY ["src/Framework/Rapido.Framework.Api/Rapido.Framework.Api.csproj", "src/Framework/Rapido.Framework.Api/"]
 COPY ["src/Framework/Rapido.Framework/Rapido.Framework.csproj", "src/Framework/Rapido.Framework/"]
-COPY ["src/Framework/Rapido.Framework.Contracts/Rapido.Framework.Contracts.csproj", "src/Framework/Rapido.Framework.Contracts/"]
 COPY ["src/Services/Notifications/Rapido.Services.Notifications.Core/Rapido.Services.Notifications.Core.csproj", "src/Services/Notifications/Rapido.Services.Notifications.Core/"]
 RUN dotnet restore "src/Services/Notifications/Rapido.Services.Notifications.Api/Rapido.Services.Notifications.Api.csproj"
 COPY . .

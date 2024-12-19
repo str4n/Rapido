@@ -8,7 +8,6 @@ ARG BUILD_CONFIGURATION=Docker
 WORKDIR /src
 COPY ["src/Services/Payments/Rapido.Services.Payments.Api/Rapido.Services.Payments.Api.csproj", "src/Services/Payments/Rapido.Services.Payments.Api/"]
 COPY ["src/Services/Payments/Rapido.Services.Payments.Core/Rapido.Services.Payments.Core.csproj", "src/Services/Payments/Rapido.Services.Payments.Core/"]
-COPY ["src/Framework/Rapido.Framework.Contracts/Rapido.Framework.Contracts.csproj", "src/Framework/Rapido.Framework.Contracts/"]
 COPY ["src/Framework/Rapido.Framework.Common/Rapido.Framework.Common.csproj", "src/Framework/Rapido.Framework.Common/"]
 COPY ["src/Framework/Rapido.Framework.Postgres/Rapido.Framework.Postgres.csproj", "src/Framework/Rapido.Framework.Postgres/"]
 COPY ["src/Framework/Rapido.Framework/Rapido.Framework.csproj", "src/Framework/Rapido.Framework/"]
