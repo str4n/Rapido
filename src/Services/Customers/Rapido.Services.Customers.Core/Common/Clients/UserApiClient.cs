@@ -5,7 +5,6 @@ using Rapido.Services.Customers.Core.Common.Clients.DTO;
 
 namespace Rapido.Services.Customers.Core.Common.Clients;
 
-//TODO: Extract URL to the service registry
 internal sealed class UserApiClient : IUserApiClient
 {
     private const string ClientName = "consul";

@@ -9,19 +9,20 @@ internal sealed class ExchangeRateApiClient : IExchangeRateApiClient
 {
     private const string BasePath = "https://v6.exchangerate-api.com/v6";
     private readonly IApiKeyVault _vault;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _clientFactory;
 
     public ExchangeRateApiClient(IHttpClientFactory factory, IApiKeyVault vault)
     {
         _vault = vault;
-        _httpClient = factory.CreateClient();
+        _clientFactory = factory;
     }
     
     public async Task<ExchangeRatesDto> GetExchangeRates(string currency)
     {
+        var client = _clientFactory.CreateClient();
         var apiKey = _vault.GetExternalKey("exchangeRate");
         var path = $"{BasePath}/{apiKey}/latest/{currency}";
 
-        return await _httpClient.GetFromJsonAsync<ExchangeRatesDto>(path);
+        return await client.GetFromJsonAsync<ExchangeRatesDto>(path);
     }
 }

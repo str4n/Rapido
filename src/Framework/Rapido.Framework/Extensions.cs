@@ -9,6 +9,7 @@ using Rapido.Framework.Auth;
 using Rapido.Framework.Common;
 using Rapido.Framework.Common.Dispatchers;
 using Rapido.Framework.Contexts;
+using Rapido.Framework.HTTP.Resilience;
 using Rapido.Framework.HTTP.ServiceDiscovery;
 using Rapido.Framework.Messaging.RabbitMQ;
 using Rapido.Framework.Observability.Logging;
@@ -39,11 +40,14 @@ public static class Extensions
             .AddContexts()
             .AddMemoryCache()
             .AddEndpointsApiExplorer()
-            .AddHttpClient()
             .AddSwaggerDocs(builder.Configuration)
             .AddAuth(builder.Configuration)
-            .AddConsul(builder.Configuration)
+            .AddConsul()
             .AddTracing(builder.Configuration);
+        
+        builder.Services
+            .AddHttpClient()
+            .AddHttpClientResilience();
 
         builder.AddVault();
 
