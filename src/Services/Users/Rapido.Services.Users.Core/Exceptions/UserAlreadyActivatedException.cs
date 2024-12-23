@@ -2,5 +2,5 @@
 
 namespace Rapido.Services.Users.Core.Exceptions;
 
-internal sealed class UserAlreadyActivatedException(string email)
-    : CustomException($"User with email: {email} was already activated.", ExceptionCategory.BadRequest);
+internal sealed class UserAlreadyActivatedException()
+    : CustomException("User was already activated.", ExceptionCategory.BadRequest);

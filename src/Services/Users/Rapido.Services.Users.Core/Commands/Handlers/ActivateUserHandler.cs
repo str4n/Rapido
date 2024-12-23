@@ -32,12 +32,12 @@ internal sealed class ActivateUserHandler(IActivationTokenRepository tokenReposi
 
         if (user is null)
         {
-            throw new UserNotFoundException($"User with id: {userId} was not found.");
+            throw new UserNotFoundException("User was not found.");
         }
 
         if (user.IsActivated)
         {
-            throw new UserAlreadyActivatedException(user.Email);
+            throw new UserAlreadyActivatedException();
         }
 
         if (user.IsDeleted)

@@ -1,5 +1,6 @@
 ﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
+using Rapido.Messages.Commands;
 using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.DTO;
 using Rapido.Services.Users.Core.Queries;
@@ -18,6 +19,10 @@ internal static class AccountEndpoints
         app.MapPost("/sign-in", SignIn)
             .WithTags("Account")
             .WithName("Sign in");
+
+        app.MapPut("/create-activation-token", CreateActivationToken)
+            .WithTags("Account")
+            .WithName("Create activation token");
         
         app.MapPut("/activate/{token}", Activate)
             .WithTags("Account")
@@ -59,6 +64,13 @@ internal static class AccountEndpoints
         await dispatcher.DispatchAsync(new ActivateUser(token));
 
         return Results.Ok();
+    }
+
+    private static async Task<IResult> CreateActivationToken(CreateActivationToken command, IDispatcher dispatcher)
+    {
+        await dispatcher.DispatchAsync(command);
+
+        return Results.Created();
     }
 
     private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context)
