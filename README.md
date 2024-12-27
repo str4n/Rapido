@@ -8,6 +8,8 @@ Depending on the service complexity, different architectural styles are being us
 
 The database is being used is [PostgreSQL](https://www.postgresql.org/) & [EntityFrameworkCore](https://learn.microsoft.com/en-us/ef/core/) as ORM, moreover application uses [Redis](https://redis.io/) as a cache.
 
+![logo](assets/rapido-logo.png)
+
 # Technologies
 
 Technologies used in the project:
