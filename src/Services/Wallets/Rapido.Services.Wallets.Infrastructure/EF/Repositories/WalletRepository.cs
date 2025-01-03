@@ -19,12 +19,14 @@ internal sealed class WalletRepository : IWalletRepository
         => _dbContext.Wallets
             .Include(x => x.Transfers)
             .Include(x => x.Balances)
+            .ThenInclude(x => x.Transfers)
             .SingleOrDefaultAsync(x => x.Id == id);
 
     public Task<Wallet> GetAsync(OwnerId ownerId)
         => _dbContext.Wallets
             .Include(x => x.Transfers)
             .Include(x => x.Balances)
+            .ThenInclude(x => x.Transfers)
             .SingleOrDefaultAsync(x => x.OwnerId == ownerId);
 
     public async Task AddAsync(Wallet wallet)

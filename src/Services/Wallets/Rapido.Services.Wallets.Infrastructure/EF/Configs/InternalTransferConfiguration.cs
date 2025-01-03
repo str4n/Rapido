@@ -1,30 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Rapido.Services.Wallets.Domain.Owners.Owner;
-using Rapido.Services.Wallets.Domain.Wallets.Aggregate;
+using Newtonsoft.Json;
+using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
-using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF.Configs;
 
-internal sealed class TransferConfiguration : IEntityTypeConfiguration<Transfer>
+internal sealed class InternalTransferConfiguration : IEntityTypeConfiguration<InternalTransfer>
 {
-    public void Configure(EntityTypeBuilder<Transfer> builder)
+    public void Configure(EntityTypeBuilder<InternalTransfer> builder)
     {
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, x => new(x));
-        
+
         builder.Property(x => x.TransactionId)
             .HasConversion(x => x.Value, x => new(x));
 
-        builder.Property(x => x.WalletId)
+        builder.Property(x => x.BalanceId)
             .HasConversion(x => x.Value, x => new(x));
-
-        builder.Property(x => x.Name)
-            .HasConversion(x => x.Value, x => new(x))
-            .IsRequired();
 
         builder.Property(x => x.Currency)
             .HasConversion(x => x.Value, x => new(x))
@@ -33,17 +28,20 @@ internal sealed class TransferConfiguration : IEntityTypeConfiguration<Transfer>
         builder.Property(x => x.Amount)
             .HasConversion(x => x.Value, x => new(x))
             .IsRequired();
-        
+
         builder.Property(x => x.Metadata)
-            .HasConversion(x => x.Value, x => new(x))
-            .IsRequired();
+            .HasConversion(x => x.Value, x => new(x));
 
         builder.Property(x => x.CreatedAt).IsRequired();
-
-        builder.HasMany(x => x.SubTransfers).WithOne();
+        
+        builder.Property(x => x.ExchangeRate)
+            .HasColumnType("text")
+            .HasConversion(
+                x => JsonConvert.SerializeObject(x), 
+                x => JsonConvert.DeserializeObject<ExchangeRate>(x));
 
         builder.HasDiscriminator<string>("Type")
-            .HasValue<IncomingTransfer>(nameof(IncomingTransfer))
-            .HasValue<OutgoingTransfer>(nameof(OutgoingTransfer));
+            .HasValue<IncomingInternalTransfer>(nameof(IncomingInternalTransfer))
+            .HasValue<OutgoingInternalTransfer>(nameof(OutgoingInternalTransfer));
     }
 }

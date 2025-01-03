@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Rapido.Services.Wallets.Infrastructure.EF;
@@ -11,9 +12,11 @@ using Rapido.Services.Wallets.Infrastructure.EF;
 namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(WalletsDbContext))]
-    partial class WalletsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250103132125_Rapido_Wallets_SubTransfer_Metadata_Not_Required")]
+    partial class Rapido_Wallets_SubTransfer_Metadata_Not_Required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,9 +60,6 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Currency")
                         .HasColumnType("text");
 
@@ -77,7 +77,7 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
                     b.ToTable("Balance");
                 });
 
-            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.InternalTransfer", b =>
+            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.SubTransfer", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -101,16 +101,13 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
                     b.Property<string>("Metadata")
                         .HasColumnType("text");
 
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("text");
-
                     b.Property<Guid?>("TransferId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("character varying(34)");
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
 
                     b.HasKey("Id");
 
@@ -118,9 +115,9 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
 
                     b.HasIndex("TransferId");
 
-                    b.ToTable("InternalTransfer");
+                    b.ToTable("SubTransfer");
 
-                    b.HasDiscriminator<string>("Type").HasValue("InternalTransfer");
+                    b.HasDiscriminator<string>("Type").HasValue("SubTransfer");
 
                     b.UseTphMappingStrategy();
                 });
@@ -146,9 +143,6 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionId")
                         .HasColumnType("text");
 
                     b.Property<string>("Type")
@@ -214,18 +208,18 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
                     b.HasDiscriminator().HasValue("IndividualOwner");
                 });
 
-            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.IncomingInternalTransfer", b =>
+            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.IncomingSubTransfer", b =>
                 {
-                    b.HasBaseType("Rapido.Services.Wallets.Domain.Wallets.Transfer.InternalTransfer");
+                    b.HasBaseType("Rapido.Services.Wallets.Domain.Wallets.Transfer.SubTransfer");
 
-                    b.HasDiscriminator().HasValue("IncomingInternalTransfer");
+                    b.HasDiscriminator().HasValue("IncomingSubTransfer");
                 });
 
-            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.OutgoingInternalTransfer", b =>
+            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.OutgoingSubTransfer", b =>
                 {
-                    b.HasBaseType("Rapido.Services.Wallets.Domain.Wallets.Transfer.InternalTransfer");
+                    b.HasBaseType("Rapido.Services.Wallets.Domain.Wallets.Transfer.SubTransfer");
 
-                    b.HasDiscriminator().HasValue("OutgoingInternalTransfer");
+                    b.HasDiscriminator().HasValue("OutgoingSubTransfer");
                 });
 
             modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.IncomingTransfer", b =>
@@ -249,7 +243,7 @@ namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
                         .HasForeignKey("WalletId");
                 });
 
-            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.InternalTransfer", b =>
+            modelBuilder.Entity("Rapido.Services.Wallets.Domain.Wallets.Transfer.SubTransfer", b =>
                 {
                     b.HasOne("Rapido.Services.Wallets.Domain.Wallets.Balance.Balance", null)
                         .WithMany("Transfers")

@@ -15,9 +15,8 @@ public class WalletHasSufficientFundsTests
     {
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
-        var exchangeRate = TestExchangeRates.GetExchangeRate(currency, currency);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 30, currency, exchangeRate, _now);
+        wallet.AddFunds("name", 30, currency, exchangeRates, _now);
 
         var result = wallet.HasSufficientFunds(amount, currency, exchangeRates);
 
@@ -32,9 +31,8 @@ public class WalletHasSufficientFundsTests
     {
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
-        var exchangeRate = TestExchangeRates.GetExchangeRate(currency, currency);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 1, currency, exchangeRate, _now);
+        wallet.AddFunds("name", 1, currency, exchangeRates, _now);
 
         var result = wallet.HasSufficientFunds(amount, currency, exchangeRates);
 
@@ -47,9 +45,8 @@ public class WalletHasSufficientFundsTests
         var amount = -1;
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
-        var exchangeRate = TestExchangeRates.GetExchangeRate(currency, currency);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 30, currency, exchangeRate, _now);
+        wallet.AddFunds("name", 30, currency, exchangeRates, _now);
 
         var act = () => wallet.HasSufficientFunds(amount, currency, exchangeRates);
 

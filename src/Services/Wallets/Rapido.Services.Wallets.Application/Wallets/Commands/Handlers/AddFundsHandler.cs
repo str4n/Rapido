@@ -44,19 +44,16 @@ internal sealed class AddFundsHandler : ICommandHandler<AddFunds>
             throw new WalletNotFoundException();
         }
         
-        
         var now = _clock.Now();
 
+        var exchangeRates = await _client.GetExchangeRates();
 
-        var exchangeRate = (await _client.GetExchangeRates())
-            .SingleOrDefault(x => x.From == currency && x.To == wallet.GetPrimaryCurrency());
-
-        if (exchangeRate is null)
+        if (exchangeRates is null)
         {
             throw new ExchangeRateNotFoundException();
         }
         
-        var transfer = wallet.AddFunds(transferName, amount, currency, exchangeRate, now);
+        var transfer = wallet.AddFunds(transferName, amount, currency, exchangeRates.ToList(), now);
 
         await _walletRepository.UpdateAsync(wallet);
 

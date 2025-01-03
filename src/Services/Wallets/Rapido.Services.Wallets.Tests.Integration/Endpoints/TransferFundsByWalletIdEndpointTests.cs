@@ -13,6 +13,7 @@ using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 using Rapido.Services.Wallets.Infrastructure.EF;
+using Rapido.Services.Wallets.Tests.Unit;
 
 namespace Rapido.Services.Wallets.Tests.Integration.Endpoints;
 
@@ -44,11 +45,13 @@ public class TransferFundsByWalletIdEndpointTests()
         var senderWallet = await TestDbContext.Wallets
             .Include(x => x.Transfers)
             .Include(x => x.Balances)
+            .ThenInclude(x => x.Transfers)
             .SingleAsync(x => x.Id == new WalletId(senderWalletId));
         
         var receiverWallet = await TestDbContext.Wallets
             .Include(x => x.Transfers)
             .Include(x => x.Balances)
+            .ThenInclude(x => x.Transfers)
             .SingleAsync(x => x.Id == new WalletId(receiverWalletId));
 
         senderWallet.Balances.First().Amount.Should().Be(Amount.Zero);
@@ -86,7 +89,7 @@ public class TransferFundsByWalletIdEndpointTests()
         var senderWallet = new Wallet(Guid.Parse(Const.Wallet1Id), owner1Id, currency, clock.Now());
         var receiverWallet = new Wallet(Guid.Parse(Const.Wallet2Id), owner2Id, currency, clock.Now());
 
-        senderWallet.AddFunds("name", 20, currency, new ExchangeRate(currency, currency, 1), clock.Now());
+        senderWallet.AddFunds("name", 20, currency, TestExchangeRates.GetExchangeRates(), clock.Now());
 
         await dbContext.Wallets.AddAsync(senderWallet);
         await dbContext.Wallets.AddAsync(receiverWallet);

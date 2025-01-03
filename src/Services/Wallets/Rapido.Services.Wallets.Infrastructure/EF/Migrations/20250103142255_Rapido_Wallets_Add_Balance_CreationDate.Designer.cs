@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Rapido.Services.Wallets.Infrastructure.EF;
@@ -11,9 +12,11 @@ using Rapido.Services.Wallets.Infrastructure.EF;
 namespace Rapido.Services.Wallets.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(WalletsDbContext))]
-    partial class WalletsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250103142255_Rapido_Wallets_Add_Balance_CreationDate")]
+    partial class Rapido_Wallets_Add_Balance_CreationDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

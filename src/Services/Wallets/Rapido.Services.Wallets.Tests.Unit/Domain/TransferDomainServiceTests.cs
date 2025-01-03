@@ -23,9 +23,8 @@ public class TransferDomainServiceTests
         var receiverWallet = Wallet.Create(Guid.NewGuid(), eurCurrency, _clock.Now());
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         var amount = new Amount(10);
-
-        var eurToEurExchangeRate = TestExchangeRates.GetExchangeRate(eurCurrency, eurCurrency);
-        senderWallet.AddFunds("name", amount, Currency.EUR(), eurToEurExchangeRate, _clock.Now());
+        
+        senderWallet.AddFunds("name", amount, Currency.EUR(), exchangeRates, _clock.Now());
         
         //Act
         
@@ -62,9 +61,8 @@ public class TransferDomainServiceTests
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         var amount = new Amount(10);
         var transferAmount = new Amount(20);
-
-        var eurToEurExchangeRate = TestExchangeRates.GetExchangeRate(eurCurrency, eurCurrency);
-        senderWallet.AddFunds("name", amount, Currency.EUR(), eurToEurExchangeRate, _clock.Now());
+        
+        senderWallet.AddFunds("name", amount, Currency.EUR(), exchangeRates, _clock.Now());
         
         //Act
         

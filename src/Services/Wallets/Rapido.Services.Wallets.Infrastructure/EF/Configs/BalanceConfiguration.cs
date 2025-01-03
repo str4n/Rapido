@@ -14,14 +14,14 @@ internal sealed class BalanceConfiguration : IEntityTypeConfiguration<Balance>
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, x => new(x));
 
-        builder.Property(x => x.Amount)
-            .HasConversion(x => x.Value, x => new(x));
-
         builder.Property(x => x.Currency)
             .HasConversion(x => x.Value, x => new(x));
 
         builder.Property(x => x.IsPrimary).HasConversion<string>();
 
         builder.HasOne<Wallet>().WithMany().HasForeignKey(x => x.WalletId);
+        builder.HasMany(x => x.Transfers).WithOne().HasForeignKey(x => x.BalanceId);
+
+        builder.Property(x => x.CreatedAt).IsRequired();
     }
 }

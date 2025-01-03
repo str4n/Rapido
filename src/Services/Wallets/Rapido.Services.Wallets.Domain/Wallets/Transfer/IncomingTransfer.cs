@@ -5,9 +5,9 @@ namespace Rapido.Services.Wallets.Domain.Wallets.Transfer;
 
 public sealed class IncomingTransfer : Transfer
 {
-    public IncomingTransfer(TransferId id, WalletId walletId, TransferName name,
+    public IncomingTransfer(TransferId id, TransactionId transactionId, WalletId walletId, TransferName name, IEnumerable<InternalTransfer> subTransfers,
         Currency currency, Amount amount, DateTime createdAt, TransferMetadata metadata = null) 
-        : base(id, walletId, name, currency, amount, createdAt, metadata)
+        : base(id, transactionId, walletId, name, subTransfers, currency, amount, createdAt, metadata)
     {
     }
 

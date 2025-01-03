@@ -16,7 +16,12 @@ public class WalletDeductFundsTests
         var primaryCurrency = new Currency("PLN");
         var wallet = Wallet.Create(Guid.NewGuid(), primaryCurrency, _now);
         var amount = 20.0;
-        wallet.Balances.Single(x => x.IsPrimary).AddFunds(amount);
+        var balance = wallet.Balances.Single(x => x.IsPrimary);
+        var internalTransfer = new IncomingInternalTransfer(new TransferId(), new TransactionId(), balance.Id, primaryCurrency,
+            amount, _now);
+        
+        balance.AddTransfer(internalTransfer);
+        
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         
         //Act
@@ -42,7 +47,11 @@ public class WalletDeductFundsTests
         var primaryCurrency = new Currency("PLN");
         var wallet = Wallet.Create(Guid.NewGuid(), primaryCurrency, _now);
         var amount = 20.0;
-        wallet.Balances.Single(x => x.IsPrimary).AddFunds(amount);
+        var balance = wallet.Balances.Single(x => x.IsPrimary);
+        var internalTransfer = new IncomingInternalTransfer(new TransferId(), new TransactionId(), balance.Id, primaryCurrency,
+            amount, _now);
+        
+        balance.AddTransfer(internalTransfer);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         
         //Act
@@ -55,7 +64,7 @@ public class WalletDeductFundsTests
     }
 
     [Fact]
-    public void deduct_funds_from_wallet_with_many_balances_should_deduct_funds_firstly_form_primary()
+    public void deduct_funds_from_wallet_with_many_balances_should_succeed()
     {
         //Arrange
         
@@ -65,8 +74,18 @@ public class WalletDeductFundsTests
         wallet.AddBalance(eurCurrency, _now);
         var amount = 20.0;
         var eurAmount = 6.0;
-        wallet.Balances.Single(x => x.IsPrimary).AddFunds(amount);
-        wallet.Balances.Single(x => x.Currency == eurCurrency).AddFunds(eurAmount);
+        
+        var balance = wallet.Balances.Single(x => x.IsPrimary);
+        var internalTransfer = new IncomingInternalTransfer(new TransferId(), new TransactionId(), balance.Id, primaryCurrency,
+            amount, _now);
+        
+        balance.AddTransfer(internalTransfer);
+        
+        var balance2 = wallet.Balances.Single(x => x.Currency == eurCurrency);
+        var internalTransfer2 = new IncomingInternalTransfer(new TransferId(), new TransactionId(), balance.Id, eurCurrency,
+            eurAmount, _now);
+        
+        balance2.AddTransfer(internalTransfer2);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         
         //Act

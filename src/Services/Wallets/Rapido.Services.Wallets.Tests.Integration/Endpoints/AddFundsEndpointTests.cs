@@ -33,6 +33,7 @@ public class AddFundsEndpointTests() : ApiTests<Program, WalletsDbContext>(optio
 
         var wallet = await TestDbContext.Wallets
             .Include(x => x.Balances)
+            .ThenInclude(x => x.Transfers)
             .SingleOrDefaultAsync(x => x.Id == new WalletId(id));
 
         var balance = wallet.Balances.Single();

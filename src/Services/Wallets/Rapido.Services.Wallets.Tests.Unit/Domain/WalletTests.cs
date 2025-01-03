@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
+using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Tests.Unit.Domain;
@@ -22,8 +23,14 @@ public class WalletTests
         var eurAmount = new Amount(10);
         var usdAmount = new Amount(10);
         
-        eurBalance.AddFunds(eurAmount);
-        usdBalance.AddFunds(usdAmount);
+        var internalTransfer = new IncomingInternalTransfer(new TransferId(), new TransactionId(), eurBalance.Id, eurCurrency,
+            eurAmount, _now);
+        
+        var internalTransfer1 = new IncomingInternalTransfer(new TransferId(), new TransactionId(), usdBalance.Id, usdCurrency,
+            usdAmount, _now);
+        
+        eurBalance.AddTransfer(internalTransfer);
+        usdBalance.AddTransfer(internalTransfer1);
         
         //Act
 

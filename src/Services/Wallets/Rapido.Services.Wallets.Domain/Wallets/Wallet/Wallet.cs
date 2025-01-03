@@ -46,38 +46,40 @@ public sealed class Wallet : AggregateRoot<WalletId>
     }
 
     public IncomingTransfer AddFunds(TransferName name, Amount amount, 
-        Currency currency, ExchangeRate exchangeRate, DateTime now)
+        Currency currency, List<ExchangeRate> exchangeRates, DateTime now)
     {
         var transferId = new TransferId();
+        var transactionId = new TransactionId();
 
-        var balance = GetPrimaryBalance();
-
+        // Gets balance in transfer currency, if doesn't exists gets primary balance
+        var balance = GetBalance(currency) ?? GetPrimaryBalance();
+        
         if (balance is null)
         {
             throw new BalanceNotFoundException();
         }
-        
+
+        var exchangeRate = GetExchangeRate(currency, balance.Currency, exchangeRates);
+
         if (amount <= Amount.Zero)
         {
             throw new InvalidTransferAmountException(amount);
         }
-
-        if (exchangeRate.From != currency)
-        {
-            throw new InvalidExchangeException("Exchange rate from currency doesn't equal transfer currency.");
-        }
-
-        if (exchangeRate.To != balance.Currency)
-        {
-            throw new InvalidExchangeException("Exchange rate to currency doesn't equal primary currency.");
-        }
-
+        
         var exchangedAmount = amount * exchangeRate.Rate;
 
-        var transfer = new IncomingTransfer(transferId, Id, name, currency, amount, now, GetMetadata(transferId, Id));
+        var internalTransfer = new IncomingInternalTransfer(transferId, transactionId, balance.Id, balance.Currency, 
+            exchangedAmount, now, GetMetadata(transactionId, Id), exchangeRate);
+        
+        var internalTransfers = new List<InternalTransfer>
+        {
+            internalTransfer
+        };
+        
+        var transfer = new IncomingTransfer(new TransferId(), transactionId, Id, name, internalTransfers, currency, amount, now, GetMetadata(transactionId, Id));
 
         _transfers.Add(transfer);
-        balance.AddFunds(exchangedAmount);
+        balance.AddTransfer(internalTransfer);
         
         IncrementVersion();
 
@@ -88,6 +90,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
         List<ExchangeRate> exchangeRates, DateTime now)
     {
         var transferId = new TransferId();
+        var transactionId = new TransactionId();
         
         if (amount <= Amount.Zero)
         {
@@ -95,48 +98,64 @@ public sealed class Wallet : AggregateRoot<WalletId>
         }
         
         var remainingAmount = amount.Value;
+        
+        // This method deducts funds from the balance in the transaction currency.
+        // If insufficient, it automatically uses the primary balance, and then any remaining available balances,
+        // performing currency exchange if necessary.
 
-        foreach (var balance in _balances
-                     .OrderByDescending(x => x.IsPrimary)
-                     .TakeWhile(_ => !(remainingAmount <= 0)))
-            
-        {
-            DeductFundsFromBalance(balance);
-        }
+        var subTransfers = _balances.OrderBy(x =>
+            {
+                if (x.Currency == currency) return 0;
+                
+                return x.IsPrimary ? 1 : 2;
+            })
+            .TakeWhile(_ => !(remainingAmount <= 0))
+            .Select(DeductFundsFromBalance)
+            .ToList();
 
         if (remainingAmount > 0)
         {
             throw new InsufficientFundsException(Id);
         }
         
-        var transfer = new OutgoingTransfer(transferId, Id, name, currency, amount, now, GetMetadata(transferId, Id));
+        var transfer = new OutgoingTransfer(transferId, transactionId, Id, name, subTransfers, currency, amount, now, GetMetadata(transactionId, Id));
         _transfers.Add(transfer);
         
         IncrementVersion();
 
         return transfer;
         
-        void DeductFundsFromBalance(Balance.Balance balance)
+        InternalTransfer DeductFundsFromBalance(Balance.Balance balance)
         {
             var exchangeRate = GetExchangeRate(balance.Currency, currency, exchangeRates);
-            var exchangedAmountFromBalance = balance.Amount * exchangeRate;
+            var exchangedAmountFromBalance = balance.Amount * exchangeRate.Rate;
 
             if (exchangedAmountFromBalance <= Amount.Zero)
             {
-                return;
+                return null;
             }
             
             if (exchangedAmountFromBalance >= remainingAmount)
             {
-                var amountToDeduct = remainingAmount / exchangeRate;
-                balance.DeductFunds(amountToDeduct);
+                var amountToDeduct = remainingAmount / exchangeRate.Rate;
+                
+                var internalTransfer = new OutgoingInternalTransfer(new TransferId(), transactionId, balance.Id, balance.Currency, amountToDeduct, now,
+                    GetMetadata(transactionId, Id), exchangeRate);
+                
+                balance.AddTransfer(internalTransfer);
                 remainingAmount = 0;
+                return internalTransfer;
             }
             else
             {
                 var amountToDeduct = balance.Amount;
-                balance.DeductFunds(amountToDeduct);
+                
+                var internalTransfer = new OutgoingInternalTransfer(new TransferId(), transactionId, balance.Id, balance.Currency, amountToDeduct, now,
+                    GetMetadata(transactionId, Id), exchangeRate);
+                
+                balance.AddTransfer(internalTransfer);
                 remainingAmount -= exchangedAmountFromBalance;
+                return internalTransfer;
             }
         }
     }
@@ -162,7 +181,7 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
         void DeductFundsFromBalance(Balance.Balance balance)
         {
-            var exchangeRate = GetExchangeRate(balance.Currency, currency, exchangeRates);
+            var exchangeRate = GetExchangeRate(balance.Currency, currency, exchangeRates).Rate;
             var exchangedAmountFromBalance = balance.Amount * exchangeRate;
 
             if (exchangedAmountFromBalance <= Amount.Zero)
@@ -220,9 +239,9 @@ public sealed class Wallet : AggregateRoot<WalletId>
     private bool BalanceExists(Currency currency) 
         => _balances.Any(x => x.Currency == currency);
     
-    private double GetExchangeRate(Currency from, Currency to, List<ExchangeRate> exchangeRates) => exchangeRates
-        .Single(x => x.From == from && x.To == to).Rate;
+    private ExchangeRate GetExchangeRate(Currency from, Currency to, List<ExchangeRate> exchangeRates) => exchangeRates
+        .Single(x => x.From == from && x.To == to);
     
-    private static TransferMetadata GetMetadata(TransferId transferId, WalletId walletId)
-        => new($"{{\"transferId\": \"{transferId}\", \"walletId\": \"{walletId}\"}}");
+    private static TransferMetadata GetMetadata(TransactionId transactionId, WalletId walletId)
+        => new($"{{\"transactionId\": \"{transactionId}\", \"walletId\": \"{walletId}\"}}");
 }

@@ -15,11 +15,11 @@ public class WalletAddFundsTests
         var primaryCurrency = new Currency("PLN");
         var wallet = Wallet.Create(Guid.NewGuid(), primaryCurrency, _now);
         var amount = 20.0;
-        var exchangeRate = TestExchangeRates.GetExchangeRate(primaryCurrency, primaryCurrency);
+        var exchangeRates = TestExchangeRates.GetExchangeRates();
         
         //Act
 
-        var transfer = wallet.AddFunds("name", amount, primaryCurrency, exchangeRate, _now);
+        var transfer = wallet.AddFunds("name", amount, primaryCurrency, exchangeRates, _now);
         
         //Assert
 
@@ -43,12 +43,13 @@ public class WalletAddFundsTests
         var primaryCurrency = new Currency("PLN");
         var wallet = Wallet.Create(Guid.NewGuid(), primaryCurrency, _now);
         var amount = 20.0;
-        var exchangeRate = TestExchangeRates.GetExchangeRate(currency, primaryCurrency);
+        var exchangeRates = TestExchangeRates.GetExchangeRates();
+        var exchangeRate = exchangeRates.Single(x => x.From == currency && x.To == primaryCurrency);
         var exchangedAmount = amount * exchangeRate.Rate;
         
         //Act
 
-        var transfer = wallet.AddFunds("name", amount, currency, exchangeRate, _now);
+        var transfer = wallet.AddFunds("name", amount, currency, exchangeRates, _now);
         
         //Assert
 

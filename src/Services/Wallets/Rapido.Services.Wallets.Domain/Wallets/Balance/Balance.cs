@@ -8,7 +8,10 @@ public sealed class Balance
 {
     public BalanceId Id { get; }
     public WalletId WalletId { get; }
-    public Amount Amount { get; private set; }
+    
+    private readonly HashSet<InternalTransfer> _transfers = new();
+    public IEnumerable<InternalTransfer> Transfers => _transfers;
+    public Amount Amount => CurrentAmount();
     public Currency Currency { get; }
     public bool IsPrimary { get; private set; }
     public DateTime CreatedAt { get; }
@@ -20,7 +23,6 @@ public sealed class Balance
         Currency = currency;
         IsPrimary = isPrimary;
         CreatedAt = createdAt;
-        Amount = 0;
     }
 
     private Balance()
@@ -30,6 +32,8 @@ public sealed class Balance
     internal static Balance Create(WalletId walletId, Currency currency, bool isPrimary, DateTime createdAt)
         => new(Guid.NewGuid(), walletId, currency, isPrimary, createdAt);
 
-    internal void AddFunds(Amount amount) => Amount += amount;
-    internal void DeductFunds(Amount amount) => Amount -= amount;
+    internal void AddTransfer(InternalTransfer transfer) => _transfers.Add(transfer);
+    
+    private Amount CurrentAmount()
+        => _transfers.OfType<IncomingInternalTransfer>().Sum(x => x.Amount) - _transfers.OfType<OutgoingInternalTransfer>().Sum(x => x.Amount);
 }
