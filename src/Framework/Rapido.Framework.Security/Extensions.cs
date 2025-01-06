@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Security.Hasher;
+using Rapido.Framework.Security.TokenGenerator;
 using Rapido.Framework.Security.Vault;
 
 namespace Rapido.Framework.Security;
@@ -12,6 +13,7 @@ public static class Extensions
         builder.AddVault();
 
         builder.Services.AddSingleton<IHasher, Hasher.Hasher>();
+        builder.Services.AddSingleton<ITokenGenerator, RandomTokenGenerator>();
 
         return builder;
     }
