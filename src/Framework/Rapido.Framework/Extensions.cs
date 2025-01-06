@@ -14,7 +14,8 @@ using Rapido.Framework.HTTP.ServiceDiscovery;
 using Rapido.Framework.Messaging.RabbitMQ;
 using Rapido.Framework.Observability.Logging;
 using Rapido.Framework.Observability.Tracing;
-using Rapido.Framework.Vault;
+using Rapido.Framework.Security;
+using Rapido.Framework.Security.Vault;
 
 namespace Rapido.Framework;
 
@@ -49,7 +50,7 @@ public static class Extensions
             .AddHttpClient()
             .AddHttpClientResilience();
 
-        builder.AddVault();
+        builder.AddSecurity();
 
         builder.Services
             .AddCommands()

@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Common.Exceptions;
 
-namespace Rapido.Framework.Vault.Vault;
+namespace Rapido.Framework.Security.Vault;
 
 internal sealed class VaultException : CustomException
 {

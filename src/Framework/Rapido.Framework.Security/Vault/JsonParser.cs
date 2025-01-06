@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
-namespace Rapido.Framework.Vault;
+namespace Rapido.Framework.Security.Vault;
 
 internal sealed class JsonParser
 {

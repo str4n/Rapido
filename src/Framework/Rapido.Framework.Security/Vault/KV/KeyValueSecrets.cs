@@ -2,7 +2,7 @@
 using Rapido.Framework.Common.Serialization;
 using VaultSharp;
 
-namespace Rapido.Framework.Vault.Vault;
+namespace Rapido.Framework.Security.Vault.KV;
 
 internal sealed class KeyValueSecrets(IVaultClient client, IOptions<VaultOptions> options, IJsonSerializer jsonSerializer) : IKeyValueSecrets
 {

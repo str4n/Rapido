@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Vault;
+﻿namespace Rapido.Framework.Security.Vault;
 
 public sealed class VaultOptions
 {

@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="VaultSharp" Version="1.17.5.1" />
+        <PackageReference Include="VaultSharp" Version="1.17.5.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
+        <ProjectReference Include="..\Rapido.Framework.Common\Rapido.Framework.Common.csproj" />
     </ItemGroup>
 
 </Project>

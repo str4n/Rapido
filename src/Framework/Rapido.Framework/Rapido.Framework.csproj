@@ -13,7 +13,7 @@
       <ProjectReference Include="..\Rapido.Framework.HTTP\Rapido.Framework.HTTP.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Messaging.RabbitMQ\Rapido.Framework.Messaging.RabbitMQ.csproj" />
       <ProjectReference Include="..\Rapido.Framework.Observability\Rapido.Framework.Observability.csproj" />
-      <ProjectReference Include="..\Rapido.Framework.Vault\Rapido.Framework.Vault.csproj" />
+      <ProjectReference Include="..\Rapido.Framework.Security\Rapido.Framework.Security.csproj" />
     </ItemGroup>
     
 </Project>

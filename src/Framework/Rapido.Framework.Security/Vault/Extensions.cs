@@ -3,19 +3,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Rapido.Framework.Common;
 using Rapido.Framework.Common.Serialization;
-using Rapido.Framework.Vault.Vault;
+using Rapido.Framework.Security.Vault.KV;
 using VaultSharp;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Rapido.Framework.Vault;
+namespace Rapido.Framework.Security.Vault;
 
-public static class Extensions
+internal static class Extensions
 {
     private const string SectionName = "Vault";
     

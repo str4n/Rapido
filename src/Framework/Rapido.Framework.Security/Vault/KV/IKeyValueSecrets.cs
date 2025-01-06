@@ -1,4 +1,4 @@
-﻿namespace Rapido.Framework.Vault.Vault;
+﻿namespace Rapido.Framework.Security.Vault.KV;
 
 public interface IKeyValueSecrets
 {
