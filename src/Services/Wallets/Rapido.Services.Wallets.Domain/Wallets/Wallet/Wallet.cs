@@ -45,11 +45,10 @@ public sealed class Wallet : AggregateRoot<WalletId>
         IncrementVersion();
     }
 
-    public IncomingTransfer AddFunds(TransferName name, Amount amount, 
+    public IncomingTransfer AddFunds(TransactionId transactionId, TransferName name, Amount amount, 
         Currency currency, List<ExchangeRate> exchangeRates, DateTime now)
     {
         var transferId = new TransferId();
-        var transactionId = new TransactionId();
 
         // Gets balance in transfer currency, if doesn't exists gets primary balance
         var balance = GetBalance(currency) ?? GetPrimaryBalance();
@@ -86,11 +85,10 @@ public sealed class Wallet : AggregateRoot<WalletId>
         return transfer;
     }
 
-    public OutgoingTransfer DeductFunds(TransferName name, Amount amount, Currency currency,
+    public OutgoingTransfer DeductFunds(TransactionId transactionId, TransferName name, Amount amount, Currency currency,
         List<ExchangeRate> exchangeRates, DateTime now)
     {
         var transferId = new TransferId();
-        var transactionId = new TransactionId();
         
         if (amount <= Amount.Zero)
         {
@@ -199,18 +197,6 @@ public sealed class Wallet : AggregateRoot<WalletId>
             }
         }
     }
-    
-    public Amount GetFunds(Currency currency)
-    {
-        var balance = GetBalance(currency);
-
-        if (balance is null)
-        {
-            throw new BalanceNotFoundException();
-        }
-
-        return balance.Amount;
-    }
 
     public Amount GetTotalFunds(List<ExchangeRate> exchangeRates)
     {
@@ -226,8 +212,8 @@ public sealed class Wallet : AggregateRoot<WalletId>
 
         return totalAmountInPrimaryCurrency;
     }
-    
-    public Currency GetPrimaryCurrency() 
+
+    private Currency GetPrimaryCurrency() 
         => _balances.SingleOrDefault(x => x.IsPrimary)?.Currency;
 
     private Balance.Balance GetBalance(Currency currency) 

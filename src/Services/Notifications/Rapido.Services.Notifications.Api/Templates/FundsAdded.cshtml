@@ -1,0 +1,13 @@
+﻿@model Rapido.Services.Notifications.Core.Templates.Models.FundsAddedTemplateModel
+
+<h2>Wallet Funding Confirmation</h2>
+<p>We confirm that your wallet has been successfully funded with@Model.Amount @Model.Currency.</p>
+<p>Transaction Details:</p>
+<p>
+    Date: @Model.Date.ToString("f")<br>
+    Transaction ID: @Model.TransactionId
+</p>
+<p>You can now use the funds in your wallet.</p>
+<p>If you have any questions, please contact us by replying to this email.</p>
+<p>Thank you for using our service.</p>
+<p>Sincerely,<br>The Rapido Team</p>

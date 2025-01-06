@@ -26,7 +26,7 @@ public class WalletDeductFundsTests
         
         //Act
 
-        var transfer = wallet.DeductFunds("name", amount, primaryCurrency, exchangeRates , _now);
+        var transfer = wallet.DeductFunds(TransactionId.Create(),"name", amount, primaryCurrency, exchangeRates , _now);
         
         //Assert
 
@@ -56,7 +56,7 @@ public class WalletDeductFundsTests
         
         //Act
 
-        var act = () => wallet.DeductFunds("name", 30, primaryCurrency, exchangeRates , _now);
+        var act = () => wallet.DeductFunds(TransactionId.Create(),"name", 30, primaryCurrency, exchangeRates , _now);
         
         //Assert
 
@@ -90,7 +90,7 @@ public class WalletDeductFundsTests
         
         //Act
 
-        var transfer = wallet.DeductFunds("name", amount, primaryCurrency, exchangeRates , _now);
+        var transfer = wallet.DeductFunds(TransactionId.Create(),"name", amount, primaryCurrency, exchangeRates , _now);
         
         //Assert
 

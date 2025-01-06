@@ -89,7 +89,7 @@ public class TransferFundsByWalletIdEndpointTests()
         var senderWallet = new Wallet(Guid.Parse(Const.Wallet1Id), owner1Id, currency, clock.Now());
         var receiverWallet = new Wallet(Guid.Parse(Const.Wallet2Id), owner2Id, currency, clock.Now());
 
-        senderWallet.AddFunds("name", 20, currency, TestExchangeRates.GetExchangeRates(), clock.Now());
+        senderWallet.AddFunds(TransactionId.Create(),"name", 20, currency, TestExchangeRates.GetExchangeRates(), clock.Now());
 
         await dbContext.Wallets.AddAsync(senderWallet);
         await dbContext.Wallets.AddAsync(receiverWallet);

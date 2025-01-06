@@ -3,8 +3,8 @@
 // correlation id
 public sealed record TransactionId(string Value)
 {
-    private const string AvailableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private const int Length = 15;
+    private const string AvailableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private const int Length = 24;
     
     public TransactionId() : this(Generate())
     {

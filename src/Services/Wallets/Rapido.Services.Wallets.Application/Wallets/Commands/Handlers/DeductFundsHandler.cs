@@ -5,6 +5,7 @@ using Rapido.Framework.Messaging.Brokers;
 using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
+using Rapido.Services.Wallets.Application.Wallets.Services;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Transfer;
@@ -12,24 +13,15 @@ using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;
 
-internal sealed class DeductFundsHandler : ICommandHandler<DeductFunds>
+internal sealed class DeductFundsHandler(
+    IWalletRepository walletRepository,
+    IClock clock,
+    ICurrencyApiClient client,
+    IMessageBroker messageBroker,
+    ITransactionIdGenerator generator,
+    ILogger<DeductFundsHandler> logger)
+    : ICommandHandler<DeductFunds>
 {
-    private readonly IWalletRepository _walletRepository;
-    private readonly IClock _clock;
-    private readonly ICurrencyApiClient _client;
-    private readonly IMessageBroker _messageBroker;
-    private readonly ILogger<DeductFundsHandler> _logger;
-
-    public DeductFundsHandler(IWalletRepository walletRepository, IClock clock, ICurrencyApiClient client,
-        IMessageBroker messageBroker, ILogger<DeductFundsHandler> logger)
-    {
-        _walletRepository = walletRepository;
-        _clock = clock;
-        _client = client;
-        _messageBroker = messageBroker;
-        _logger = logger;
-    }
-    
     public async Task HandleAsync(DeductFunds command)
     {
         var walletId = new WalletId(command.WalletId);
@@ -37,28 +29,37 @@ internal sealed class DeductFundsHandler : ICommandHandler<DeductFunds>
         var amount = new Amount(command.Amount);
         var transferName = new TransferName(command.TransferName);
         
-        var wallet = await _walletRepository.GetAsync(walletId);
+        var wallet = await walletRepository.GetAsync(walletId);
         
         if (wallet is null)
         {
             throw new WalletNotFoundException();
         }
         
-        var now = _clock.Now();
+        var now = clock.Now();
 
-        var exchangeRates = (await _client.GetExchangeRates()).ToList();
+        var exchangeRates = (await client.GetExchangeRates()).ToList();
         
         if (exchangeRates is null || !exchangeRates.Any())
         {
             throw new ExchangeRateNotFoundException();
         }
+
+        var transactionId = await generator.Generate();
         
-        var transfer = wallet.DeductFunds(transferName, amount, currency, exchangeRates.ToList(), now);
+        wallet.DeductFunds(transactionId, transferName, amount, currency, exchangeRates.ToList(), now);
         
-        await _walletRepository.UpdateAsync(wallet);
+        await walletRepository.UpdateAsync(wallet);
         
-        await _messageBroker.PublishAsync(new FundsDeducted(transfer.WalletId, transfer.Name, transfer.Currency, transfer.Amount));
+        await messageBroker.PublishAsync(new FundsDeducted(
+            walletId, 
+            wallet.OwnerId, 
+            transactionId,
+            transferName, 
+            currency, 
+            amount, 
+            now));
         
-        _logger.LogInformation("{amount} {currency} deducted from wallet with id: {walletId}.", amount, currency, walletId);
+        logger.LogInformation("{amount} {currency} deducted from wallet with id: {walletId}.", amount, currency, walletId);
     }
 }

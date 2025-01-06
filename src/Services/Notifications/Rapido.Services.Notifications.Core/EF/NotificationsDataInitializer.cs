@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Rapido.Framework.Postgres.Initializers;
 using Rapido.Services.Notifications.Core.Entities;
+using Rapido.Services.Notifications.Core.Templates;
 
 namespace Rapido.Services.Notifications.Core.EF;
 
@@ -29,8 +30,28 @@ internal sealed class NotificationsDataInitializer : IDataInitializer
 
     private async Task AddTemplatesAsync()
     {
-        await _dbContext.Templates
-            .AddAsync(new Template(Guid.NewGuid(), "verify_email", "Email verification for Rapido", "Templates/VerifyEmail.cshtml"));
+        var templates = new Template[]
+        {
+            new(
+                Guid.NewGuid(),
+                EmailTemplate.ActivationEmailTemplateName,
+                "Email verification for Rapido",
+                $"Templates/{EmailTemplate.ActivationEmailTemplateName}.cshtml"),
+
+            new(
+                Guid.NewGuid(),
+                EmailTemplate.FundsAddedTemplateName,
+                "Funds received on Rapido",
+                $"Templates/{EmailTemplate.FundsAddedTemplateName}.cshtml"),
+            
+            new(
+                Guid.NewGuid(),
+                EmailTemplate.FundsDeductedTemplateName,
+                "Funds sent on Rapido",
+                $"Templates/{EmailTemplate.FundsDeductedTemplateName}.cshtml")
+        };
+        
+        await _dbContext.Templates.AddRangeAsync(templates);
         
         _logger.LogInformation("Templates initialized.");
     }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Rapido.Services.Wallets.Domain.Wallets.Exceptions;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
+using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Tests.Unit.Domain;
@@ -16,7 +17,7 @@ public class WalletHasSufficientFundsTests
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 30, currency, exchangeRates, _now);
+        wallet.AddFunds(TransactionId.Create(),"name", 30, currency, exchangeRates, _now);
 
         var result = wallet.HasSufficientFunds(amount, currency, exchangeRates);
 
@@ -32,7 +33,7 @@ public class WalletHasSufficientFundsTests
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 1, currency, exchangeRates, _now);
+        wallet.AddFunds(TransactionId.Create(),"name", 1, currency, exchangeRates, _now);
 
         var result = wallet.HasSufficientFunds(amount, currency, exchangeRates);
 
@@ -46,7 +47,7 @@ public class WalletHasSufficientFundsTests
         var currency = new Currency("EUR");
         var wallet = Wallet.Create(Guid.NewGuid(), currency, _now);
         var exchangeRates = TestExchangeRates.GetExchangeRates();
-        wallet.AddFunds("name", 30, currency, exchangeRates, _now);
+        wallet.AddFunds(TransactionId.Create(),"name", 30, currency, exchangeRates, _now);
 
         var act = () => wallet.HasSufficientFunds(amount, currency, exchangeRates);
 

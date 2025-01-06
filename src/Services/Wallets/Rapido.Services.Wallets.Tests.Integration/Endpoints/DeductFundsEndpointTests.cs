@@ -10,6 +10,7 @@ using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Commands;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
+using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 using Rapido.Services.Wallets.Infrastructure.EF;
 using Rapido.Services.Wallets.Tests.Unit;
@@ -90,7 +91,7 @@ public class DeductFundsEndpointTests()
         var currency = new Currency("EUR");
         var wallet = new Wallet(Guid.Parse(Const.Wallet1Id), ownerId, currency, clock.Now());
 
-        wallet.AddFunds("test", 20, currency, TestExchangeRates.GetExchangeRates(), clock.Now());
+        wallet.AddFunds(TransactionId.Create(),"test", 20, currency, TestExchangeRates.GetExchangeRates(), clock.Now());
 
         await dbContext.Wallets.AddAsync(wallet);
 

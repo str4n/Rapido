@@ -1,5 +1,4 @@
-﻿using Rapido.Services.Notifications.Core.Entities;
-using Rapido.Services.Notifications.Core.Models;
+﻿using Rapido.Services.Notifications.Core.Templates;
 
 namespace Rapido.Services.Notifications.Core.Facades;
 

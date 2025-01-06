@@ -24,11 +24,11 @@ public class TransferDomainServiceTests
         var exchangeRates = TestExchangeRates.GetExchangeRates();
         var amount = new Amount(10);
         
-        senderWallet.AddFunds("name", amount, Currency.EUR(), exchangeRates, _clock.Now());
+        senderWallet.AddFunds(TransactionId.Create(),"name", amount, Currency.EUR(), exchangeRates, _clock.Now());
         
         //Act
         
-        _service.Transfer(senderWallet, receiverWallet, "name", amount, eurCurrency, exchangeRates);
+        _service.Transfer(senderWallet, receiverWallet, TransactionId.Create(), "name", amount, eurCurrency, exchangeRates, _clock.Now());
         
         //Assert
 
@@ -62,12 +62,12 @@ public class TransferDomainServiceTests
         var amount = new Amount(10);
         var transferAmount = new Amount(20);
         
-        senderWallet.AddFunds("name", amount, Currency.EUR(), exchangeRates, _clock.Now());
+        senderWallet.AddFunds(TransactionId.Create(),"name", amount, Currency.EUR(), exchangeRates, _clock.Now());
         
         //Act
         
         var act = 
-            () => _service.Transfer(senderWallet, receiverWallet, "name", transferAmount, eurCurrency, exchangeRates);
+            () => _service.Transfer(senderWallet, receiverWallet, TransactionId.Create(),"name", transferAmount, eurCurrency, exchangeRates, _clock.Now());
         
         //Assert
 
@@ -77,14 +77,8 @@ public class TransferDomainServiceTests
     
     #region Arrange
 
-    private readonly ITransferService _service;
-    private readonly IClock _clock;
-
-    public TransferDomainServiceTests()
-    {
-        _clock = new TestClock();
-        _service = new TransferService(_clock);
-    }
+    private readonly ITransferService _service = new TransferService();
+    private readonly IClock _clock = new TestClock();
 
     #endregion
 }

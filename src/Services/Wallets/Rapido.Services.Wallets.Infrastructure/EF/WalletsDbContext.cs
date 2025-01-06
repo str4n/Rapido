@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
+using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF;
@@ -10,6 +11,7 @@ public sealed class WalletsDbContext : DbContext
     public DbSet<IndividualOwner> IndividualOwners { get; set; }
     public DbSet<CorporateOwner> CorporateOwners { get; set; }
     public DbSet<Owner> Owners { get; set; }
+    public DbSet<Transfer> Transfers { get; set; }
 
     public WalletsDbContext(DbContextOptions<WalletsDbContext> options) : base(options)
     {

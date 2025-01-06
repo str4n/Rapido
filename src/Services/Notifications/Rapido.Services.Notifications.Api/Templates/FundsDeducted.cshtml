@@ -1,0 +1,14 @@
+﻿@model Rapido.Services.Notifications.Core.Templates.Models.FundsDeductedTemplateModel
+
+<h2>Funds Sent from Rapido</h2>
+<p>This email confirms that funds have been sent from your Rapido wallet.</p>
+<p>Transaction Details:</p>
+<p>
+    Amount: @Model.Amount @Model.Currency<br>
+    Date: @Model.Date.ToString("f")<br>
+    Transaction ID: @Model.TransactionId
+</p>
+<p>**Please note:** This email is for informational purposes only. You don't need to reply.</p>
+<p>If you have any questions about this transaction, please contact Rapido support.</p>
+<p>Thank you for using Rapido.</p>
+<p>Sincerely,<br>The Rapido Team</p>

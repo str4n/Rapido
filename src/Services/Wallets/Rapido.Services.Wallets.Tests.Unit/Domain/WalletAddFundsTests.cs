@@ -19,7 +19,7 @@ public class WalletAddFundsTests
         
         //Act
 
-        var transfer = wallet.AddFunds("name", amount, primaryCurrency, exchangeRates, _now);
+        var transfer = wallet.AddFunds(TransactionId.Create(),"name", amount, primaryCurrency, exchangeRates, _now);
         
         //Assert
 
@@ -49,7 +49,7 @@ public class WalletAddFundsTests
         
         //Act
 
-        var transfer = wallet.AddFunds("name", amount, currency, exchangeRates, _now);
+        var transfer = wallet.AddFunds(TransactionId.Create(),"name", amount, currency, exchangeRates, _now);
         
         //Assert
 

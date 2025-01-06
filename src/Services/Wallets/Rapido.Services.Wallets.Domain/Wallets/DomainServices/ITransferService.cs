@@ -5,6 +5,13 @@ namespace Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 
 public interface ITransferService
 {
-    void Transfer(Wallet.Wallet wallet, Wallet.Wallet receiverWallet, TransferName transferName, Amount amount,
-        Currency currency, List<ExchangeRate> exchangeRates);
+    void Transfer(
+        Wallet.Wallet wallet, 
+        Wallet.Wallet receiverWallet, 
+        TransactionId transactionId, 
+        TransferName transferName, 
+        Amount amount,
+        Currency currency, 
+        List<ExchangeRate> exchangeRates,
+        DateTime date);
 }

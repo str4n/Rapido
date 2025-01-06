@@ -4,14 +4,12 @@ using Rapido.Services.Wallets.Domain.Wallets.Transfer;
 
 namespace Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 
-internal sealed class TransferService(IClock clock) : ITransferService
+internal sealed class TransferService : ITransferService
 {
-    public void Transfer(Wallet.Wallet wallet, Wallet.Wallet receiverWallet, TransferName transferName, Amount amount, Currency currency,
-        List<ExchangeRate> exchangeRates)
+    public void Transfer(Wallet.Wallet wallet, Wallet.Wallet receiverWallet, TransactionId transactionId, TransferName transferName, Amount amount, Currency currency,
+        List<ExchangeRate> exchangeRates, DateTime date)
     {
-        var now = clock.Now();
-
-        wallet.DeductFunds(transferName, amount, currency, exchangeRates, now);
-        receiverWallet.AddFunds(transferName, amount, currency, exchangeRates, now);
+        wallet.DeductFunds(transactionId, transferName, amount, currency, exchangeRates, date);
+        receiverWallet.AddFunds(transactionId, transferName, amount, currency, exchangeRates, date);
     }
 }

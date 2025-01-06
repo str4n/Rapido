@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rapido.Framework.Common.Abstractions.Commands;
+using Rapido.Framework.Common.Abstractions.Events;
+using Rapido.Framework.Common.Time;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Application.Wallets.Clients;
 using Rapido.Services.Wallets.Application.Wallets.Exceptions;
+using Rapido.Services.Wallets.Application.Wallets.Services;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
 using Rapido.Services.Wallets.Domain.Wallets.DomainServices;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
@@ -13,24 +16,16 @@ using Rapido.Services.Wallets.Domain.Wallets.Wallet;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;
 
-internal sealed class TransferFundsByWalletIdHandler : ICommandHandler<TransferFundsByWalletId>
+internal sealed class TransferFundsByWalletIdHandler(
+    IWalletRepository walletRepository,
+    ITransferService transferService,
+    IMessageBroker messageBroker,
+    ITransactionIdGenerator transactionIdGenerator,
+    ILogger<TransferFundsByWalletIdHandler> logger,
+    ICurrencyApiClient client,
+    IClock clock)
+    : ICommandHandler<TransferFundsByWalletId>
 {
-    private readonly IWalletRepository _walletRepository;
-    private readonly ITransferService _transferService;
-    private readonly IMessageBroker _messageBroker;
-    private readonly ILogger<TransferFundsByWalletIdHandler> _logger;
-    private readonly ICurrencyApiClient _client;
-
-    public TransferFundsByWalletIdHandler(IWalletRepository walletRepository, ITransferService transferService,
-        IMessageBroker messageBroker, ILogger<TransferFundsByWalletIdHandler> logger, ICurrencyApiClient client)
-    {
-        _walletRepository = walletRepository;
-        _transferService = transferService;
-        _messageBroker = messageBroker;
-        _logger = logger;
-        _client = client;
-    }
-    
     public async Task HandleAsync(TransferFundsByWalletId command)
     {
         var walletId = new WalletId(command.WalletId);
@@ -39,7 +34,7 @@ internal sealed class TransferFundsByWalletIdHandler : ICommandHandler<TransferF
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         
-        var wallet = await _walletRepository.GetAsync(walletId);
+        var wallet = await walletRepository.GetAsync(walletId);
         
         if (wallet is null)
         {
@@ -51,33 +46,41 @@ internal sealed class TransferFundsByWalletIdHandler : ICommandHandler<TransferF
             throw new WalletNotFoundException();
         }
         
-        var receiverWallet = await _walletRepository.GetAsync(receiverWalletId);
+        var receiverWallet = await walletRepository.GetAsync(receiverWalletId);
         
         if (receiverWallet is null)
         {
             throw new WalletNotFoundException();
         }
 
+        var now = clock.Now();
+
         if (wallet.Id == receiverWallet.Id)
         {
             throw new CannotMakeSelfFundsTransferException();
         }
 
-        var exchangeRates = (await _client.GetExchangeRates()).ToList();
+        var exchangeRates = (await client.GetExchangeRates()).ToList();
         
         if (exchangeRates is null || !exchangeRates.Any())
         {
             throw new ExchangeRateNotFoundException();
         }
+
+        var transactionId = await transactionIdGenerator.Generate();
         
-        _transferService.Transfer(wallet, receiverWallet, transferName, amount, currency, exchangeRates);
+        transferService.Transfer(wallet, receiverWallet, transactionId, transferName, amount, currency, exchangeRates, now);
         
-        await _walletRepository.UpdateAsync(wallet);
-        await _walletRepository.UpdateAsync(receiverWallet);
+        await walletRepository.UpdateAsync(wallet);
+        await walletRepository.UpdateAsync(receiverWallet);
         
-        await _messageBroker.PublishAsync(
-            new FundsTransferred(wallet.Id, receiverWallet.Id, transferName, currency, amount));
+        await messageBroker.PublishAsync(
+            new IEvent[]
+            {
+                new FundsDeducted(wallet.Id, wallet.OwnerId, transactionId, transferName, currency, amount, now),
+                new FundsAdded(wallet.Id, wallet.OwnerId, transactionId, transferName, currency, amount, now),
+            });
         
-        _logger.LogInformation("Transferred {amount} {currency} from wallet with id: {walletId} to wallet with id: {receiverWalletId}.", amount, currency, walletId, receiverWalletId);
+        logger.LogInformation("Transferred {amount} {currency} from wallet with id: {walletId} to wallet with id: {receiverWalletId}.", amount, currency, walletId, receiverWalletId);
     }
 }
