@@ -10,8 +10,24 @@ namespace Rapido.Services.Notifications.Core.Services;
 internal sealed class TemplateService(NotificationsDbContext dbContext) : ITemplateService
 {
     public async Task<EmailTemplate> GetUserActivationTemplate(string activationToken)
+        => await GetTemplate(new ActivateUserTemplateModel(activationToken), EmailTemplate.ActivationEmailTemplateName);
+
+    public async Task<EmailTemplate> GetFundsAddedTemplate(string transactionId, string currency, double amount,
+        DateTime transferDate)
+        => await GetTemplate(new FundsAddedTemplateModel(transactionId, currency, amount, transferDate),
+            EmailTemplate.FundsAddedTemplateName);
+
+    public async Task<EmailTemplate> GetFundsDeductedTemplate(string transactionId, string currency, double amount,
+        DateTime transferDate)
+        => await GetTemplate(new FundsDeductedTemplateModel(transactionId, currency, amount, transferDate),
+            EmailTemplate.FundsDeductedTemplateName);
+
+    public async Task<EmailTemplate> GetPasswordRecoveryTemplate(string recoveryToken)
+        => await GetTemplate(new PasswordRecoveryTemplateModel(recoveryToken),
+            EmailTemplate.PasswordRecoveryTemplateName);
+
+    private async Task<EmailTemplate> GetTemplate<TModel>(TModel model, string templateName) where TModel : TemplateModel
     {
-        var templateName = EmailTemplate.ActivationEmailTemplateName;
         var templateEntity = await dbContext.Templates.SingleOrDefaultAsync(x => x.Name == templateName);
 
         if (templateEntity is null)
@@ -21,41 +37,7 @@ internal sealed class TemplateService(NotificationsDbContext dbContext) : ITempl
 
         var subject = templateEntity.Subject;
         var body = await RazorTemplateEngine
-            .RenderAsync($"{templateEntity.TemplatePath}", new ActivateUserTemplateModel(activationToken));
-
-        return new EmailTemplate(subject, body);
-    }
-
-    public async Task<EmailTemplate> GetFundsAddedTemplate(string transactionId, string currency, double amount, DateTime transferDate)
-    {
-        var templateName = EmailTemplate.FundsAddedTemplateName;
-        var templateEntity = await dbContext.Templates.SingleOrDefaultAsync(x => x.Name == templateName);
-
-        if (templateEntity is null)
-        {
-            throw new TemplateNotFoundException(templateName);
-        }
-
-        var subject = templateEntity.Subject;
-        var body = await RazorTemplateEngine
-            .RenderAsync($"{templateEntity.TemplatePath}", new FundsAddedTemplateModel(transactionId, currency, amount, transferDate));
-
-        return new EmailTemplate(subject, body);
-    }
-
-    public async Task<EmailTemplate> GetFundsDeductedTemplate(string transactionId, string currency, double amount, DateTime transferDate)
-    {
-        var templateName = EmailTemplate.FundsDeductedTemplateName;
-        var templateEntity = await dbContext.Templates.SingleOrDefaultAsync(x => x.Name == templateName);
-
-        if (templateEntity is null)
-        {
-            throw new TemplateNotFoundException(templateName);
-        }
-
-        var subject = templateEntity.Subject;
-        var body = await RazorTemplateEngine
-            .RenderAsync($"{templateEntity.TemplatePath}", new FundsDeductedTemplateModel(transactionId, currency, amount, transferDate));
+            .RenderAsync($"{templateEntity.TemplatePath}", model);
 
         return new EmailTemplate(subject, body);
     }

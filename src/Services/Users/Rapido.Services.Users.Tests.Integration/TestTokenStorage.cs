@@ -1,5 +1,5 @@
 ﻿using Rapido.Framework.Auth;
-using Rapido.Services.Users.Core.Storage;
+using Rapido.Services.Users.Core.Shared.Storage;
 
 namespace Rapido.Services.Users.Tests.Integration;
 

@@ -7,12 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
 using Rapido.Framework.Testing.Abstractions;
-using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.EF;
-using Rapido.Services.Users.Core.Entities.Role;
-using Rapido.Services.Users.Core.Entities.User;
-using Rapido.Services.Users.Core.Exceptions;
-using Rapido.Services.Users.Core.Services;
+using Rapido.Services.Users.Core.Shared.EF;
+using Rapido.Services.Users.Core.User.Commands;
+using Rapido.Services.Users.Core.User.Domain;
+using Rapido.Services.Users.Core.User.Services;
 using Xunit;
 using TestMessageBroker = Rapido.Framework.Testing.Abstractions.TestMessageBroker;
 
@@ -25,7 +24,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [Fact]
     public async Task given_valid_sign_up_request_should_create_account()
     {
-        var email = Const.ValidEmail;
+        var email = Const.EmailNotInUse;
         var password = Const.ValidPassword;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
@@ -66,7 +65,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [InlineData("Pa-s@ord12")]
     public async Task given_sign_up_request_with_invalid_password_syntax_should_return_bad_request_status_code(string password)
     {
-        var email = Const.ValidEmail;
+        var email = Const.EmailNotInUse;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
 

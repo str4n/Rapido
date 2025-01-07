@@ -19,10 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="Templates\VerifyEmail.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Update="Templates\ActivateUser.cshtml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>

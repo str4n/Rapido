@@ -1,10 +1,12 @@
 ﻿using Rapido.Framework.Common.Abstractions.Dispatchers;
 using Rapido.Framework.Contexts;
 using Rapido.Messages.Commands;
-using Rapido.Services.Users.Core.Commands;
-using Rapido.Services.Users.Core.DTO;
-using Rapido.Services.Users.Core.Queries;
-using Rapido.Services.Users.Core.Storage;
+using Rapido.Services.Users.Core.PasswordRecovery.Commands;
+using Rapido.Services.Users.Core.Shared.Storage;
+using Rapido.Services.Users.Core.User.Commands;
+using Rapido.Services.Users.Core.User.DTO;
+using Rapido.Services.Users.Core.User.Queries;
+using Rapido.Services.Users.Core.UserActivation.Commands;
 
 namespace Rapido.Services.Users.Api.Endpoints;
 
@@ -27,6 +29,14 @@ internal static class AccountEndpoints
         app.MapPut("/activate/{token}", Activate)
             .WithTags("Account")
             .WithName("Activate account");
+
+        app.MapPut("/create-recovery-token", CreateRecoveryToken)
+            .WithTags("Account")
+            .WithName("Request password recovery");
+        
+        app.MapPut("recover-password", RecoverPassword)
+            .WithTags("Account")
+            .WithName("Recover password");
 
         app.MapGet("/me", GetMe)
             .RequireAuthorization()
@@ -52,6 +62,11 @@ internal static class AccountEndpoints
 
     private static async Task<IResult> SignIn(SignIn command, IDispatcher dispatcher, ITokenStorage tokenStorage)
     {
+        if (command is null)
+        {
+            return Results.BadRequest();
+        }
+        
         await dispatcher.DispatchAsync(command);
         var token = tokenStorage.Get();
         var user = await dispatcher.DispatchAsync(new GetUser(token.UserId));
@@ -68,6 +83,35 @@ internal static class AccountEndpoints
 
     private static async Task<IResult> CreateActivationToken(CreateActivationToken command, IDispatcher dispatcher)
     {
+        if (command is null)
+        {
+            return Results.BadRequest();
+        }
+        
+        await dispatcher.DispatchAsync(command);
+
+        return Results.Created();
+    }
+    
+    private static async Task<IResult> RecoverPassword(RecoverPassword command, IDispatcher dispatcher)
+    {
+        if (command is null)
+        {
+            return Results.BadRequest();
+        }
+        
+        await dispatcher.DispatchAsync(command);
+
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> CreateRecoveryToken(CreateRecoveryToken command, IDispatcher dispatcher)
+    {
+        if (command is null)
+        {
+            return Results.BadRequest();
+        }
+        
         await dispatcher.DispatchAsync(command);
 
         return Results.Created();

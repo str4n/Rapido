@@ -7,8 +7,9 @@ using Rapido.Framework.Common.Time;
 using Rapido.Framework.Messaging.Brokers;
 using Rapido.Framework.Testing;
 using Rapido.Framework.Testing.Abstractions;
-using Rapido.Services.Users.Core.Commands;
 using Rapido.Services.Users.Core.EF;
+using Rapido.Services.Users.Core.Shared.EF;
+using Rapido.Services.Users.Core.User.Commands;
 using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;

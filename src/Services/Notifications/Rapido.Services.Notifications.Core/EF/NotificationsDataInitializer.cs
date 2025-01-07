@@ -48,7 +48,13 @@ internal sealed class NotificationsDataInitializer : IDataInitializer
                 Guid.NewGuid(),
                 EmailTemplate.FundsDeductedTemplateName,
                 "Funds sent on Rapido",
-                $"Templates/{EmailTemplate.FundsDeductedTemplateName}.cshtml")
+                $"Templates/{EmailTemplate.FundsDeductedTemplateName}.cshtml"),
+            
+            new(
+                Guid.NewGuid(),
+                EmailTemplate.PasswordRecoveryTemplateName,
+                "Password recovery for Rapido",
+                $"Templates/{EmailTemplate.PasswordRecoveryTemplateName}.cshtml")
         };
         
         await _dbContext.Templates.AddRangeAsync(templates);

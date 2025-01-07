@@ -1,6 +1,6 @@
 ﻿using Rapido.Framework.Auth.ApiKeys.Filters;
 using Rapido.Framework.Common.Abstractions.Dispatchers;
-using Rapido.Services.Users.Core.Queries;
+using Rapido.Services.Users.Core.User.Queries;
 
 namespace Rapido.Services.Users.Api.Endpoints;
 
