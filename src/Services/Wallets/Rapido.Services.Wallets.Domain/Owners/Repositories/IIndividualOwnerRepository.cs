@@ -4,9 +4,9 @@ namespace Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 public interface IIndividualOwnerRepository
 {
-    public Task<IndividualOwner> GetAsync(OwnerId id);
-    public Task<IEnumerable<IndividualOwner>> GetAllAsync();
-    public Task AddAsync(IndividualOwner owner);
-    public Task UpdateAsync(IndividualOwner owner);
-    public Task DeleteAsync(IndividualOwner owner);
+    public Task<IndividualOwner> GetAsync(OwnerId id, CancellationToken cancellationToken = default);
+    public Task<IEnumerable<IndividualOwner>> GetAllAsync(CancellationToken cancellationToken = default);
+    public Task AddAsync(IndividualOwner owner, CancellationToken cancellationToken = default);
+    public Task UpdateAsync(IndividualOwner owner, CancellationToken cancellationToken = default);
+    public Task DeleteAsync(IndividualOwner owner, CancellationToken cancellationToken = default);
 }

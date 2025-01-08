@@ -8,29 +8,22 @@ using Rapido.Services.Customers.Core.Common.Exceptions;
 
 namespace Rapido.Services.Customers.Core.Common.Commands.Handlers;
 
-internal sealed class LockCustomerTemporarilyHandler : ICommandHandler<LockCustomerTemporarily>
+internal sealed class LockCustomerTemporarilyHandler(
+    ICustomerRepository repository,
+    IClock clock,
+    IMessageBroker messageBroker)
+    : ICommandHandler<LockCustomerTemporarily>
 {
-    private readonly ICustomerRepository _repository;
-    private readonly IClock _clock;
-    private readonly IMessageBroker _messageBroker;
-
-    public LockCustomerTemporarilyHandler(ICustomerRepository repository, IClock clock, IMessageBroker messageBroker)
+    public async Task HandleAsync(LockCustomerTemporarily command, CancellationToken cancellationToken = default)
     {
-        _repository = repository;
-        _clock = clock;
-        _messageBroker = messageBroker;
-    }
-    
-    public async Task HandleAsync(LockCustomerTemporarily command)
-    {
-        var customer = await _repository.GetCustomerAsync(command.CustomerId);
+        var customer = await repository.GetCustomerAsync(command.CustomerId);
 
         if (customer is null)
         {
             throw new CustomerNotFoundException(command.CustomerId);
         }
 
-        var now = _clock.Now();
+        var now = clock.Now();
 
         if (now >= command.EndDate)
         {
@@ -41,7 +34,7 @@ internal sealed class LockCustomerTemporarilyHandler : ICommandHandler<LockCusto
         
         customer.Lock(lockout);
 
-        await _repository.UpdateAsync(customer);
-        await _messageBroker.PublishAsync(new CustomerLocked(customer.Id));
+        await repository.UpdateAsync(customer);
+        await messageBroker.PublishAsync(new CustomerLocked(customer.Id));
     }
 }

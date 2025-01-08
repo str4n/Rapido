@@ -12,7 +12,7 @@ internal sealed class ActivateUserHandler(IActivationTokenRepository tokenReposi
     IClock clock, IMessageBroker messageBroker) 
     : ICommandHandler<ActivateUser>
 {
-    public async Task HandleAsync(ActivateUser command)
+    public async Task HandleAsync(ActivateUser command, CancellationToken cancellationToken = default)
     {
         var activationToken = await tokenRepository.GetAsync(command.ActivationToken);
 

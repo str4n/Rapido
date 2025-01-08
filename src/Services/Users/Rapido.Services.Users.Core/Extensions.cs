@@ -14,6 +14,7 @@ public static class Extensions
     public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
         => services
             .AddPostgres<UsersDbContext>(configuration)
+            .AddUnitOfWork<UsersDbContext>()
             .AddInitializer<UsersDataInitializer>()
             .AddScoped<ITokenStorage, HttpContextTokenStorage>()
             .AddSingleton<IPasswordValidator, PasswordValidator>()

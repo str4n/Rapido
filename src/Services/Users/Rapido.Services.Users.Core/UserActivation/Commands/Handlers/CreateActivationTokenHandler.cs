@@ -21,7 +21,7 @@ internal sealed class CreateActivationTokenHandler(
 {
     private const int TokenLifetime = 24; // in hours
     
-    public async Task HandleAsync(CreateActivationToken command)
+    public async Task HandleAsync(CreateActivationToken command, CancellationToken cancellationToken = default)
     {
         var email = command.Email;
         var user = await userRepository.GetAsync(email, false);

@@ -13,14 +13,8 @@ internal sealed class RecoveryTokenRepository(UsersDbContext dbContext) : IRecov
         => dbContext.RecoveryTokens.AnyAsync(x => x.Token == token);
 
     public async Task AddAsync(PasswordRecoveryToken token)
-    {
-        await dbContext.RecoveryTokens.AddAsync(token);
-        await dbContext.SaveChangesAsync();
-    }
+        => await dbContext.RecoveryTokens.AddAsync(token);
 
-    public async Task DeleteAsync(PasswordRecoveryToken token)
-    {
-        dbContext.RecoveryTokens.Remove(token);
-        await dbContext.SaveChangesAsync();
-    }
+    public Task DeleteAsync(PasswordRecoveryToken token)
+        => Task.FromResult(dbContext.RecoveryTokens.Remove(token));
 }

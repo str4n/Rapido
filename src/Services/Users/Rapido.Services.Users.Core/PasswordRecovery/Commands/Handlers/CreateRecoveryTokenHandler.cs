@@ -22,7 +22,7 @@ internal sealed class RequestRecoveryHandler(
 {
     private const int TokenLifetime = 15; // in minutes
     
-    public async Task HandleAsync(CreateRecoveryToken command)
+    public async Task HandleAsync(CreateRecoveryToken command, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetAsync(command.Email, false);
         

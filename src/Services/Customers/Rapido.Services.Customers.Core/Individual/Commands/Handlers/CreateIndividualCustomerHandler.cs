@@ -7,30 +7,22 @@ using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
 namespace Rapido.Services.Customers.Core.Individual.Commands.Handlers;
 
-internal sealed class CreateIndividualCustomerHandler : ICommandHandler<CreateIndividualCustomer>
+internal sealed class CreateIndividualCustomerHandler(
+    ICustomerRepository repository,
+    IClock clock,
+    IUserApiClient apiClient)
+    : ICommandHandler<CreateIndividualCustomer>
 {
-    private readonly ICustomerRepository _repository;
-    private readonly IClock _clock;
-    private readonly IUserApiClient _apiClient;
-
-    public CreateIndividualCustomerHandler(ICustomerRepository repository, IClock clock,
-        IUserApiClient apiClient)
-    {
-        _repository = repository;
-        _clock = clock;
-        _apiClient = apiClient;
-    }
-    
-    public async Task HandleAsync(CreateIndividualCustomer command)
+    public async Task HandleAsync(CreateIndividualCustomer command, CancellationToken cancellationToken = default)
     {
         var email = command.Email;
 
-        if (await _repository.AnyWithEmailAsync(email))
+        if (await repository.AnyWithEmailAsync(email))
         {
             throw new CustomerAlreadyExistsException($"Customer with email: {email} already exists.");
         }
 
-        var user = await _apiClient.GetAsync(email);
+        var user = await apiClient.GetAsync(email);
 
         if (user is null)
         {
@@ -39,8 +31,8 @@ internal sealed class CreateIndividualCustomerHandler : ICommandHandler<CreateIn
 
         var customerId = user.UserId;
 
-        var customer = new IndividualCustomer(customerId, user.Email,_clock.Now());
+        var customer = new IndividualCustomer(customerId, user.Email,clock.Now());
 
-        await _repository.AddAsync(customer);
+        await repository.AddAsync(customer);
     }
 }

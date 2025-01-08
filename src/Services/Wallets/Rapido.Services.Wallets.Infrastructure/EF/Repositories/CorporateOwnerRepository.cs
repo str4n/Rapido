@@ -4,30 +4,17 @@ using Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF.Repositories;
 
-internal sealed class CorporateOwnerRepository : ICorporateOwnerRepository
+internal sealed class CorporateOwnerRepository(WalletsDbContext dbContext) : ICorporateOwnerRepository
 {
-    private readonly WalletsDbContext _dbContext;
+    public Task<CorporateOwner> GetAsync(OwnerId id, CancellationToken cancellationToken = default)
+        => dbContext.CorporateOwners.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-    public CorporateOwnerRepository(WalletsDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public async Task<IEnumerable<CorporateOwner>> GetAllAsync(CancellationToken cancellationToken = default)
+        => await dbContext.CorporateOwners.ToListAsync(cancellationToken);
 
-    public Task<CorporateOwner> GetAsync(OwnerId id)
-        => _dbContext.CorporateOwners.SingleOrDefaultAsync(x => x.Id == id);
+    public async Task AddAsync(CorporateOwner owner, CancellationToken cancellationToken = default)
+        => await dbContext.CorporateOwners.AddAsync(owner, cancellationToken);
 
-    public async Task<IEnumerable<CorporateOwner>> GetAllAsync()
-        => await _dbContext.CorporateOwners.ToListAsync();
-
-    public async Task AddAsync(CorporateOwner owner)
-    {
-        await _dbContext.CorporateOwners.AddAsync(owner);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(CorporateOwner owner)
-    {
-        _dbContext.CorporateOwners.Update(owner);
-        await _dbContext.SaveChangesAsync();
-    }
+    public Task UpdateAsync(CorporateOwner owner, CancellationToken cancellationToken = default)
+        => Task.FromResult(dbContext.CorporateOwners.Update(owner));
 }

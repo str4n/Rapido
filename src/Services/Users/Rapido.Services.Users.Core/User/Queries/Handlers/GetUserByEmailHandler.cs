@@ -5,19 +5,12 @@ using Rapido.Services.Users.Core.User.Repositories;
 
 namespace Rapido.Services.Users.Core.User.Queries.Handlers;
 
-internal sealed class GetUserByEmailHandler : IQueryHandler<GetUserByEmail, UserDto>
+internal sealed class GetUserByEmailHandler(IUserRepository repository) : IQueryHandler<GetUserByEmail, UserDto>
 {
-    private readonly IUserRepository _repository;
-
-    public GetUserByEmailHandler(IUserRepository repository)
-    {
-        _repository = repository;
-    }
-    
-    public async Task<UserDto> HandleAsync(GetUserByEmail query)
+    public async Task<UserDto> HandleAsync(GetUserByEmail query, CancellationToken cancellationToken = default)
     {
         var email = query.Email;
-        var user = await _repository.GetAsync(email, false);
+        var user = await repository.GetAsync(email, false);
 
         if (user is null)
         {

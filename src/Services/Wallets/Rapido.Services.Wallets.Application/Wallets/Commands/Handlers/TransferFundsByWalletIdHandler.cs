@@ -26,7 +26,7 @@ internal sealed class TransferFundsByWalletIdHandler(
     IClock clock)
     : ICommandHandler<TransferFundsByWalletId>
 {
-    public async Task HandleAsync(TransferFundsByWalletId command)
+    public async Task HandleAsync(TransferFundsByWalletId command, CancellationToken cancellationToken = default)
     {
         var walletId = new WalletId(command.WalletId);
         var receiverWalletId = new WalletId(command.ReceiverWalletId);
@@ -34,7 +34,7 @@ internal sealed class TransferFundsByWalletIdHandler(
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         
-        var wallet = await walletRepository.GetAsync(walletId);
+        var wallet = await walletRepository.GetAsync(walletId, cancellationToken);
         
         if (wallet is null)
         {
@@ -46,7 +46,7 @@ internal sealed class TransferFundsByWalletIdHandler(
             throw new WalletNotFoundException();
         }
         
-        var receiverWallet = await walletRepository.GetAsync(receiverWalletId);
+        var receiverWallet = await walletRepository.GetAsync(receiverWalletId, cancellationToken);
         
         if (receiverWallet is null)
         {
@@ -71,8 +71,8 @@ internal sealed class TransferFundsByWalletIdHandler(
         
         transferService.Transfer(wallet, receiverWallet, transactionId, transferName, amount, currency, exchangeRates, now);
         
-        await walletRepository.UpdateAsync(wallet);
-        await walletRepository.UpdateAsync(receiverWallet);
+        await walletRepository.UpdateAsync(wallet, cancellationToken);
+        await walletRepository.UpdateAsync(receiverWallet, cancellationToken);
         
         await messageBroker.PublishAsync(
             new IEvent[]

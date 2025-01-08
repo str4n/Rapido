@@ -4,8 +4,8 @@ namespace Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 public interface ICorporateOwnerRepository
 {
-    public Task<CorporateOwner> GetAsync(OwnerId id);
-    public Task<IEnumerable<CorporateOwner>> GetAllAsync();
-    public Task AddAsync(CorporateOwner owner);
-    public Task UpdateAsync(CorporateOwner owner);
+    public Task<CorporateOwner> GetAsync(OwnerId id, CancellationToken cancellationToken = default);
+    public Task<IEnumerable<CorporateOwner>> GetAllAsync(CancellationToken cancellationToken = default);
+    public Task AddAsync(CorporateOwner owner, CancellationToken cancellationToken = default);
+    public Task UpdateAsync(CorporateOwner owner, CancellationToken cancellationToken = default);
 }

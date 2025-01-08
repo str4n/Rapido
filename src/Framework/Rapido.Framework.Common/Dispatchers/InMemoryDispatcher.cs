@@ -5,21 +5,15 @@ using Rapido.Framework.Common.Abstractions.Queries;
 
 namespace Rapido.Framework.Common.Dispatchers;
 
-internal sealed class InMemoryDispatcher : IDispatcher
+internal sealed class InMemoryDispatcher(
+    IQueryDispatcher queryDispatcher, 
+    ICommandDispatcher commandDispatcher)
+    : IDispatcher
 {
-    private readonly IQueryDispatcher _queryDispatcher;
-    private readonly ICommandDispatcher _commandDispatcher;
+    public async Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) 
+        where TCommand : class, ICommand
+        => await commandDispatcher.DispatchAsync(command, cancellationToken);
 
-    public InMemoryDispatcher(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
-    {
-        _queryDispatcher = queryDispatcher;
-        _commandDispatcher = commandDispatcher;
-    }
-
-
-    public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : class, ICommand
-        => await _commandDispatcher.DispatchAsync(command);
-
-    public async Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query)
-        => await _queryDispatcher.DispatchAsync(query);
+    public async Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default)
+        => await queryDispatcher.DispatchAsync(query, cancellationToken);
 }

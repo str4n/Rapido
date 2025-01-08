@@ -21,7 +21,7 @@ internal sealed class RecoverPasswordHandler(
     IMessageBroker messageBroker) 
     : ICommandHandler<RecoverPassword>
 {
-    public async Task HandleAsync(RecoverPassword command)
+    public async Task HandleAsync(RecoverPassword command, CancellationToken cancellationToken = default)
     {
         var newPassword = command.NewPassword;
         

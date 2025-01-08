@@ -7,20 +7,11 @@ using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Commands.Handlers;
 
-internal sealed class AddBalanceHandler : ICommandHandler<AddBalance>
+internal sealed class AddBalanceHandler(IWalletRepository walletRepository, IClock clock) : ICommandHandler<AddBalance>
 {
-    private readonly IWalletRepository _walletRepository;
-    private readonly IClock _clock;
-
-    public AddBalanceHandler(IWalletRepository walletRepository, IClock clock)
+    public async Task HandleAsync(AddBalance command, CancellationToken cancellationToken = default)
     {
-        _walletRepository = walletRepository;
-        _clock = clock;
-    }
-    
-    public async Task HandleAsync(AddBalance command)
-    {
-        var wallet = await _walletRepository.GetAsync(new OwnerId(command.OwnerId));
+        var wallet = await walletRepository.GetAsync(new OwnerId(command.OwnerId), cancellationToken);
 
         if (wallet is null)
         {
@@ -29,8 +20,8 @@ internal sealed class AddBalanceHandler : ICommandHandler<AddBalance>
 
         var currency = new Currency(command.Currency);
         
-        wallet.AddBalance(currency, _clock.Now());
+        wallet.AddBalance(currency, clock.Now());
 
-        await _walletRepository.UpdateAsync(wallet);
+        await walletRepository.UpdateAsync(wallet, cancellationToken);
     }
 }

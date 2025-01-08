@@ -3,15 +3,9 @@ using Rapido.Services.Customers.Core.Common.Domain.Repositories;
 
 namespace Rapido.Services.Customers.Core.Common.Queries.Handlers;
 
-internal sealed class CheckNameUniquenessHandler : IQueryHandler<CheckNameUniqueness, bool>
+internal sealed class CheckNameUniquenessHandler(ICustomerRepository repository)
+    : IQueryHandler<CheckNameUniqueness, bool>
 {
-    private readonly ICustomerRepository _repository;
-
-    public CheckNameUniquenessHandler(ICustomerRepository repository)
-    {
-        _repository = repository;
-    }
-
-    public async Task<bool> HandleAsync(CheckNameUniqueness query)
-        => await _repository.AnyWithNameAsync(query.Name);
+    public async Task<bool> HandleAsync(CheckNameUniqueness query, CancellationToken cancellationToken = default)
+        => await repository.AnyWithNameAsync(query.Name);
 }

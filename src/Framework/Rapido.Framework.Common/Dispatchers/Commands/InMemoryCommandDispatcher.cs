@@ -3,21 +3,15 @@ using Rapido.Framework.Common.Abstractions.Commands;
 
 namespace Rapido.Framework.Common.Dispatchers.Commands;
 
-internal sealed class InMemoryCommandDispatcher : ICommandDispatcher
+internal sealed class InMemoryCommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public InMemoryCommandDispatcher(IServiceProvider serviceProvider)
+    public async Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) 
+        where TCommand : class, ICommand
     {
-        _serviceProvider = serviceProvider;
-    }
-    
-    public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : class, ICommand
-    {
-        await using var scope = _serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
 
         var handler = scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand>>();
 
-        await handler.HandleAsync(command);
+        await handler.HandleAsync(command, cancellationToken);
     }
 }

@@ -7,20 +7,12 @@ using Rapido.Services.Customers.Core.Common.Exceptions;
 
 namespace Rapido.Services.Customers.Core.Common.Commands.Handlers;
 
-internal sealed class ChangeAddressHandler : ICommandHandler<ChangeAddress>
+internal sealed class ChangeAddressHandler(ICustomerRepository customerRepository, IMessageBroker messageBroker)
+    : ICommandHandler<ChangeAddress>
 {
-    private readonly ICustomerRepository _customerRepository;
-    private readonly IMessageBroker _messageBroker;
-
-    public ChangeAddressHandler(ICustomerRepository customerRepository, IMessageBroker messageBroker)
+    public async Task HandleAsync(ChangeAddress command, CancellationToken cancellationToken = default)
     {
-        _customerRepository = customerRepository;
-        _messageBroker = messageBroker;
-    }
-    
-    public async Task HandleAsync(ChangeAddress command)
-    {
-        var customer = await _customerRepository.GetCustomerAsync(command.Id);
+        var customer = await customerRepository.GetCustomerAsync(command.Id);
 
         if (customer is null)
         {
@@ -31,7 +23,7 @@ internal sealed class ChangeAddressHandler : ICommandHandler<ChangeAddress>
         
         customer.ChangeAddress(address);
 
-        await _customerRepository.UpdateAsync(customer);
-        await _messageBroker.PublishAsync(new CustomerAddressChanged(customer.Id));
+        await customerRepository.UpdateAsync(customer);
+        await messageBroker.PublishAsync(new CustomerAddressChanged(customer.Id));
     }
 }

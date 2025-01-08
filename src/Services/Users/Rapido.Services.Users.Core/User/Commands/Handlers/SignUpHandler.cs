@@ -19,7 +19,7 @@ internal sealed class SignUpHandler(
     IMessageBroker messageBroker)
     : ICommandHandler<SignUp>
 {
-    public async Task HandleAsync(SignUp command)
+    public async Task HandleAsync(SignUp command, CancellationToken cancellationToken = default)
     {
         var id = command.UserId;
         var email = (Email)command.Email?.ToLowerInvariant();

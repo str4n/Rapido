@@ -13,14 +13,8 @@ internal sealed class ActivationTokenRepository(UsersDbContext dbContext) : IAct
         => dbContext.ActivationTokens.AnyAsync(x => x.Token == token);
 
     public async Task AddAsync(UserActivationToken token)
-    {
-        await dbContext.ActivationTokens.AddAsync(token);
-        await dbContext.SaveChangesAsync();
-    }
+        => await dbContext.ActivationTokens.AddAsync(token);
 
-    public async Task DeleteAsync(UserActivationToken token)
-    {
-        dbContext.ActivationTokens.Remove(token);
-        await dbContext.SaveChangesAsync();
-    }
+    public Task DeleteAsync(UserActivationToken token)
+        => Task.FromResult(dbContext.ActivationTokens.Remove(token));
 }

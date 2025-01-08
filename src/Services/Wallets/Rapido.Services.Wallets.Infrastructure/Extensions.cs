@@ -12,7 +12,9 @@ public static class Extensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddPostgres<WalletsDbContext>(configuration);
+        services
+            .AddPostgres<WalletsDbContext>(configuration)
+            .AddUnitOfWork<WalletsDbContext>();
 
         services
             .AddScoped<IWalletRepository, WalletRepository>()

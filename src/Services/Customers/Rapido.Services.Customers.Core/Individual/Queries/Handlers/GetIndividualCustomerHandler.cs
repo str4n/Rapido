@@ -6,18 +6,12 @@ using Rapido.Services.Customers.Core.Individual.Mappings;
 
 namespace Rapido.Services.Customers.Core.Individual.Queries.Handlers;
 
-internal sealed class GetIndividualCustomerHandler : IQueryHandler<GetIndividualCustomer, IndividualCustomerDto>
+internal sealed class GetIndividualCustomerHandler(ICustomerRepository repository)
+    : IQueryHandler<GetIndividualCustomer, IndividualCustomerDto>
 {
-    private readonly ICustomerRepository _repository;
-
-    public GetIndividualCustomerHandler(ICustomerRepository repository)
+    public async Task<IndividualCustomerDto> HandleAsync(GetIndividualCustomer query, CancellationToken cancellationToken = default)
     {
-        _repository = repository;
-    }
-
-    public async Task<IndividualCustomerDto> HandleAsync(GetIndividualCustomer query)
-    {
-        var customer = await _repository.GetIndividualCustomerAsync(query.Id);
+        var customer = await repository.GetIndividualCustomerAsync(query.Id);
 
         if (customer is null)
         {

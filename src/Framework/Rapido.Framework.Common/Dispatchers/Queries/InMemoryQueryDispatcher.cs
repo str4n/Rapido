@@ -3,35 +3,29 @@ using Rapido.Framework.Common.Abstractions.Queries;
 
 namespace Rapido.Framework.Common.Dispatchers.Queries;
 
-internal sealed class InMemoryQueryDispatcher : IQueryDispatcher
+internal sealed class InMemoryQueryDispatcher(IServiceProvider serviceProvider) : IQueryDispatcher
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public InMemoryQueryDispatcher(IServiceProvider serviceProvider)
+    public async Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default)
     {
-        _serviceProvider = serviceProvider;
-    }
-    
-    public async Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query)
-    {
-        await using var scope = _serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
         
         var handlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResult));
         var handler = scope.ServiceProvider.GetRequiredService(handlerType);
         
-        var result = await (Task<TResult>) handlerType
+        var result = await ((Task<TResult>) handlerType
             .GetMethod(nameof(IQueryHandler<IQuery<TResult>, TResult>.HandleAsync))
-            ?.Invoke(handler, new[] {query});
+            ?.Invoke(handler, [query, cancellationToken]))!;
 
         return result;
     }
 
-    public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query) where TQuery : class, IQuery<TResult>
+    public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query, CancellationToken cancellationToken = default) 
+        where TQuery : class, IQuery<TResult>
     {
-        await using var scope = _serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
 
         var handler = scope.ServiceProvider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
 
-        return await handler.HandleAsync(query);
+        return await handler.HandleAsync(query, cancellationToken);
     }
 }

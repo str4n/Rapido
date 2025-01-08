@@ -22,14 +22,14 @@ internal sealed class DeductFundsHandler(
     ILogger<DeductFundsHandler> logger)
     : ICommandHandler<DeductFunds>
 {
-    public async Task HandleAsync(DeductFunds command)
+    public async Task HandleAsync(DeductFunds command, CancellationToken cancellationToken = default)
     {
         var walletId = new WalletId(command.WalletId);
         var currency = new Currency(command.Currency);
         var amount = new Amount(command.Amount);
         var transferName = new TransferName(command.TransferName);
         
-        var wallet = await walletRepository.GetAsync(walletId);
+        var wallet = await walletRepository.GetAsync(walletId, cancellationToken);
         
         if (wallet is null)
         {
@@ -49,7 +49,7 @@ internal sealed class DeductFundsHandler(
         
         wallet.DeductFunds(transactionId, transferName, amount, currency, exchangeRates.ToList(), now);
         
-        await walletRepository.UpdateAsync(wallet);
+        await walletRepository.UpdateAsync(wallet, cancellationToken);
         
         await messageBroker.PublishAsync(new FundsDeducted(
             walletId, 

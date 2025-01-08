@@ -8,31 +8,23 @@ using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Queries.Handlers;
 
-internal sealed class CheckSufficiencyOfFundsHandler : IQueryHandler<CheckSufficiencyOfFunds, SufficientFundsDto>
+internal sealed class CheckSufficiencyOfFundsHandler(IWalletRepository walletRepository, ICurrencyApiClient client)
+    : IQueryHandler<CheckSufficiencyOfFunds, SufficientFundsDto>
 {
-    private readonly IWalletRepository _walletRepository;
-    private readonly ICurrencyApiClient _client;
-
-    public CheckSufficiencyOfFundsHandler(IWalletRepository walletRepository, ICurrencyApiClient client)
-    {
-        _walletRepository = walletRepository;
-        _client = client;
-    }
-
-    public async Task<SufficientFundsDto> HandleAsync(CheckSufficiencyOfFunds query)
+    public async Task<SufficientFundsDto> HandleAsync(CheckSufficiencyOfFunds query, CancellationToken cancellationToken = default)
     {
         var ownerId = new OwnerId(query.OwnerId);
         var amount = new Amount(query.Amount);
         var currency = new Currency(query.Currency);
 
-        var wallet = await _walletRepository.GetAsync(ownerId);
+        var wallet = await walletRepository.GetAsync(ownerId);
         
         if (wallet is null)
         {
             throw new WalletNotFoundException();
         }
         
-        var exchangeRates = (await _client.GetExchangeRates()).ToList();
+        var exchangeRates = (await client.GetExchangeRates()).ToList();
         
         if (exchangeRates is null || !exchangeRates.Any())
         {

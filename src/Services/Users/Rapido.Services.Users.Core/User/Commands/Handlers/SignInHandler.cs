@@ -8,35 +8,26 @@ using Rapido.Services.Users.Core.User.Services;
 
 namespace Rapido.Services.Users.Core.User.Commands.Handlers;
 
-internal sealed class SignInHandler : ICommandHandler<SignIn>
+internal sealed class SignInHandler(
+    IUserRepository userRepository,
+    IPasswordManager passwordManager,
+    IAuthenticator authenticator,
+    ITokenStorage tokenStorage)
+    : ICommandHandler<SignIn>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IPasswordManager _passwordManager;
-    private readonly IAuthenticator _authenticator;
-    private readonly ITokenStorage _tokenStorage;
-
-    public SignInHandler(IUserRepository userRepository, IPasswordManager passwordManager, IAuthenticator authenticator,
-        ITokenStorage tokenStorage)
-    {
-        _userRepository = userRepository;
-        _passwordManager = passwordManager;
-        _authenticator = authenticator;
-        _tokenStorage = tokenStorage;
-    }
-    
-    public async Task HandleAsync(SignIn command)
+    public async Task HandleAsync(SignIn command, CancellationToken cancellationToken = default)
     {
         var email = (Email)command.Email.ToLowerInvariant();
         var password = command.Password;
 
-        var user = await _userRepository.GetAsync(email);
+        var user = await userRepository.GetAsync(email);
 
         if (user is null)
         {
             throw new InvalidCredentialsException();
         }
 
-        if (!_passwordManager.Validate(password, user.Password))
+        if (!passwordManager.Validate(password, user.Password))
         {
             throw new InvalidCredentialsException();
         }
@@ -46,7 +37,7 @@ internal sealed class SignInHandler : ICommandHandler<SignIn>
             throw new UserNotActivatedException();
         }
 
-        var jwt = _authenticator.CreateToken(user.Id, user.Role.Name, user.Email);
-        _tokenStorage.Set(jwt);
+        var jwt = authenticator.CreateToken(user.Id, user.Role.Name, user.Email);
+        tokenStorage.Set(jwt);
     }
 }

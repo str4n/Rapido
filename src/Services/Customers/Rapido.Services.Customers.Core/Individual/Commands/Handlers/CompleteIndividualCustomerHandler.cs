@@ -9,23 +9,15 @@ using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 
 namespace Rapido.Services.Customers.Core.Individual.Commands.Handlers;
 
-internal sealed class CompleteIndividualCustomerHandler : ICommandHandler<CompleteIndividualCustomer>
+internal sealed class CompleteIndividualCustomerHandler(
+    ICustomerRepository customerRepository,
+    IClock clock,
+    IMessageBroker messageBroker)
+    : ICommandHandler<CompleteIndividualCustomer>
 {
-    private readonly ICustomerRepository _customerRepository;
-    private readonly IClock _clock;
-    private readonly IMessageBroker _messageBroker;
-
-    public CompleteIndividualCustomerHandler(ICustomerRepository customerRepository, IClock clock, 
-        IMessageBroker messageBroker)
+    public async Task HandleAsync(CompleteIndividualCustomer command, CancellationToken cancellationToken = default)
     {
-        _customerRepository = customerRepository;
-        _clock = clock;
-        _messageBroker = messageBroker;
-    }
-
-    public async Task HandleAsync(CompleteIndividualCustomer command)
-    {
-        var customer = await _customerRepository.GetIndividualCustomerAsync(command.CustomerId);
+        var customer = await customerRepository.GetIndividualCustomerAsync(command.CustomerId);
 
         if (customer is null)
         {
@@ -37,15 +29,15 @@ internal sealed class CompleteIndividualCustomerHandler : ICommandHandler<Comple
         var address = new Address(command.Country, command.Province, command.City, command.Street, command.Postalcode);
         var nationality = new Nationality(command.Nationality);
 
-        if (await _customerRepository.AnyWithNameAsync(name))
+        if (await customerRepository.AnyWithNameAsync(name))
         {
             throw new CustomerAlreadyExistsException($"Customer with name: {name} already exists.");
         }
         
-        customer.Complete(name, fullName, address, nationality, _clock.Now());
+        customer.Complete(name, fullName, address, nationality, clock.Now());
 
-        await _customerRepository.UpdateAsync(customer);
-        await _messageBroker.PublishAsync(new IndividualCustomerCompleted(customer.Id, customer.Name, 
+        await customerRepository.UpdateAsync(customer);
+        await messageBroker.PublishAsync(new IndividualCustomerCompleted(customer.Id, customer.Name, 
             customer.FullName, customer.Nationality));
     }
 }

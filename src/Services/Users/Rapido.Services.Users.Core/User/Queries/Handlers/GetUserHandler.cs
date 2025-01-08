@@ -5,19 +5,12 @@ using Rapido.Services.Users.Core.User.Repositories;
 
 namespace Rapido.Services.Users.Core.User.Queries.Handlers;
 
-internal sealed class GetUserHandler : IQueryHandler<GetUser, UserDto>
+internal sealed class GetUserHandler(IUserRepository userRepository) : IQueryHandler<GetUser, UserDto>
 {
-    private readonly IUserRepository _userRepository;
-
-    public GetUserHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-    
-    public async Task<UserDto> HandleAsync(GetUser query)
+    public async Task<UserDto> HandleAsync(GetUser query, CancellationToken cancellationToken = default)
     {
         var userId = query.UserId;
-        var user = await _userRepository.GetAsync(userId, false);
+        var user = await userRepository.GetAsync(userId, false);
 
         if (user is null)
         {

@@ -6,10 +6,11 @@ using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Domain.Wallets.Money;
 using Rapido.Services.Wallets.Domain.Wallets.Repositories;
 using Rapido.Services.Wallets.Domain.Wallets.Wallet;
+using Rapido.Services.Wallets.Infrastructure.EF;
 
 namespace Rapido.Services.Wallets.Application.Wallets.Messages.Commands.Handlers;
 
-internal sealed class CreateWalletConsumer(IWalletRepository repository, IClock clock, IMessageBroker messageBroker) 
+internal sealed class CreateWalletConsumer(WalletsDbContext dbContext, IClock clock, IMessageBroker messageBroker) 
     : IConsumer<CreateWallet>
 {
     public async Task Consume(ConsumeContext<CreateWallet> context)
@@ -19,7 +20,10 @@ internal sealed class CreateWalletConsumer(IWalletRepository repository, IClock 
 
         var wallet = Wallet.Create(message.OwnerId, currency, clock.Now());
 
-        await repository.AddAsync(wallet);
+        await dbContext.Wallets.AddAsync(wallet);
+        await dbContext.SaveChangesAsync();
+
+        await messageBroker.PublishAsync(new WalletCreated(wallet.Id, wallet.OwnerId, currency));
 
         Currency GetCurrencyBasedOnNationality() => message.Nationality switch
         {
@@ -28,7 +32,5 @@ internal sealed class CreateWalletConsumer(IWalletRepository repository, IClock 
             "US" => Currency.USD(),
             _ => Currency.EUR(),
         };
-
-        await messageBroker.PublishAsync(new WalletCreated(wallet.Id, wallet.OwnerId, currency));
     }
 }

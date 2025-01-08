@@ -4,24 +4,14 @@ using Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF.Repositories;
 
-internal sealed class OwnerRepository : IOwnerRepository
+internal sealed class OwnerRepository(WalletsDbContext dbContext) : IOwnerRepository
 {
-    private readonly WalletsDbContext _dbContext;
+    public Task<Owner> GetAsync(string name, CancellationToken cancellationToken = default)
+        => dbContext.Owners.SingleOrDefaultAsync(x => x.Name == name, cancellationToken);
 
-    public OwnerRepository(WalletsDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public Task<Owner> GetAsync(OwnerId id, CancellationToken cancellationToken = default)
+        => dbContext.Owners.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-    public Task<Owner> GetAsync(string name)
-        => _dbContext.Owners.SingleOrDefaultAsync(x => x.Name == name);
-
-    public Task<Owner> GetAsync(OwnerId id)
-        => _dbContext.Owners.SingleOrDefaultAsync(x => x.Id == id);
-
-    public async Task UpdateAsync(Owner owner)
-    {
-        _dbContext.Owners.Update(owner);
-        await _dbContext.SaveChangesAsync();
-    }
+    public Task UpdateAsync(Owner owner, CancellationToken cancellationToken = default)
+        => Task.FromResult(dbContext.Owners.Update(owner));
 }

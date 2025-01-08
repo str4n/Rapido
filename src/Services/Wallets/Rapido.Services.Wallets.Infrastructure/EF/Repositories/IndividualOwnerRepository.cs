@@ -4,36 +4,20 @@ using Rapido.Services.Wallets.Domain.Owners.Repositories;
 
 namespace Rapido.Services.Wallets.Infrastructure.EF.Repositories;
 
-internal sealed class IndividualOwnerRepository : IIndividualOwnerRepository
+internal sealed class IndividualOwnerRepository(WalletsDbContext dbContext) : IIndividualOwnerRepository
 {
-    private readonly WalletsDbContext _dbContext;
+    public Task<IndividualOwner> GetAsync(OwnerId id, CancellationToken cancellationToken = default)
+        => dbContext.IndividualOwners.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-    public IndividualOwnerRepository(WalletsDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public async Task<IEnumerable<IndividualOwner>> GetAllAsync(CancellationToken cancellationToken = default)
+        => await dbContext.IndividualOwners.ToListAsync(cancellationToken);
 
-    public Task<IndividualOwner> GetAsync(OwnerId id)
-        => _dbContext.IndividualOwners.SingleOrDefaultAsync(x => x.Id == id);
+    public async Task AddAsync(IndividualOwner owner, CancellationToken cancellationToken = default)
+        => await dbContext.IndividualOwners.AddAsync(owner, cancellationToken);
 
-    public async Task<IEnumerable<IndividualOwner>> GetAllAsync()
-        => await _dbContext.IndividualOwners.ToListAsync();
+    public Task UpdateAsync(IndividualOwner owner, CancellationToken cancellationToken = default)
+        => Task.FromResult(dbContext.IndividualOwners.Update(owner));
 
-    public async Task AddAsync(IndividualOwner owner)
-    {
-        await _dbContext.IndividualOwners.AddAsync(owner);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(IndividualOwner owner)
-    {
-        _dbContext.IndividualOwners.Update(owner);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(IndividualOwner owner)
-    {
-        _dbContext.IndividualOwners.Remove(owner);
-        await _dbContext.SaveChangesAsync();
-    }
+    public Task DeleteAsync(IndividualOwner owner, CancellationToken cancellationToken = default)
+        => Task.FromResult(dbContext.IndividualOwners.Remove(owner));
 }

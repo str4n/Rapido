@@ -2,6 +2,7 @@
 
 public interface IQueryDispatcher
 {
-    Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query);
-    Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query) where TQuery : class, IQuery<TResult>;
+    Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default);
+    Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query, CancellationToken cancellationToken = default) 
+        where TQuery : class, IQuery<TResult>;
 }

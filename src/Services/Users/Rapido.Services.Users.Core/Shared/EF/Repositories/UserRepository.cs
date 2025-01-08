@@ -36,14 +36,8 @@ internal sealed class UserRepository : IUserRepository
         => _dbContext.Users.AnyAsync(x => x.Email == email);
 
     public async Task AddAsync(User.Domain.User user)
-    {
-        await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
-    }
+        => await _dbContext.Users.AddAsync(user);
 
-    public async Task UpdateAsync(User.Domain.User user)
-    {
-        _dbContext.Users.Update(user);
-        await _dbContext.SaveChangesAsync();
-    }
+    public Task UpdateAsync(User.Domain.User user)
+        => Task.FromResult(_dbContext.Users.Update(user));
 }

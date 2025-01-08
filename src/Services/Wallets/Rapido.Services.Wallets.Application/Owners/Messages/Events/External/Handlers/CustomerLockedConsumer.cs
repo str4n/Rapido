@@ -1,24 +1,19 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Rapido.Messages.Events;
 using Rapido.Services.Wallets.Domain.Owners.Owner;
 using Rapido.Services.Wallets.Domain.Owners.Repositories;
+using Rapido.Services.Wallets.Infrastructure.EF;
 
 namespace Rapido.Services.Wallets.Application.Owners.Messages.Events.External.Handlers;
 
-internal sealed class CustomerLockedConsumer : IConsumer<CustomerLocked>
+internal sealed class CustomerLockedConsumer(WalletsDbContext dbContext) : IConsumer<CustomerLocked>
 {
-    private readonly IOwnerRepository _repository;
-
-    public CustomerLockedConsumer(IOwnerRepository repository)
-    {
-        _repository = repository;
-    }
-    
     public async Task Consume(ConsumeContext<CustomerLocked> context)
     {
         var message = context.Message;
 
-        var owner = await _repository.GetAsync(message.CustomerId);
+        var owner = await dbContext.Owners.SingleOrDefaultAsync(x => x.Id == new OwnerId(message.CustomerId));
 
         if (owner is null)
         {
@@ -32,6 +27,7 @@ internal sealed class CustomerLockedConsumer : IConsumer<CustomerLocked>
         
         owner.Lock();
 
-        await _repository.UpdateAsync(owner);
+        dbContext.Owners.Update(owner);
+        await dbContext.SaveChangesAsync();
     }
 }
