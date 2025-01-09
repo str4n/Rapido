@@ -21,16 +21,16 @@ internal static class OwnerEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetAllIndividualOwners(IDispatcher dispatcher)
+    private static async Task<IResult> GetAllIndividualOwners(IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        var result = await dispatcher.DispatchAsync(new GetIndividualOwners());
+        var result = await dispatcher.DispatchAsync(new GetIndividualOwners(), cancellationToken);
 
         return Results.Ok(result);
     }
     
-    private static async Task<IResult> GetAllCorporateOwners(IDispatcher dispatcher)
+    private static async Task<IResult> GetAllCorporateOwners(IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        var result = await dispatcher.DispatchAsync(new GetCorporateOwners());
+        var result = await dispatcher.DispatchAsync(new GetCorporateOwners(), cancellationToken);
 
         return Results.Ok(result);
     }

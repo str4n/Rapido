@@ -14,9 +14,9 @@ internal static class CurrencyEndpoints
         return app;
     }
     
-    private static async Task<IResult> GetExchangeRates(IExchangeRateService service)
+    private static async Task<IResult> GetExchangeRates(IExchangeRateService service, CancellationToken cancellationToken)
     {
-        var result = await service.GetExchangeRates();
+        var result = await service.GetExchangeRates(cancellationToken);
 
         return Results.Ok(result);
     }

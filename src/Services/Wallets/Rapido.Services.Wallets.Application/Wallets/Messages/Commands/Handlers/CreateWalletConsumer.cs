@@ -20,6 +20,8 @@ internal sealed class CreateWalletConsumer(
 {
     public async Task Consume(ConsumeContext<CreateWallet> context)
     {
+        var cancellationToken = context.CancellationToken;
+        
         await unitOfWork.ExecuteAsync(async () =>
         {
             var message = context.Message;
@@ -27,7 +29,7 @@ internal sealed class CreateWalletConsumer(
 
             var wallet = Wallet.Create(message.OwnerId, currency, clock.Now());
 
-            await repository.AddAsync(wallet);
+            await repository.AddAsync(wallet, cancellationToken);
 
             await messageBroker.PublishAsync(new WalletCreated(wallet.Id, wallet.OwnerId, currency));
 
@@ -38,6 +40,6 @@ internal sealed class CreateWalletConsumer(
                 "US" => Currency.USD(),
                 _ => Currency.EUR(),
             };
-        });
+        }, cancellationToken);
     }
 }

@@ -46,7 +46,7 @@ internal static class AccountEndpoints
         return app;
     }
 
-    private static async Task<IResult> SignUp(SignUp command, IDispatcher dispatcher)
+    private static async Task<IResult> SignUp(SignUp command, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
         var userId = Guid.NewGuid();
 
@@ -55,73 +55,86 @@ internal static class AccountEndpoints
             return Results.BadRequest();
         }
         
-        await dispatcher.DispatchAsync(command with { UserId = userId });
+        await dispatcher.DispatchAsync(command with { UserId = userId }, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> SignIn(SignIn command, IDispatcher dispatcher, ITokenStorage tokenStorage)
+    private static async Task<IResult> SignIn(
+        SignIn command, 
+        IDispatcher dispatcher, 
+        ITokenStorage tokenStorage, 
+        CancellationToken cancellationToken)
     {
         if (command is null)
         {
             return Results.BadRequest();
         }
         
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
         var token = tokenStorage.Get();
-        var user = await dispatcher.DispatchAsync(new GetUser(token.UserId));
+        var user = await dispatcher.DispatchAsync(new GetUser(token.UserId), cancellationToken);
 
         return Results.Ok(new AuthDto(token, user.AccountType));
     }
 
-    private static async Task<IResult> Activate(string token, IDispatcher dispatcher)
+    private static async Task<IResult> Activate(string token, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(new ActivateUser(token));
+        await dispatcher.DispatchAsync(new ActivateUser(token), cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> CreateActivationToken(CreateActivationToken command, IDispatcher dispatcher)
+    private static async Task<IResult> CreateActivationToken(
+        CreateActivationToken command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
         if (command is null)
         {
             return Results.BadRequest();
         }
         
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Created();
     }
     
-    private static async Task<IResult> RecoverPassword(RecoverPassword command, IDispatcher dispatcher)
+    private static async Task<IResult> RecoverPassword(
+        RecoverPassword command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
         if (command is null)
         {
             return Results.BadRequest();
         }
         
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Ok();
     }
     
-    private static async Task<IResult> CreateRecoveryToken(CreateRecoveryToken command, IDispatcher dispatcher)
+    private static async Task<IResult> CreateRecoveryToken(
+        CreateRecoveryToken command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
         if (command is null)
         {
             return Results.BadRequest();
         }
         
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Created();
     }
 
-    private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context, CancellationToken cancellationToken)
     {
         var userId = context.Identity.UserId;
 
-        var result = await dispatcher.DispatchAsync(new GetUser(userId));
+        var result = await dispatcher.DispatchAsync(new GetUser(userId), cancellationToken);
 
         return Results.Ok(result);
     }

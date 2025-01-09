@@ -4,5 +4,5 @@ namespace Rapido.Services.Currencies.Core.Services;
 
 public interface IExchangeRateService
 {
-    Task<IEnumerable<ExchangeRateDto>> GetExchangeRates();
+    Task<IEnumerable<ExchangeRateDto>> GetExchangeRates(CancellationToken cancellationToken = default);
 }

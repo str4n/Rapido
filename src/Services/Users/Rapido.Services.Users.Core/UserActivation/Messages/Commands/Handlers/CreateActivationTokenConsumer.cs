@@ -8,8 +8,10 @@ internal sealed class CreateActivationTokenConsumer(IDispatcher dispatcher) : IC
 {
     public async Task Consume(ConsumeContext<CreateActivationToken> context)
     {
+        var cancellationToken = context.CancellationToken;
+        
         var message = context.Message;
 
-        await dispatcher.DispatchAsync(message);
+        await dispatcher.DispatchAsync(message, cancellationToken);
     }
 }

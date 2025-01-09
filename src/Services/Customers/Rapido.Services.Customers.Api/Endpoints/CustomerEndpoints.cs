@@ -32,30 +32,41 @@ internal static class CustomerEndpoints
         return app;
     }
     
-    private static async Task<IResult> LockTemporarily(Guid customerId, LockCustomerTemporarily command, IDispatcher dispatcher)
+    private static async Task<IResult> LockTemporarily(
+        Guid customerId, 
+        LockCustomerTemporarily command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(command with { CustomerId = customerId });
+        await dispatcher.DispatchAsync(command with { CustomerId = customerId }, cancellationToken);
 
         return Results.Ok();
     }
     
-    private static async Task<IResult> LockPermanently(Guid customerId, LockCustomerPermanently command, IDispatcher dispatcher)
+    private static async Task<IResult> LockPermanently(
+        Guid customerId, 
+        LockCustomerPermanently command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(command with { CustomerId = customerId });
+        await dispatcher.DispatchAsync(command with { CustomerId = customerId }, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> Unlock(Guid customerId, IDispatcher dispatcher)
+    private static async Task<IResult> Unlock(
+        Guid customerId, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(new UnlockCustomer(customerId));
+        await dispatcher.DispatchAsync(new UnlockCustomer(customerId), cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> IsEmailTaken(string name, IDispatcher dispatcher)
+    private static async Task<IResult> IsEmailTaken(string name, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        var result = await dispatcher.DispatchAsync(new CheckNameUniqueness(name));
+        var result = await dispatcher.DispatchAsync(new CheckNameUniqueness(name), cancellationToken);
 
         return Results.Ok(new { IsNameTaken = result });
     }

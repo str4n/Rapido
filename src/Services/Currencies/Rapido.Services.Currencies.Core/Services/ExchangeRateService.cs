@@ -4,31 +4,22 @@ using Rapido.Services.Currencies.Core.DTO;
 
 namespace Rapido.Services.Currencies.Core.Services;
 
-internal sealed class ExchangeRateService : IExchangeRateService
+internal sealed class ExchangeRateService(ICache cache, ExchangeRateLoader loader) : IExchangeRateService
 {
-    private readonly ICache _cache;
-    private readonly ExchangeRateLoader _loader;
-
-    public ExchangeRateService(ICache cache, ExchangeRateLoader loader)
+    public async Task<IEnumerable<ExchangeRateDto>> GetExchangeRates(CancellationToken cancellationToken = default)
     {
-        _cache = cache;
-        _loader = loader;
-    }
-    
-    public async Task<IEnumerable<ExchangeRateDto>> GetExchangeRates()
-    {
-        var usdRates = await _cache.GetAsync<List<ExchangeRateDto>>("USD");
-        var eurRates = await _cache.GetAsync<List<ExchangeRateDto>>("EUR");
-        var plnRates = await _cache.GetAsync<List<ExchangeRateDto>>("PLN");
-        var gbpRates = await _cache.GetAsync<List<ExchangeRateDto>>("GBP");
+        var usdRates = await cache.GetAsync<List<ExchangeRateDto>>("USD", cancellationToken);
+        var eurRates = await cache.GetAsync<List<ExchangeRateDto>>("EUR", cancellationToken);
+        var plnRates = await cache.GetAsync<List<ExchangeRateDto>>("PLN", cancellationToken);
+        var gbpRates = await cache.GetAsync<List<ExchangeRateDto>>("GBP", cancellationToken);
 
         if (usdRates is null || eurRates is null || plnRates is null || gbpRates is null)
         {
-            await _loader.LoadExchangeRates();
-            usdRates = await _cache.GetAsync<List<ExchangeRateDto>>("USD");
-            eurRates = await _cache.GetAsync<List<ExchangeRateDto>>("EUR");
-            plnRates = await _cache.GetAsync<List<ExchangeRateDto>>("PLN");
-            gbpRates = await _cache.GetAsync<List<ExchangeRateDto>>("GBP");
+            await loader.LoadExchangeRates(cancellationToken);
+            usdRates = await cache.GetAsync<List<ExchangeRateDto>>("USD", cancellationToken);
+            eurRates = await cache.GetAsync<List<ExchangeRateDto>>("EUR", cancellationToken);
+            plnRates = await cache.GetAsync<List<ExchangeRateDto>>("PLN", cancellationToken);
+            gbpRates = await cache.GetAsync<List<ExchangeRateDto>>("GBP", cancellationToken);
         }
 
         var result = new List<ExchangeRateDto>();

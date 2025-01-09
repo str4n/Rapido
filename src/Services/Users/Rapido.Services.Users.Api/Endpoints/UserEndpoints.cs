@@ -16,17 +16,17 @@ internal static class UserEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetUser(string email, IDispatcher dispatcher)
+    private static async Task<IResult> GetUser(string email, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        var result = await dispatcher.DispatchAsync(new GetUserByEmail(email));
+        var result = await dispatcher.DispatchAsync(new GetUserByEmail(email), cancellationToken);
 
         return Results.Ok(result);
     }
 
     // Endpoint for frontend validator
-    private static async Task<IResult> IsEmailTaken(string email, IDispatcher dispatcher)
+    private static async Task<IResult> IsEmailTaken(string email, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        var result = await dispatcher.DispatchAsync(new CheckUserEmailUniqueness(email));
+        var result = await dispatcher.DispatchAsync(new CheckUserEmailUniqueness(email), cancellationToken);
 
         return Results.Ok(new { IsEmailTaken = result });
     }

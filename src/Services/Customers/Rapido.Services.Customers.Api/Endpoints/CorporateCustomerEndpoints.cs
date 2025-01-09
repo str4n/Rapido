@@ -43,45 +43,60 @@ internal static class CorporateCustomerEndpoints
         return app;
     }
     
-    private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> GetMe(IDispatcher dispatcher, IContext context, CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        var result = await dispatcher.DispatchAsync(new GetCorporateCustomer(id));
+        var result = await dispatcher.DispatchAsync(new GetCorporateCustomer(id), cancellationToken);
         
         return Results.Ok(result);
     }
     
-    private static async Task<IResult> Complete(CompleteCorporateCustomer command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> Complete(
+        CompleteCorporateCustomer command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        await dispatcher.DispatchAsync(command with { CustomerId = id });
+        await dispatcher.DispatchAsync(command with { CustomerId = id }, cancellationToken);
 
         return Results.Ok();
     }
     
-    private static async Task<IResult> Create(CreateCorporateCustomer command, IDispatcher dispatcher)
+    private static async Task<IResult> Create(
+        CreateCorporateCustomer command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> ChangeAddress(ChangeAddress command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> ChangeAddress(
+        ChangeAddress command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
         
-        await dispatcher.DispatchAsync(command with { Id =  id});
+        await dispatcher.DispatchAsync(command with { Id =  id}, cancellationToken);
 
         return Results.Ok();
     }
     
-    private static async Task<IResult> ChangeNationality(ChangeNationality command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> ChangeNationality(
+        ChangeNationality command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
         
-        await dispatcher.DispatchAsync(command with { Id =  id});
+        await dispatcher.DispatchAsync(command with { Id =  id}, cancellationToken);
 
         return Results.Ok();
     }

@@ -4,5 +4,5 @@ namespace Rapido.Services.Currencies.Core.Clients;
 
 internal interface IExchangeRateApiClient
 {
-    Task<ExchangeRatesDto> GetExchangeRates(string currency);
+    Task<ExchangeRatesDto> GetExchangeRates(string currency, CancellationToken cancellationToken = default);
 }

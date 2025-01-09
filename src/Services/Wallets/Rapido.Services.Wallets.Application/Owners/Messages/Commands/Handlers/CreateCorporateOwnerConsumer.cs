@@ -21,14 +21,16 @@ internal sealed class CreateCorporateOwnerConsumer(
 {
     public async Task Consume(ConsumeContext<CreateCorporateOwner> context)
     {
+        var cancellationToken = context.CancellationToken;
+        
         await unitOfWork.ExecuteAsync(async () =>
         {
             var message = context.Message;
 
             var owner = new CorporateOwner(message.CustomerId, message.Name, message.TaxId, clock.Now());
 
-            await repository.AddAsync(owner);
+            await repository.AddAsync(owner, cancellationToken);
             await messageBroker.PublishAsync(new OwnerCreated(message.CustomerId, message.Nationality));
-        });
+        }, cancellationToken);
     }
 }

@@ -6,43 +6,38 @@ using Rapido.Services.Currencies.Core.DTO;
 
 namespace Rapido.Services.Currencies.Core.Services;
 
-internal sealed class ExchangeRateLoader : IHostedService, IDisposable
+internal sealed class ExchangeRateLoader(IExchangeRateApiClient client, IServiceProvider serviceProvider)
+    : IHostedService, IDisposable
 {
-    private readonly IExchangeRateApiClient _client;
-    private readonly IServiceProvider _serviceProvider;
     private Timer _timer;
 
-    public ExchangeRateLoader(IExchangeRateApiClient client, IServiceProvider serviceProvider)
-    {
-        _client = client;
-        _serviceProvider = serviceProvider;
-    }
-    
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(20));
     }
 
-    public async void DoWork(object state)
+    private async void DoWork(object state)
     {
         await LoadExchangeRates();
     }
+    
+    //TODO: improve fetching exchange rates
 
-    public async Task LoadExchangeRates()
+    public async Task LoadExchangeRates(CancellationToken cancellationToken = default)
     {
         const string usd = "USD";
         const string eur = "EUR";
         const string pln = "PLN";
         const string gbp = "GBP";
 
-        using var scope = _serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
 
         var cache = scope.ServiceProvider.GetRequiredService<ICache>();
         
-        var usdRates = await _client.GetExchangeRates(usd);
-        var eurRates = await _client.GetExchangeRates(eur);
-        var plnRates = await _client.GetExchangeRates(pln);
-        var gbpRates = await _client.GetExchangeRates(gbp);
+        var usdRates = await client.GetExchangeRates(usd, cancellationToken);
+        var eurRates = await client.GetExchangeRates(eur, cancellationToken);
+        var plnRates = await client.GetExchangeRates(pln, cancellationToken);
+        var gbpRates = await client.GetExchangeRates(gbp, cancellationToken);
 
         var usdDtos = new List<ExchangeRateDto>
         {
@@ -76,10 +71,10 @@ internal sealed class ExchangeRateLoader : IHostedService, IDisposable
             new(gbp,gbp, gbpRates.ConversionRates.GBP),
         };
 
-        await cache.SetAsync(usd, usdDtos);
-        await cache.SetAsync(eur, eurDtos);
-        await cache.SetAsync(pln, plnDtos);
-        await cache.SetAsync(gbp, gbpDtos);
+        await cache.SetAsync(usd, usdDtos, cancellationToken: cancellationToken);
+        await cache.SetAsync(eur, eurDtos, cancellationToken: cancellationToken);
+        await cache.SetAsync(pln, plnDtos, cancellationToken: cancellationToken);
+        await cache.SetAsync(gbp, gbpDtos, cancellationToken: cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

@@ -51,63 +51,89 @@ internal static class WalletEndpoints
         return app;
     }
 
-    private static async Task<IResult> TransferFundsByWalletId(TransferFundsByWalletId command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> TransferFundsByWalletId(
+        TransferFundsByWalletId command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        await dispatcher.DispatchAsync(command with { OwnerId = id });
+        await dispatcher.DispatchAsync(command with { OwnerId = id }, cancellationToken);
 
         return Results.Ok();
     }
     
-    private static async Task<IResult> TransferFundsByReceiverName(TransferFundsByReceiverName command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> TransferFundsByReceiverName(
+        TransferFundsByReceiverName command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        await dispatcher.DispatchAsync(command with { OwnerId = id });
+        await dispatcher.DispatchAsync(command with { OwnerId = id }, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> AddFunds(AddFunds command, IDispatcher dispatcher)
+    private static async Task<IResult> AddFunds(
+        AddFunds command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> DeductFunds(DeductFunds command, IDispatcher dispatcher)
+    private static async Task<IResult> DeductFunds(
+        DeductFunds command, 
+        IDispatcher dispatcher, 
+        CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(command);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Ok();
     }
 
-    private static async Task<IResult> GetWallet(IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> GetWallet(
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        var result = await dispatcher.DispatchAsync(new GetWallet(id));
+        var result = await dispatcher.DispatchAsync(new GetWallet(id), cancellationToken);
 
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> AddBalance(AddBalance command, IDispatcher dispatcher, IContext context)
+    private static async Task<IResult> AddBalance(
+        AddBalance command, 
+        IDispatcher dispatcher, 
+        IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
-        await dispatcher.DispatchAsync(command with { OwnerId = id });
+        await dispatcher.DispatchAsync(command with { OwnerId = id }, cancellationToken);
 
         return Results.Created();
     }
 
-    private static async Task<IResult> HasSufficientFunds([FromQuery] double amount, [FromQuery] string currency, [FromServices]IDispatcher dispatcher, [FromServices]IContext context)
+    private static async Task<IResult> HasSufficientFunds(
+        [FromQuery] double amount, 
+        [FromQuery] string currency, 
+        [FromServices]IDispatcher dispatcher, 
+        [FromServices]IContext context, 
+        CancellationToken cancellationToken)
     {
         var id = context.Identity.UserId;
 
         var query = new CheckSufficiencyOfFunds(id, amount, currency);
         
-        var result = await dispatcher.DispatchAsync(query with { OwnerId = id });
+        var result = await dispatcher.DispatchAsync(query with { OwnerId = id }, cancellationToken);
 
         return Results.Ok(result);
     }

@@ -15,19 +15,19 @@ internal sealed class RedisCache : ICache
         _clock = clock;
     }
     
-    public async Task<T> GetAsync<T>(string key)
+    public async Task<T> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(key))
         {
             return default;
         }
 
-        var value = await _cache.GetStringAsync(key);
+        var value = await _cache.GetStringAsync(key, cancellationToken);
 
         return string.IsNullOrWhiteSpace(value) ? default : JsonConvert.DeserializeObject<T>(value);
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null)
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(key))
         {
@@ -36,23 +36,23 @@ internal sealed class RedisCache : ICache
 
         if (expiry is null)
         {
-            await _cache.SetStringAsync(key, JsonConvert.SerializeObject(value));
+            await _cache.SetStringAsync(key, JsonConvert.SerializeObject(value), cancellationToken);
             return;
         }
 
         await _cache.SetStringAsync(key, JsonConvert.SerializeObject(value), new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = new DateTimeOffset(_clock.Now()).Add((TimeSpan)expiry)
-        });
+        }, cancellationToken);
     }
 
-    public async Task DeleteAsync<T>(string key)
+    public async Task DeleteAsync<T>(string key, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(key))
         {
             return;
         }
 
-        await _cache.RemoveAsync(key);
+        await _cache.RemoveAsync(key, cancellationToken);
     }
 }
