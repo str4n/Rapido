@@ -26,7 +26,7 @@ internal static class AccountEndpoints
             .WithTags("Account")
             .WithName("Create activation token");
         
-        app.MapPut("/activate/{token}", Activate)
+        app.MapPut("/activate", Activate)
             .WithTags("Account")
             .WithName("Activate account");
 
@@ -78,9 +78,9 @@ internal static class AccountEndpoints
         return Results.Ok(new AuthDto(token, user.AccountType));
     }
 
-    private static async Task<IResult> Activate(string token, IDispatcher dispatcher, CancellationToken cancellationToken)
+    private static async Task<IResult> Activate(ActivateUser command, IDispatcher dispatcher, CancellationToken cancellationToken)
     {
-        await dispatcher.DispatchAsync(new ActivateUser(token), cancellationToken);
+        await dispatcher.DispatchAsync(command, cancellationToken);
 
         return Results.Ok();
     }

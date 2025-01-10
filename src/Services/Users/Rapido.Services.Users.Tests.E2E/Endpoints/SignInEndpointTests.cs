@@ -44,7 +44,7 @@ public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options =
         
         activationToken.Should().NotBeNull();
 
-        var activationResponse = await Client.PutAsync($"/activate/{activationToken.Token}", null);
+        var activationResponse = await Client.PutAsJsonAsync("/activate/", new ActivateUser(activationToken.Token));
         
         activationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 

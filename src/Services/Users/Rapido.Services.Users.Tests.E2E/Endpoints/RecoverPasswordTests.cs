@@ -10,6 +10,7 @@ using Rapido.Messages.Events;
 using Rapido.Services.Users.Core.PasswordRecovery.Commands;
 using Rapido.Services.Users.Core.Shared.EF;
 using Rapido.Services.Users.Core.User.Commands;
+using Rapido.Services.Users.Core.UserActivation.Commands;
 using Xunit;
 
 namespace Rapido.Services.Users.Tests.E2E.Endpoints;
@@ -42,7 +43,7 @@ public class RecoverPasswordTests() : ApiTests<Program, UsersDbContext>(options 
         
         activationToken.Should().NotBeNull();
 
-        var activationResponse = await Client.PutAsync($"/activate/{activationToken.Token}", null);
+        var activationResponse = await Client.PutAsJsonAsync("/activate/", new ActivateUser(activationToken.Token));
         
         activationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
