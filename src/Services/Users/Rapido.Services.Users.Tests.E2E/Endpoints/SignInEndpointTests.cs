@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Rapido.Framework.Auth;
 using Rapido.Framework.Messaging.Brokers;
@@ -40,7 +41,7 @@ public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options =
 
         createActivationTokenResponse.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var activationToken = TestDbContext.ActivationTokens.First();
+        var activationToken = await TestDbContext.ActivationTokens.FirstAsync();
         
         activationToken.Should().NotBeNull();
 

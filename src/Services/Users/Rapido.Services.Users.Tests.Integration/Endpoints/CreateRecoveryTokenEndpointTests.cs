@@ -26,7 +26,7 @@ public class CreateRecoveryTokenEndpointTests() : ApiTests<Program, UsersDbConte
     [Fact]
     public async Task given_valid_create_token_request_should_succeed()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         
         var response = await Act(new CreateRecoveryToken(email));
 
@@ -60,7 +60,7 @@ public class CreateRecoveryTokenEndpointTests() : ApiTests<Program, UsersDbConte
         await dbContext.Users.AddAsync(new User
         {
             Id = Guid.NewGuid(),
-            Email = Const.EmailInUse,
+            Email = Const.SecondEmail,
             Password = password,
             IsActivated = true,
             IsDeleted = false,

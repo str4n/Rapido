@@ -28,7 +28,7 @@ public class RecoverPasswordEndpointTests() : ApiTests<Program, UsersDbContext>(
     [Fact]
     public async Task valid_recover_password_request_should_change_password()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         var recoveryToken = Const.RecoveryToken;
         var newPassword = "Test122!";
 
@@ -52,7 +52,7 @@ public class RecoverPasswordEndpointTests() : ApiTests<Program, UsersDbContext>(
     [Fact]
     public async Task recover_password_request_with_invalid_token_should_return_bad_request_status_code()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         var recoveryToken = "1NV4L1D";
         var newPassword = "Test122!";
 
@@ -85,7 +85,7 @@ public class RecoverPasswordEndpointTests() : ApiTests<Program, UsersDbContext>(
         await dbContext.Users.AddAsync(new User
         {
             Id = userId,
-            Email = Const.EmailInUse,
+            Email = Const.SecondEmail,
             Password = password,
             IsActivated = true,
             IsDeleted = false,

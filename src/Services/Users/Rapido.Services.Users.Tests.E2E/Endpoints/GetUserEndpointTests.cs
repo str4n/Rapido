@@ -43,7 +43,7 @@ public class GetUserEndpointTests() : ApiTests<Program, UsersDbContext>(options 
 
         createActivationTokenResponse.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var activationToken = TestDbContext.ActivationTokens.First();
+        var activationToken = await TestDbContext.ActivationTokens.FirstAsync();
         
         activationToken.Should().NotBeNull();
 

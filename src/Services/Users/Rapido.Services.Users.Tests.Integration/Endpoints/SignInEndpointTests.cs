@@ -24,7 +24,7 @@ public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [Fact]
     public async Task given_valid_sign_in_request_should_create_proper_jwt()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         var password = Const.ValidPassword;
 
         var command = new SignIn(email, password);
@@ -44,7 +44,7 @@ public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [Fact]
     public async Task given_sign_in_request_with_invalid_credentials_should_return_bad_request_status_code()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         var password = "PasswOrd42@";
 
         var command = new SignIn(email, password);
@@ -75,7 +75,7 @@ public class SignInEndpointTests() : ApiTests<Program, UsersDbContext>(options =
         await dbContext.Users.AddAsync(new User
         {
             Id = Guid.NewGuid(),
-            Email = Const.EmailInUse,
+            Email = Const.SecondEmail,
             Password = password,
             IsActivated = true,
             IsDeleted = false,

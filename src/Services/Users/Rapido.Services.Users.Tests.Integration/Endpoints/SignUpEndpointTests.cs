@@ -24,7 +24,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [Fact]
     public async Task given_valid_sign_up_request_should_create_account()
     {
-        var email = Const.EmailNotInUse;
+        var email = Const.FirstEmail;
         var password = Const.ValidPassword;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
@@ -46,7 +46,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [Fact]
     public async Task given_sign_up_request_with_already_taken_email_should_return_bad_request_status_code()
     {
-        var email = Const.EmailInUse;
+        var email = Const.SecondEmail;
         var password = Const.ValidPassword;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
@@ -65,7 +65,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
     [InlineData("Pa-s@ord12")]
     public async Task given_sign_up_request_with_invalid_password_syntax_should_return_bad_request_status_code(string password)
     {
-        var email = Const.EmailNotInUse;
+        var email = Const.FirstEmail;
         var accountType = AccountType.Individual;
         var command = new SignUp(Guid.NewGuid(), email, password, accountType.ToString());
 
@@ -100,7 +100,7 @@ public class SignUpEndpointTests() : ApiTests<Program, UsersDbContext>(options =
         await dbContext.Users.AddAsync(new User
         {
             Id = Guid.NewGuid(),
-            Email = Const.EmailInUse,
+            Email = Const.SecondEmail,
             Password = password,
             IsActivated = true,
             IsDeleted = false,
