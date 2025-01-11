@@ -78,6 +78,19 @@ services:
       - rapido
     ports: 
       - 8200:8200
+        
+  rapido.seq:
+    image: datalust/seq
+    container_name: seq
+    networks:
+      - rapido
+    ports:
+      - 5341:5341
+      - 80:80
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - seq:/data
 
 networks:
   rapido:
@@ -103,4 +116,7 @@ volumes:
     driver: local
     
   vault:
+    driver: local
+    
+  seq:
     driver: local
