@@ -44,7 +44,7 @@ internal sealed class ExchangeRateLoader(IExchangeRateApiClient client, IService
     }
     
     // Load for all currencies
-    private async Task LoadExchangeRates(CancellationToken cancellationToken = default)
+    public async Task LoadExchangeRates(CancellationToken cancellationToken = default)
     {
         using var scope = serviceProvider.CreateScope();
 

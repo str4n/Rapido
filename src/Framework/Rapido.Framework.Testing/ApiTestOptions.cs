@@ -2,7 +2,7 @@
 
 public sealed class ApiTestOptions
 {
-    public bool EnablePostgres => true;
-    public bool EnableRedis => false;
+    public bool EnablePostgres { get; set; } = true;
+    public bool EnableRedis { get; set; } = false;
     public Dictionary<string, string> DefaultHttpClientHeaders = new();
 }

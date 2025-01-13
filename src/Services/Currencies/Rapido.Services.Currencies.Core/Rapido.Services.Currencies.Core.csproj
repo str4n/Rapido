@@ -10,4 +10,8 @@
       <ProjectReference Include="..\..\..\Framework\Rapido.Framework\Rapido.Framework.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Rapido.Services.Currencies.Tests.Integration"/>
+    </ItemGroup>
+
 </Project>
