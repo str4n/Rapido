@@ -15,7 +15,13 @@ using Rapido.Services.Customers.Core.Individual.Domain.Customer;
 namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
 public class UnlockCustomerEndpointTests()
-    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options), new ApiTestOptions
+    {
+        DefaultHttpClientHeaders = new()
+        {
+            { "Authorization", $"Bearer {Jwt}" }
+        }
+    })
 {
     private Task<HttpResponseMessage> Act(UnlockCustomer command) => 
         Client.PostAsJsonAsync($"/customers/unlock/{command.CustomerId}", command);
@@ -95,6 +101,9 @@ public class UnlockCustomerEndpointTests()
     
     
     #region Arrange
+    
+    private static readonly string Jwt = new TestAuthenticator()
+        .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "admin", Const.IndividualCustomerEmail);
 
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
@@ -116,14 +125,6 @@ public class UnlockCustomerEndpointTests()
         await dbContext.IndividualCustomers.AddAsync(customer);
 
         await dbContext.SaveChangesAsync();
-    }
-    
-    protected override void AddClientHeaders()
-    {
-        var jwt = new TestAuthenticator()
-            .GenerateJwt(Guid.Parse(Const.IndividualCustomerGuid), "admin", Const.IndividualCustomerEmail);
-        
-        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
 
     #endregion

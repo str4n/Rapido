@@ -18,7 +18,13 @@ using Rapido.Services.Wallets.Tests.Unit;
 namespace Rapido.Services.Wallets.Tests.Integration.Endpoints;
 
 public class TransferFundsByWalletIdEndpointTests() 
-    : ApiTests<Program, WalletsDbContext>(options => new WalletsDbContext(options))
+    : ApiTests<Program, WalletsDbContext>(options => new WalletsDbContext(options), new ApiTestOptions
+    {
+        DefaultHttpClientHeaders = new()
+        {
+            {"Authorization", $"Bearer {Jwt}" }
+        }
+    })
 {
     private Task<HttpResponseMessage> Act(TransferFundsByWalletId command) 
         => Client.PostAsJsonAsync("/transfer/id", command);
@@ -59,6 +65,8 @@ public class TransferFundsByWalletIdEndpointTests()
     }
     
     #region Arrange
+    private static readonly string Jwt = new TestAuthenticator()
+        .GenerateJwt(Guid.Parse(Const.Owner1Id), "admin", "email@test.com");
 
     protected override Action<IServiceCollection> ConfigureServices => s =>
     {
@@ -96,14 +104,6 @@ public class TransferFundsByWalletIdEndpointTests()
 
         await dbContext.SaveChangesAsync();
     }
-
-    protected override void AddClientHeaders()
-    {
-        var jwt = new TestAuthenticator()
-            .GenerateJwt(Guid.Parse(Const.Owner1Id), "admin", "email@test.com");
-        
-        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
-    }
-
+    
     #endregion
 }

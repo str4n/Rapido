@@ -14,7 +14,13 @@ using Rapido.Services.Customers.Core.Corporate.Domain.Customer;
 namespace Rapido.Services.Customers.Tests.Integration.Endpoints;
 
 public class CompleteCorporateCustomerEndpointTests()
-    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options))
+    : ApiTests<Program, CustomersDbContext>(options => new CustomersDbContext(options), new ApiTestOptions
+    {
+        DefaultHttpClientHeaders = new()
+        {
+            { "Authorization", $"Bearer {Jwt}" }
+        }
+    })
 {
     private async Task<HttpResponseMessage> Act(CompleteCorporateCustomer command)
         => await Client.PostAsJsonAsync("/corporate/complete", command);
@@ -51,6 +57,9 @@ public class CompleteCorporateCustomerEndpointTests()
     
     #region Arrange
 
+    private static readonly string Jwt = new TestAuthenticator()
+        .GenerateJwt(Guid.Parse(Const.CorporateCustomerGuid), "user", Const.CorporateCustomerEmail);
+
     protected override Action<IServiceCollection> ConfigureServices { get; } = s =>
     {
         s.AddScoped<IMessageBroker, TestMessageBroker>();
@@ -67,14 +76,6 @@ public class CompleteCorporateCustomerEndpointTests()
            Const.CorporateCustomerEmail, clock.Now()));
 
         await dbContext.SaveChangesAsync();
-    }
-
-    protected override void AddClientHeaders()
-    {
-        var jwt = new TestAuthenticator()
-            .GenerateJwt(Guid.Parse(Const.CorporateCustomerGuid), "user", Const.CorporateCustomerEmail);
-        
-       Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
 
     #endregion Arrange

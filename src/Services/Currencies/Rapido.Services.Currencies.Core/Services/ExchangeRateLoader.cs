@@ -10,6 +10,7 @@ namespace Rapido.Services.Currencies.Core.Services;
 internal sealed class ExchangeRateLoader(IExchangeRateApiClient client, IServiceProvider serviceProvider)
     : IHostedService, IDisposable
 {
+    private const int CacheLifetime = 1800; // In seconds
     private Timer _timer;
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ internal sealed class ExchangeRateLoader(IExchangeRateApiClient client, IService
             .Select(targetCurrency => new ExchangeRateDto(currency, targetCurrency, GetRateByReflection(targetCurrency, rates)))
             .ToList();
 
-        await cache.SetAsync(currency, dtos, cancellationToken: cancellationToken);
+        await cache.SetAsync(currency, dtos, TimeSpan.FromSeconds(CacheLifetime), cancellationToken);
     }
     
     // Load for all currencies
@@ -59,7 +60,7 @@ internal sealed class ExchangeRateLoader(IExchangeRateApiClient client, IService
                 .Select(targetCurrency => new ExchangeRateDto(currency, targetCurrency, GetRateByReflection(targetCurrency, rates)))
                 .ToList();
 
-            await cache.SetAsync(currency, dtos, cancellationToken: cancellationToken);
+            await cache.SetAsync(currency, dtos,TimeSpan.FromSeconds(CacheLifetime), cancellationToken);
         }
     }
     

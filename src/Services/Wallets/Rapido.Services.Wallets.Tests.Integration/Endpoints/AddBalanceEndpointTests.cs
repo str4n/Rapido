@@ -14,7 +14,14 @@ using Rapido.Services.Wallets.Infrastructure.EF;
 
 namespace Rapido.Services.Wallets.Tests.Integration.Endpoints;
 
-public class AddBalanceEndpointTests() : ApiTests<Program, WalletsDbContext>(options => new WalletsDbContext(options))
+public class AddBalanceEndpointTests() 
+    : ApiTests<Program, WalletsDbContext>(options => new WalletsDbContext(options), new ApiTestOptions
+{
+    DefaultHttpClientHeaders = new()
+    {
+        {"Authorization", $"Bearer {Jwt}" }
+    }
+})
 {
     private Task<HttpResponseMessage> Act(AddBalance command) 
         => Client.PostAsJsonAsync("/add-balance", command);
@@ -55,6 +62,8 @@ public class AddBalanceEndpointTests() : ApiTests<Program, WalletsDbContext>(opt
     }
     
     #region Arrange
+    private static readonly string Jwt = new TestAuthenticator()
+        .GenerateJwt(Guid.Parse(Const.Owner1Id), "user", "email@test.com");
 
     protected override Action<IServiceCollection> ConfigureServices => s =>
     {
@@ -78,14 +87,6 @@ public class AddBalanceEndpointTests() : ApiTests<Program, WalletsDbContext>(opt
         await dbContext.Wallets.AddAsync(wallet);
 
         await dbContext.SaveChangesAsync();
-    }
-
-    protected override void AddClientHeaders()
-    {
-        var jwt = new TestAuthenticator()
-            .GenerateJwt(Guid.Parse(Const.Owner1Id), "user", "email@test.com");
-        
-        Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
     }
 
     #endregion
