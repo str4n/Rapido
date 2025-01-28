@@ -33,6 +33,8 @@ Technologies used in the project:
 
 And more...
 
+![technologies](assets/rapido-technologies.png)
+
 # Solution structure
 
 ## Why single repo?
