@@ -26,6 +26,7 @@ Technologies used in the project:
 * **[Consul](https://www.consul.io/)**
 * **[Jaeger](https://www.jaegertracing.io/)**
 * **[Vault](https://www.vaultproject.io/)**
+* **[Terraform](https://www.terraform.io/)**
 * **[Seq](https://datalust.co/seq)**
 * **[MassTransit](https://masstransit.io/)**
 * **[YARP](https://microsoft.github.io/reverse-proxy/index.html)**
@@ -68,3 +69,46 @@ In order to achieve even better decoupling and decentralization, it's split into
 
 # Web UI
 There is [web UI](https://github.com/str4n/Rapido.Web) written in **[Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)**. Both projects are still actively developed.
+
+# Starting solution
+
+## 1. Prerequisites:
+
++ [.NET Core SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
++ [Git](https://git-scm.com/)
++ [Docker](https://www.docker.com/)
++ [Free API key](https://www.exchangerate-api.com/)
+
+## 2. Clone the repository
+Clone repo using git.
+```
+git clone https://github.com/str4n/Rapido.git
+```
+
+## 3. Modify API key
+Open ``compose/terraform/seed.tf`` file and replace external api key.
+```
+apiKeys = {
+      external = [
+        {
+          serviceName = "exchangeRate"
+          key         = "secret" <-- Replace this key!
+        }
+      ]
+...
+```
+
+## 4. Start infrastructure
+To start your infrastructure, use Docker to run the docker-compose file.
+```
+docker-compose -f compose\infrastructure.yml up -d
+```
+It will prepare the required infrastructure. Then, you can start the services independently of each other via ``dotnet run`` or use ``docker-compose`` to start whole application.
+
+## 5. Start services
+To run whole application use docker-compose again.
+```
+docker-compose -f compose\services.yml up -d
+```
+
+
