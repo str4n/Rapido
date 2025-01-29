@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_PASSWORD: Admin12!
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - postgres:/var/lib/postgresql/data
 
@@ -26,8 +26,8 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-        - 5672:5672
-        - 15672:15672
+        - "5672:5672"
+        - "15672:15672"
 
   rapido.redis:
     image: redis:7.2
@@ -36,7 +36,7 @@ services:
     networks:
       - rapido
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes: 
       - redis:/data
 
@@ -58,9 +58,9 @@ services:
     networks:
       - rapido
     ports: 
-      - 4317:4317
-      - 4318:4318
-      - 16686:16686
+      - "4317:4317"
+      - "4318:4318"
+      - "16686:16686"
 
   rapido.papercut:
     image: changemakerstudiosus/papercut-smtp:latest
@@ -68,8 +68,8 @@ services:
     networks:
       - rapido
     ports:
-      - 8080:80
-      - 25:25
+      - "8080:80"
+      - "25:25"
         
   rapido.vault:
     image: hashicorp/vault:latest
@@ -77,7 +77,11 @@ services:
     networks:
       - rapido
     ports: 
-      - 8200:8200
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=secret
+    cap_add:
+      - IPC_LOCK
         
   rapido.seq:
     image: datalust/seq
@@ -85,13 +89,29 @@ services:
     networks:
       - rapido
     ports:
-      - 5341:5341
-      - 80:80
+      - "5341:5341"
+      - "80:80"
     environment:
       - ACCEPT_EULA=Y
     volumes:
       - seq:/data
-
+        
+  rapido.terraform:
+    image: hashicorp/terraform:latest
+    container_name: terraform
+    working_dir: /terraform
+    depends_on:
+       - rapido.vault
+    networks:
+      - rapido
+    volumes:
+       - ./terraform:/terraform
+    environment:
+      VAULT_ADDR: "http://rapido.vault:8200"
+      VAULT_TOKEN: ${VAULT_TOKEN:-"secret"}
+    entrypoint: [ "/bin/sh", "-c" ]
+    command: "/terraform/run.sh"
+      
 networks:
   rapido:
     name: rapido
@@ -119,4 +139,7 @@ volumes:
     driver: local
     
   seq:
+    driver: local
+    
+  terraform:
     driver: local
