@@ -16,7 +16,7 @@ COPY ["src/Framework/Rapido.Framework.HTTP/Rapido.Framework.HTTP.csproj", "src/F
 COPY ["src/Framework/Rapido.Framework.Messaging.RabbitMQ/Rapido.Framework.Messaging.RabbitMQ.csproj", "src/Framework/Rapido.Framework.Messaging.RabbitMQ/"]
 COPY ["src/Framework/Rapido.Framework.Messaging/Rapido.Framework.Messaging.csproj", "src/Framework/Rapido.Framework.Messaging/"]
 COPY ["src/Framework/Rapido.Framework.Observability/Rapido.Framework.Observability.csproj", "src/Framework/Rapido.Framework.Observability/"]
-COPY ["src/Framework/Rapido.Framework.Vault/Rapido.Framework.Vault.csproj", "src/Framework/Rapido.Framework.Vault/"]
+COPY ["src/Framework/Rapido.Framework.Security/Rapido.Framework.Security.csproj", "src/Framework/Rapido.Framework.Security/"]
 RUN dotnet restore "src/Saga/Rapido.Saga/Rapido.Saga.csproj"
 COPY . .
 WORKDIR "/src/src/Saga/Rapido.Saga"
